@@ -1,0 +1,7 @@
+{
+    "name": "@quick-bite/shared",
+    "version": "1.0.0",
+    "dependencies": {
+        "@quick-bite/firebase":"file:../firebase"
+    }
+}

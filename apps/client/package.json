@@ -1,5 +1,5 @@
 {
-    "name": "quick-bite-client",
+    "name": "@quick-bite/client",
     "version": "1.0.0",
     "scripts": {
         "start": "vite",
@@ -17,6 +17,8 @@
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.16.0"
+        "react-router-dom": "^6.16.0",
+        "@quick-bite/firebase": "file:../../packages/firebase",
+        "@quick-bite/shared": "file:../../packages/shared"
     }
 }
