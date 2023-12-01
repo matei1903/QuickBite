@@ -5,8 +5,9 @@ const test = import.meta.env.VITE_MY_SECRET
 export default () => {
     const _fire = useFirebase();
     const db = _fire.db;
+    console.log(db);
     const [menuItems,setMenuItems] = useState([])
-    useEffect(()=>{
+   /* useEffect(()=>{
         const query=collection(db,"menu_items")
         return onSnapshot(query,(querySnapshot)=>{
             const items=[];
@@ -16,7 +17,7 @@ export default () => {
             })
             setMenuItems(items)
         })
-    },[])
+    },[])*/
 
     return <div>Home page {menuItems.length}</div>
 }
