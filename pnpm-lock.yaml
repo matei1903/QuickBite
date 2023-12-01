@@ -20,6 +20,9 @@ importers:
       '@quick-bite/shared':
         specifier: file:../../packages/shared
         version: file:packages/shared
+      firebase:
+        specifier: ^10.7.0
+        version: 10.7.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
