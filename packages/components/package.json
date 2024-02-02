@@ -1,0 +1,8 @@
+{
+    "name": "@quick-bite/components",
+    "version": "1.0.0",
+    "dependencies": {
+        "@quick-bite/firebase": "file:../firebase",
+        "react": "^18.2.0"
+    }
+}
