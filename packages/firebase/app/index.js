@@ -1,18 +1,13 @@
-import { initializeApp } from 'firebase/app';
-let app = null
-export default () => {
-    if (app)
-        return app
-    const settings={
-        apiKey: import.meta.env.VITE_FIRE_CLIENT_API_KEY,
-        authDomain: import.meta.env.VITE_FIRE_CLIENT_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIRE_CLIENT_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIRE_CLIENT_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIRE_CLIENT_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIRE_CLIENT_APP_ID
-    }
-    console.log(settings)
-    app = initializeApp(settings)
-    console.log(app);
-    return app
-}
+import { initializeApp, getApps, getApp } from "firebase/app";
+
+export default () =>
+    getApps().length
+        ? getApp()
+        : initializeApp({
+            apiKey: "AIzaSyDsHaokB4PIq_Z_JryaCi0l3FmIqJRsdo8",
+            authDomain: "quickbite-844b3.firebaseapp.com",
+            projectId: "quickbite-844b3",
+            storageBucket: "quickbite-844b3.appspot.com",
+            messagingSenderId: "505376164695",
+            appId: "1:505376164695:web:90c1c6e648efa5b7410c12"
+        });

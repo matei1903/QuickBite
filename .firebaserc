@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "quickbite-844b3"
+  },
+  "targets": {
+    "quickbite-844b3": {
+      "hosting": {
+        "restaurant-quickbite": [
+          "restaurant-quickbite"
+        ],
+        "quickbite-844b3": [
+          "quickbite-844b3"
+        ]
+      }
+    }
+  }
+}

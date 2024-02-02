@@ -1,9 +1,16 @@
 {
     "name": "quick-bite",
     "version": "1.0.0",
+    "workspaces": ["packages/*","apps/*"],
     "scripts": {
-        "build": "npx pnpm i",
-        "dev:client": "npm --prefix ./apps/client run start",
+        "build:client": "npm --prefix apps/client run build",
+        "build:restaurant": "npm --prefix apps/restaurant run build",
+        "build": "run-p build:*",
+        "preview:client": "npm --prefix apps/client run preview",
+        "preview:restaurant": "npm --prefix apps/restaurant run preview",
+        "preview": "run-p preview:*",
+        "dev:client": "npm --prefix apps/client run dev",
+        "dev:restaurant": "npm --prefix apps/restaurant run dev",
         "dev": "run-p dev:*"
     },
     "devDependencies": {

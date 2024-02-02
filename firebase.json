@@ -1,0 +1,26 @@
+{
+    "hosting": [
+      {
+        "target": "restaurant-quickbite",
+        "public": "./apps/restaurant/dist",
+        "ignore": ["./.firebase"],
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "index.html"
+          }
+        ]
+      },
+      {
+          "target": "quickbite-844b3",
+          "public": "./apps/client/dist",
+          "ignore": ["./.firebase"],
+          "rewrites": [
+            {
+              "source": "**",
+              "destination": "index.html"
+            }
+          ]
+        }
+    ]
+  }

@@ -1,11 +1,11 @@
 {
-    "name": "@quick-bite/client",
+    "name": "@quick-bite/restaurant",
     "version": "1.0.0",
     "type": "module",
     "scripts": {
       "build": "vite build",
-      "dev": "vite --port 5100",
-      "preview": "vite preview --port 5100"
+      "dev": "vite --port 5200",
+      "preview": "vite preview --port 5200"
     },
     "dependencies": {
       "react": "^18.2.0",
