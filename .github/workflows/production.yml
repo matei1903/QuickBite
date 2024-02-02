@@ -1,0 +1,25 @@
+name: 'production'
+on:
+  push:
+    branches:
+      - main
+jobs:
+  ProductionDeploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.11.0
+      - name: Install Dependencies
+        run: npm i
+      - name: Build
+        run: npm run build
+      - name: Deploy To Firebase
+        run: npx --yes firebase-tools deploy --only hosting --token $FIRE_DEPLOY_TOKEN
+        env: 
+          FIRE_DEPLOY_TOKEN: '${{ secrets.FIRE_DEPLOY_TOKEN }}'
