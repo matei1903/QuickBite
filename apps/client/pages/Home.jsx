@@ -11,7 +11,7 @@ const StyledHome = styled.div`
     color: red;
   }
   .test {
-    color: pink;
+    color: blue;
   }
 `;
 export default () => {
