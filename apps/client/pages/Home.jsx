@@ -8,7 +8,7 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledHome = styled.div`
   h1 {
-    color: red;
+    color: blue;
   }
   .test {
     color: green;
