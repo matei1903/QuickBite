@@ -13,6 +13,11 @@ const StyledHome = styled.div`
   }
   .test {
     color: green;
+    float: right;
+    top: 10px;
+  }
+  .alimente {
+    text-align: center;
   }
 `;
 export default () => {
@@ -33,9 +38,9 @@ export default () => {
     return (
         <Layout>
             <StyledHome>
-                <h1>Meniup</h1>
+                <h1>Meniu</h1>
                 {docs.map((doc) => (
-                    <div key={doc.id}>{doc.test}</div>
+                    <div className="alimente" key={doc.id}>{doc.test}</div>
                 ))}
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
