@@ -14,7 +14,8 @@ const StyledHome = styled.div`
   .test {
     color: green;
     float: right;
-    top: 10px;
+    padding-top: 10px;
+    right: 10px;
   }
   .alimente {
     text-align: center;
