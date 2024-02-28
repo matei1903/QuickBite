@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledLayout = styled.div`
   .header {
-    background: red;
+    text-align: center;
   }
 `;
 export default ({ children }) => {
@@ -14,7 +14,7 @@ export default ({ children }) => {
         return <div>loading...</div>
     return (
         <StyledLayout>
-            <div className="header">header</div>
+            <div className="header">logo</div>
             <div>{children}</div>
         </StyledLayout>
     );

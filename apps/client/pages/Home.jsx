@@ -8,7 +8,8 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledHome = styled.div`
   h1 {
-    color: blue;
+    color: #dfc780;
+    text-align: center;
   }
   .test {
     color: green;
@@ -32,7 +33,7 @@ export default () => {
     return (
         <Layout>
             <StyledHome>
-                <h1>this is the homepage of the admin app</h1>
+                <h1>Meniup</h1>
                 {docs.map((doc) => (
                     <div key={doc.id}>{doc.test}</div>
                 ))}
