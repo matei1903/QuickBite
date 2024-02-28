@@ -12,7 +12,7 @@ const router = createBrowserRouter([
 const GlobalStypes = createGlobalStyle`
   body {
     background: ${variables.primaryBg};
-    color: ${variables.primaryColor};
+    color: #535353;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 `;
