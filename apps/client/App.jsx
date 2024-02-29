@@ -13,7 +13,7 @@ const GlobalStypes = createGlobalStyle`
   body {
     background: #202b1b;
     color: ${variables.primaryColor};
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, fantasy;
   }
 `;
 const Loader = () => <div>loading...</div>;
