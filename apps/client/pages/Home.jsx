@@ -10,7 +10,7 @@ const StyledHome = styled.div`
   h1 {
     color: #dfc780;
     text-align: center;
-    font-family: "Trattatello", fantasy;
+    font-family: fantasy;
   }
   .test {
     color: green;
