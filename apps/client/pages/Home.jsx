@@ -7,10 +7,11 @@ const Icon = React.lazy(() =>
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledHome = styled.div`
+@import url(https://db.onlinewebfonts.com/c/05289e866fe7e1e99d27a7a31f8d3b66?family=Trattatello);
   h1 {
     color: #dfc780;
     text-align: center;
-    font-family: 'Trattatello', fantasy, cursive;
+    font-family: "Trattatello";
   }
   .test {
     color: green;
