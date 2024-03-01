@@ -18,6 +18,7 @@ const StyledHome = styled.div`
   }
   .alimente {
     text-align: center;
+    background-color: #ddddd6;
   }
 `;
 export default () => {
@@ -26,7 +27,7 @@ export default () => {
     const [docs, setDocs] = useState([]);
     useEffect(
         () =>
-            onSnapshot(query(collection(db, "/test")), (qs) => {
+            onSnapshot(query(collection(db, "/menu_items")), (qs) => {
                 const _docs = [];
                 qs.forEach((doc) => {
                     _docs.push({ ...doc.data(), id: doc.id });
@@ -40,7 +41,7 @@ export default () => {
             <StyledHome>
                 <h1>Meniu</h1>
                 {docs.map((doc) => (
-                    <div className="alimente" key={doc.id}>{doc.test}</div>
+                    <div className="alimente" key={doc.id}>{doc.menu_items}</div>
                 ))}
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
