@@ -21,6 +21,7 @@ const StyledHome = styled.div`
     background-color: #ddddd6;
     width: fit-content;
     color: #191919;
+    margin: 0 auto;
   }
 `;
 export default () => {
