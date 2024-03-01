@@ -8,6 +8,7 @@ const StyledLayout = styled.div`
   .img {
     width: 150px;
     height: auto;
+    top: 10px;
   }
 `;
 export default ({ children }) => {
