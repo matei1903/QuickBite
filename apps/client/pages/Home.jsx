@@ -13,7 +13,7 @@ const StyledHome = styled.div`
     font-family: fantasy;
   }
   .test {
-    color: green;
+    color: white;
     float: right;
   }
   .alimente {
