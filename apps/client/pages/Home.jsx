@@ -18,7 +18,7 @@ const StyledHome = styled.div`
   }
   .alimente {
     text-align: center;
-    background-color: #ddddd6;
+   
   }
 `;
 export default () => {
