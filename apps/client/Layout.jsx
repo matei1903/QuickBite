@@ -15,7 +15,7 @@ export default ({ children }) => {
     return (
         <StyledLayout>
             <div className="header">
-              <img src="gs://quickbite-844b3.appspot.com/logo_quickbite.png" alt="logo_quickbite"></img>
+              <img src="gs://quickbite-844b3.appspot.com/logo_quickbite.png"></img>
             </div>
             <div>{children}</div>
         </StyledLayout>
