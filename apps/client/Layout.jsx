@@ -6,7 +6,7 @@ const StyledLayout = styled.div`
     text-align: center;
   }
   .img {
-    width: 50px;
+    width: 150px;
     height: auto;
   }
 `;
