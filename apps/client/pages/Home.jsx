@@ -26,6 +26,8 @@ const StyledHome = styled.div`
     text-align: center;
     background-color: #ddddd6;
     color: #191919;
+    padding: 10px;
+    font-size:18px;
     border-bottom: 1px solid #191919;
     border-top: 1px solid #191919;
   }
