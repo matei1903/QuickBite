@@ -23,7 +23,7 @@ const StyledHome = styled.div`
     margin: 0 auto;
   }
   .alimente {
-    text-align: center;
+    text-align: left;
     background-color: #ddddd6;
     color: #191919;
     padding: 10px;
