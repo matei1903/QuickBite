@@ -41,9 +41,10 @@ const StyledHome = styled.div`
     transform: translateX(-50%);
     bottom: 40px;
     width: 100px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #3f2c49;
     color: #ecebed;
+    font-size:10px;
   }
   .plateste {
     
@@ -54,9 +55,10 @@ const StyledHome = styled.div`
     left: 50%;
     transform: translateX(-50%);
     width:100px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #53624d;
     color: #ecebed;
+    font-size:10px;
   }
 `;
 export default () => {
