@@ -15,6 +15,12 @@ const StyledHome = styled.div`
   .test {
     color: grey;
     float: right;
+    
+  }
+  .alimente-container {
+    background-color: #ddddd6;
+    width: 70%;
+    margin: 0 auto;
   }
   .alimente {
     text-align: center;
@@ -24,11 +30,6 @@ const StyledHome = styled.div`
     margin: 0 auto;
     padding: 10px;
     border: 1px solid #191919;
-    border-radius: 5px;
-
-    .alimente > div {
-        border-radius: 0;
-    }
   }
 `;
 export default () => {
@@ -50,9 +51,11 @@ export default () => {
         <Layout>
             <StyledHome>
                 <h1>Meniu</h1>
-                {docs.map((doc) => (   
+                <div className="alimente-container">
+                    {docs.map((doc) => (   
                     <div className="alimente" key={doc.id}>{doc.nume}</div>
-                ))}
+                     ))}
+                </div>
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
         </Layout>
