@@ -28,10 +28,26 @@ const StyledHome = styled.div`
     color: #191919;
     padding: 10px;
     font-size:18px;
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    border-image: radial-gradient(ellipse at center, #191919 0%, transparent 70%);
-    border-image-slice: 1;
+    border-bottom: 1px solid #191919;
+    border-top: 1px solid #191919;
+  }
+  .comanda {
+    margin: 0 auto;
+    padding: 5px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .plateste {
+    margin: 0 auto;
+    padding: 5px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 `;
 export default () => {
@@ -59,6 +75,8 @@ export default () => {
                      ))}
                 </div>
                 <Icon className="test" path="profile.svg" />
+                <button className="comanda">Comanda</button>
+                <button className="plateste">Plateste</button>
             </StyledHome>
         </Layout>
     );
