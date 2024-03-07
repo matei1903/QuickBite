@@ -30,7 +30,7 @@ export default () => {
     const [docs, setDocs] = useState([]);
     useEffect(
         () =>
-            onSnapshot(query(collection(db, "/test/B5MjuKeyTWWSIWDn80zA/test2")), (qs) => {
+            onSnapshot(query(collection(db, "/aperitive")), (qs) => {
                 const _docs = [];
                 qs.forEach((doc) => {
                     _docs.push({ ...doc.data(), id: doc.id });
@@ -44,7 +44,7 @@ export default () => {
             <StyledHome>
                 <h1>Meniu</h1>
                 {docs.map((doc) => (
-                    <div className="alimente" key={doc.id}>{doc.prenume}</div>
+                    <div className="alimente" key={doc.id}>{doc.nume}</div>
                 ))}
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
