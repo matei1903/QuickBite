@@ -19,11 +19,9 @@ const StyledHome = styled.div`
   .alimente {
     text-align: center;
     background-color: #ddddd6;
-    width: fit-content;
+    width: 100px;
     color: #191919;
     margin: 0 auto;
-    justify-content: center;
-    display: inline-block;
     padding: 10px;
     border-radius: 5px;
   }
@@ -47,10 +45,8 @@ export default () => {
         <Layout>
             <StyledHome>
                 <h1>Meniu</h1>
-                {docs.map((doc) => (
-                    <div className="alimente">
-                        <div key={doc.id}>{doc.nume}</div>
-                    </div>
+                {docs.map((doc) => (   
+                    <div className="alimente" key={doc.id}>{doc.nume}</div>
                 ))}
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
