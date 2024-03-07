@@ -30,7 +30,7 @@ export default () => {
     const [docs, setDocs] = useState([]);
     useEffect(
         () =>
-            onSnapshot(query(collection(db, "/test2")), (qs) => {
+            onSnapshot(query(collection(db, "/test/B5MjuKeyTWWSIWDn80zA/test2")), (qs) => {
                 const _docs = [];
                 qs.forEach((doc) => {
                     _docs.push({ ...doc.data(), id: doc.id });
