@@ -48,7 +48,9 @@ export default () => {
             <StyledHome>
                 <h1>Meniu</h1>
                 {docs.map((doc) => (
-                    <div className="alimente" key={doc.id}>{doc.nume.join(', ')}</div>
+                    <div className="alimente">
+                        <div key={doc.id}>{doc.nume}</div>
+                    </div>
                 ))}
                 <Icon className="test" path="profile.svg" />
             </StyledHome>
