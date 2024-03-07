@@ -25,6 +25,10 @@ const StyledHome = styled.div`
     padding: 10px;
     border: 1px solid #191919;
     border-radius: 5px;
+
+    >div {
+        border-radius: 0;
+    }
   }
 `;
 export default () => {
