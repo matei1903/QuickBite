@@ -25,11 +25,9 @@ const StyledHome = styled.div`
   .alimente {
     text-align: center;
     background-color: #ddddd6;
-    width: 70%;
     color: #191919;
-    margin: 0 auto;
-    padding: 10px;
-    border: 1px solid #191919;
+    border-bottom: 1px solid #191919;
+    border-top: 1px solid #191919;
   }
 `;
 export default () => {
