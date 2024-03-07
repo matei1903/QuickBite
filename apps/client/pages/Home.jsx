@@ -26,7 +26,7 @@ const StyledHome = styled.div`
     border: 1px solid #191919;
     border-radius: 5px;
 
-    >div {
+    .alimente > div {
         border-radius: 0;
     }
   }
