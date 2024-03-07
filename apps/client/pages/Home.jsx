@@ -44,7 +44,7 @@ const StyledHome = styled.div`
     border-radius: 10px;
     background-color: #3f2c49;
     color: #ecebed;
-    font-size:10px;
+    font-size:15px;
   }
   .plateste {
     
@@ -58,7 +58,7 @@ const StyledHome = styled.div`
     border-radius: 10px;
     background-color: #53624d;
     color: #ecebed;
-    font-size:10px;
+    font-size:15px;
   }
 `;
 export default () => {
