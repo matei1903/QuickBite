@@ -28,8 +28,7 @@ const StyledHome = styled.div`
     color: #191919;
     padding: 10px;
     font-size:18px;
-    border-bottom: 1px solid #191919;
-    border-top: 1px solid #191919;
+    
   }
   .comanda {
     
@@ -82,7 +81,7 @@ export default () => {
                 <h1>Meniu</h1>
                 <div className="alimente-container">
                     {docs.map((doc) => (   
-                    <div className="alimente" key={doc.id}>{doc.nume}</div>
+                    <div className="alimente" key={doc.id}>{doc.nume}<hr></hr></div>
                      ))}
                 </div>
                 <Icon className="test" path="profile.svg" />
