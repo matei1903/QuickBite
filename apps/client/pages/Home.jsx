@@ -39,6 +39,7 @@ const StyledHome = styled.div`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    bottom: 40px;
   }
   .plateste {
     margin: 0 auto;
