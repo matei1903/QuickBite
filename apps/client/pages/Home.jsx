@@ -22,6 +22,7 @@ const StyledHome = styled.div`
     width: fit-content;
     color: #191919;
     margin: 0 auto;
+    justify-content: center;
     display: inline-block;
     padding: 10px;
     border-radius: 5px;
