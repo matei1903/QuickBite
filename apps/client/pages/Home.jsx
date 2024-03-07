@@ -28,8 +28,10 @@ const StyledHome = styled.div`
     color: #191919;
     padding: 10px;
     font-size:18px;
-    border-bottom: 1px solid #191919;
-    border-top: 1px solid #191919;
+    border-bottom: 1px solid transparent;;
+    border-top: 1px solid transparent;;
+    border-image: radial-gradient(ellipse at center, #191919 0%, transparent 70%);
+    border-image-slice: 1;
   }
 `;
 export default () => {
