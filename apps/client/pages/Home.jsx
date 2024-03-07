@@ -32,20 +32,20 @@ const StyledHome = styled.div`
     border-top: 1px solid #191919;
   }
   .comanda {
-    margin: 0 auto;
+    
     padding: 5px;
     text-align: center;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     bottom: 40px;
   }
   .plateste {
-    margin: 0 auto;
+    
     padding: 5px;
     text-align: center;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
