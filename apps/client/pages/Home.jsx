@@ -148,15 +148,15 @@ export default () => {
         <h1>Meniu</h1>
         <div className="alimente-container">
           {docs.map((doc_aper) => (
-            <StyledDiv className="alimente" key={doc.id}>
+            <StyledDiv className="alimente" key={doc_aper.id}>
               <StyledCheckbox
                 type="checkbox"
-                checked={selectedItems.includes(doc.id)}
-                onChange={() => handleSelect(doc.id)}
+                checked={selectedItems.includes(doc_aper.id)}
+                onChange={() => handleSelect(doc_aper.id)}
               />
               {doc_aper.nume}
-              <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="pret">{doc.pret} ron</div>
+              <div className="ingrediente">{doc_aper.ingrediente}</div>
+              <div className="pret">{doc_aper.pret} ron</div>
               <hr />
             </StyledDiv>
           ))}
