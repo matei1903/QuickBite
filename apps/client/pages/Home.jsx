@@ -120,27 +120,29 @@ export default () => {
 
 
   useEffect(() => {
-    const aperitiveQuery = query(collection(db, "/aperitive"));
-    const felPrincipalQuery = query(collection(db, "/fel_principal"));
-    const supeCiorbeQuery = query(collection(db, "/supe_ciorbe"));
-    const salateQuery = query(collection(db, "/salate"));
-    const pasteQuery = query(collection(db, "/paste"));
-    const pizzaQuery = query(collection(db, "/pizza"));
-    const garnituriQuery = query(collection(db, "/garnituri"));
-    const desertQuery = query(collection(db, "/desert"));
-    const bauturiQuery = query(collection(db, "/bauturi"));
-  
-    const combinedQuery = query(aperitiveQuery, felPrincipalQuery, supeCiorbeQuery, salateQuery, pasteQuery, pizzaQuery, garnituriQuery, desertQuery, bauturiQuery);
+    const combinedQuery = query(
+      collection(db, "/aperitive"),
+      collection(db, "/fel_principal"),
+      collection(db, "/supe_ciorbe"),
+      collection(db, "/salate"),
+      collection(db, "/paste"),
+      collection(db, "/pizza"),
+      collection(db, "/garnituri"),
+      collection(db, "/desert"),
+      collection(db, "/bauturi")
+    );
   
     const unsubscribe = onSnapshot(combinedQuery, (snapshot) => {
       const _docs = [];
   
       snapshot.forEach((doc) => {
-        _docs.push({ ...doc.data(), id: doc.id });
+        _docs.push({ id: doc.id, name: doc.data().name });
       });
   
       setDocs(_docs);
     });
+  
+    return () => unsubscribe();
   }, []);
   
   return (
