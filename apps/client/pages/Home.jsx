@@ -128,7 +128,15 @@ export default () => {
         });
         setDocs(_docs);
       }),
+      onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
+        const _docs = [];
+        qs.forEach((doc_fp) => {
+          _docs.push({ ...doc_fp.data(), id: doc_fp.id });
+        });
+        setDocs(_docs);
+      }),
     []
+    
   );
   
   
@@ -147,6 +155,19 @@ export default () => {
               {doc_aper.nume}
               <div className="ingrediente">{doc_aper.ingrediente}</div>
               <div className="pret">{doc_aper.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs.map((doc_fp) => (
+            <StyledDiv className="alimente" key={doc_fp.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc_fp.id)}
+                onChange={() => handleSelect(doc_fp.id)}
+              />
+              {doc_fp.nume}
+              <div className="ingrediente">{doc_fp.ingrediente}</div>
+              <div className="pret">{doc_fp.pret} ron</div>
               <hr />
             </StyledDiv>
           ))}
