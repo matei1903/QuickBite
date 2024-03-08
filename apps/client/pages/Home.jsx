@@ -130,6 +130,17 @@ export default () => {
       }),
     []
   );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
+        const _docs = [];
+        qs.forEach((doc) => {
+          _docs.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs(_docs);
+      }),
+    []
+  );
   
   return (
     <Layout>
