@@ -119,21 +119,23 @@ export default () => {
   };
 
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(query(collection(db, "/")), (qs) => {
-      const _docs = [];
-      qs.forEach((doc) => {
-        const { nume, ...otherData } = doc.data();
-        _docs.push({ id: doc.id, name: nume, otherData });
-      });
-      setDocs(_docs);
+  const unsubscribe = onSnapshot(db, (snapshot) => {
+    const _docs = [];
+  
+    snapshot.forEach((doc) => {
+      // Assuming each document has a "nume" field
+      _docs.push({ id: doc.id, name: doc.data().nume });
     });
   
-    // Unsubscribe when component unmounts
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+    setDocs(_docs);
+  });
+  
+  // ...
+  
+  // Unsubscribe when component unmounts
+  return () => {
+    unsubscribe();
+  };
   
   return (
     <Layout>
