@@ -4,7 +4,7 @@ const Layout = React.lazy(() => import("../Layout.jsx"));
 const Icon = React.lazy(() =>
   import("@quick-bite/components/common/Icon.jsx")
 );
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query, getFirestore } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledHome = styled.div`
   h1 {
