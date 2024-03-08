@@ -121,7 +121,7 @@ export default () => {
 
   useEffect(
     () =>
-      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
+      onSnapshot(query(collection(db, "/")), (qs) => {
         const _docs = [];
         qs.forEach((doc) => {
           _docs.push({ ...doc.data(), id: doc.id });
