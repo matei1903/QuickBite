@@ -72,7 +72,6 @@ const StyledHome = styled.div`
     font-size:14px;
   }
 `;
-import styled from "styled-components";
 
 const StyledCheckbox = styled.input`
   appearance: none;
