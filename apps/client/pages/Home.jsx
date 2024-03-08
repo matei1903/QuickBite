@@ -119,45 +119,17 @@ export default () => {
   };
 
 
-  useEffect(() => {
-    const aperitiveQuery = query(collection(db, "/aperitive"));
-    const felPrincipalQuery = query(collection(db, "/fel_principal"));
-    const supeCiorbeQuery = query(collection(db, "/supe_ciorbe"));
-    const salateQuery = query(collection(db, "/salate"));
-    const pasteQuery = query(collection(db, "/paste"));
-    const pizzaQuery = query(collection(db, "/pizza"));
-    const garnituriQuery = query(collection(db, "/garnituri"));
-    const desertQuery = query(collection(db, "/desert"));
-    const bauturiQuery = query(collection(db, "/bauturi"));
-  
-    const queries = [
-      aperitiveQuery,
-      felPrincipalQuery,
-      supeCiorbeQuery,
-      salateQuery,
-      pasteQuery,
-      pizzaQuery,
-      garnituriQuery,
-      desertQuery,
-      bauturiQuery
-    ];
-  
-    const combinedQuery = query(...queries);
-  
-    const unsubscribe = onSnapshot(combinedQuery, (snapshot) => {
-      const _docs = [];
-  
-      snapshot.forEach((doc) => {
-        _docs.push({ id: doc.id, name: doc.data().nume });
-      });
-  
-      setDocs(_docs);
-    });
-  
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
+        const _docs = [];
+        qs.forEach((doc) => {
+          _docs.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs(_docs);
+      }),
+    []
+  );
   
   return (
     <Layout>
