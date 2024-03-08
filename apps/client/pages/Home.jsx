@@ -19,7 +19,7 @@ const StyledHome = styled.div`
   }
   .alimente-container {
     background-color: #ddddd6;
-    width: 70%;
+    width: 90%;
     margin: 0 auto;
   }
   .alimente {
