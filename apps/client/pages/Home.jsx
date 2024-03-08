@@ -39,11 +39,13 @@ const StyledHome = styled.div`
     left: 50%;
     transform: translateX(-50%);
     bottom: 40px;
-    width: 100px;
+    width: 200px;
     border-radius: 10px;
     background-color: #3f2c49;
     color: #ecebed;
-    font-size:15px;
+    font-size:20px;
+    border: none;
+    outline: 2px solid black;
   }
   .plateste {
     
@@ -53,11 +55,13 @@ const StyledHome = styled.div`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width:100px;
+    width:200px;
     border-radius: 10px;
     background-color: #53624d;
     color: #ecebed;
-    font-size:15px;
+    font-size:20px;
+    border: none;
+    outline: 2px solid black;
   }
   .ingrediente {
     text-align: left;
