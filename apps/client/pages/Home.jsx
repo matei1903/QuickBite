@@ -72,6 +72,33 @@ const StyledHome = styled.div`
     font-size:14px;
   }
 `;
+import styled from "styled-components";
+
+const StyledCheckbox = styled.input`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #202b1b; /* Culoarea verde inchis pentru bordură */
+  outline: none;
+  cursor: pointer;
+  margin-right: 8px;
+
+  &:checked {
+    background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
+    border-color: #006400; /* Culoarea bordurii când este selectat */
+  }
+`;
+
+const StyledDiv = styled.div`
+  .alimente {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+`;
 export default () => {
   const { db } = useFirebase();
 
@@ -106,8 +133,8 @@ export default () => {
         <h1>Meniu</h1>
         <div className="alimente-container">
           {docs.map((doc) => (
-            <div className="alimente" key={doc.id}>
-              <input
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
                 type="checkbox"
                 checked={selectedItems.includes(doc.id)}
                 onChange={() => handleSelect(doc.id)}
@@ -116,7 +143,7 @@ export default () => {
               <div className="ingrediente">{doc.ingrediente}</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
-            </div>
+            </StyledDiv>
           ))}
         </div>
         <Icon className="test" path="profile.svg" />
