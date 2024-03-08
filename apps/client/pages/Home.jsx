@@ -59,6 +59,18 @@ const StyledHome = styled.div`
     color: #ecebed;
     font-size:15px;
   }
+  .ingrediente {
+    text-align: left;
+    color: #9e9e9e;
+    padding: 10px;
+    font-size:12px;
+  }
+  .pret {
+    text-align: right;
+    color: #191919;
+    padding: 10px;
+    font-size:14px;
+  }
 `;
 export default () => {
   const { db } = useFirebase();
@@ -101,6 +113,8 @@ export default () => {
                 onChange={() => handleSelect(doc.id)}
               />
               {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret}</div>
               <hr />
             </div>
           ))}
