@@ -123,8 +123,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/aperitive")), (qs) => {
         const _docs = [];
-        qs.forEach((doc) => {
-          _docs.push({ ...doc.data(), id: doc.id });
+        qs.forEach((doc_aper) => {
+          _docs.push({ ...doc_aper.data(), id: doc_aper.id });
         });
         setDocs(_docs);
       }),
@@ -134,8 +134,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
         const _docs = [];
-        qs.forEach((doc) => {
-          _docs.push({ ...doc.data(), id: doc.id });
+        qs.forEach((doc_fp) => {
+          _docs.push({ ...doc_fp.data(), id: doc_fp.id });
         });
         setDocs(_docs);
       }),
@@ -154,7 +154,8 @@ export default () => {
                 checked={selectedItems.includes(doc.id)}
                 onChange={() => handleSelect(doc.id)}
               />
-              {doc.nume}
+              {doc_aper.nume}
+              {doc_fp.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
