@@ -121,25 +121,25 @@ export default () => {
 
   useEffect(
     () =>
-      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
+      onSnapshot(query(collection(db, "/aperitive")), (qs_aper) => {
         const _docs = [];
-        qs.forEach((doc_aper) => {
+        qs_aper.forEach((doc_aper) => {
           _docs.push({ ...doc_aper.data(), id: doc_aper.id });
         });
         setDocs(_docs);
       }),
-      onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
-        const _docs = [];
-        qs.forEach((doc_fp) => {
-          _docs.push({ ...doc_fp.data(), id: doc_fp.id });
-        });
-        setDocs(_docs);
-      }),
+    onSnapshot(query(collection(db, "/fel_principal")), (qs_fp) => {
+      const _docs = [];
+      qs_aper.forEach((doc_fp) => {
+        _docs.push({ ...doc_fp.data(), id: doc_fp.id });
+      });
+      setDocs(_docs);
+    }),
     []
-    
+
   );
-  
-  
+
+
   return (
     <Layout>
       <StyledHome>
