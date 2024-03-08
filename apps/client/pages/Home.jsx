@@ -52,7 +52,7 @@ const StyledHome = styled.div`
     padding: 5px;
     text-align: center;
     position: fixed;
-    bottom: 0;
+    bottom: 5;
     left: 50%;
     transform: translateX(-50%);
     width:150px;
