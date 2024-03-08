@@ -145,7 +145,7 @@ export default () => {
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
-          {docs_aper.map((doc_aper) => (
+          {_docs_aper.map((doc_aper) => (
             <StyledDiv className="alimente" key={doc_aper.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -158,7 +158,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
-          {docs_fp.map((doc_fp) => (
+          {_docs_fp.map((doc_fp) => (
             <StyledDiv className="alimente" key={doc_fp.id}>
               <StyledCheckbox
                 type="checkbox"
