@@ -119,17 +119,21 @@ export default () => {
   };
 
 
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/")), (qs) => {
-        const _docs = [];
-        qs.forEach((doc) => {
-          _docs.push({ ...doc.data(), id: doc.id });
-        });
-        setDocs(_docs);
-      }),
-    []
-  );
+  useEffect(() => {
+    const unsubscribe = onSnapshot(query(collection(db, "/")), (qs) => {
+      const _docs = [];
+      qs.forEach((doc) => {
+        const { nume, ...otherData } = doc.data();
+        _docs.push({ id: doc.id, name: nume, otherData });
+      });
+      setDocs(_docs);
+    });
+  
+    // Unsubscribe when component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   
   return (
     <Layout>
