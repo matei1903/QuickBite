@@ -65,6 +65,18 @@ export default () => {
 
   const [docs, setDocs] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (itemId) => {
+    if (selectedItems.includes(itemId)) {
+      // Deselect item
+      setSelectedItems(selectedItems.filter((id) => id !== itemId));
+    } else {
+      // Select item
+      setSelectedItems([...selectedItems, itemId]);
+    }
+  };
+
+
   useEffect(
     () =>
       onSnapshot(query(collection(db, "/aperitive")), (qs) => {
@@ -99,13 +111,4 @@ export default () => {
       </StyledHome>
     </Layout>
   );
-};
-const handleSelect = (itemId) => {
-  if (selectedItems.includes(itemId)) {
-    // Deselect item
-    setSelectedItems(selectedItems.filter((id) => id !== itemId));
-  } else {
-    // Select item
-    setSelectedItems([...selectedItems, itemId]);
-  }
 };
