@@ -31,7 +31,7 @@ const StyledHome = styled.div`
     
   }
   .comanda {
-    
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
     text-align: center;
     position: fixed;
@@ -40,15 +40,15 @@ const StyledHome = styled.div`
     transform: translateX(-50%);
     bottom: 50px;
     width: 150px;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: #3f2c49;
     color: #ecebed;
-    font-size:20px;
+    font-size:18px;
     border: none;
     outline: 2px solid black;
   }
   .plateste {
-    
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
     text-align: center;
     position: fixed;
@@ -56,10 +56,10 @@ const StyledHome = styled.div`
     left: 50%;
     transform: translateX(-50%);
     width:150px;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: #53624d;
     color: #ecebed;
-    font-size:20px;
+    font-size:18px;
     border: none;
     outline: 2px solid black;
   }
