@@ -61,7 +61,7 @@ const StyledHome = styled.div`
   }
   .ingrediente {
     text-align: left;
-    color: #9e9e9e;
+    color: #7e7e7e;
     padding: 10px;
     font-size:12px;
   }
@@ -114,7 +114,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="pret">{doc.pret}</div>
+              <div className="pret">{doc.pret} ron</div>
               <hr />
             </div>
           ))}
