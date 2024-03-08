@@ -130,7 +130,7 @@ export default () => {
       }),
     onSnapshot(query(collection(db, "/fel_principal")), (qs_fp) => {
       const _docs = [];
-      qs_aper.forEach((doc_fp) => {
+      qs_fp.forEach((doc_fp) => {
         _docs.push({ ...doc_fp.data(), id: doc_fp.id });
       });
       setDocs(_docs);
