@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 const Icon = React.lazy(() =>
-    import("@quick-bite/components/common/Icon.jsx")
+  import("@quick-bite/components/common/Icon.jsx")
 );
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
@@ -61,33 +61,51 @@ const StyledHome = styled.div`
   }
 `;
 export default () => {
-    const { db } = useFirebase();
+  const { db } = useFirebase();
 
-    const [docs, setDocs] = useState([]);
-    useEffect(
-        () =>
-            onSnapshot(query(collection(db, "/aperitive")), (qs) => {
-                const _docs = [];
-                qs.forEach((doc) => {
-                    _docs.push({ ...doc.data(), id: doc.id });
-                });
-                setDocs(_docs);
-            }),
-        []
-    );
-    return (
-        <Layout>
-            <StyledHome>
-                <h1>Meniu</h1>
-                <div className="alimente-container">
-                    {docs.map((doc) => (   
-                    <div className="alimente" key={doc.id}>{doc.nume}<hr></hr></div>
-                     ))}
-                </div>
-                <Icon className="test" path="profile.svg" />
-                <button className="comanda">Comanda</button>
-                <button className="plateste">Plateste</button>
-            </StyledHome>
-        </Layout>
-    );
+  const [docs, setDocs] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
+        const _docs = [];
+        qs.forEach((doc) => {
+          _docs.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs(_docs);
+      }),
+    []
+  );
+  return (
+    <Layout>
+      <StyledHome>
+        <h1>Meniu</h1>
+        <div className="alimente-container">
+          {docs.map((doc) => (
+            <div className="alimente" key={doc.id}>
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <hr />
+            </div>
+          ))}
+        </div>
+        <Icon className="test" path="profile.svg" />
+        <button className="comanda">Comanda</button>
+        <button className="plateste">Plateste</button>
+      </StyledHome>
+    </Layout>
+  );
+};
+const handleSelect = (itemId) => {
+  if (selectedItems.includes(itemId)) {
+    // Deselect item
+    setSelectedItems(selectedItems.filter((id) => id !== itemId));
+  } else {
+    // Select item
+    setSelectedItems([...selectedItems, itemId]);
+  }
 };
