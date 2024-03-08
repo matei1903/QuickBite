@@ -38,8 +38,8 @@ const StyledHome = styled.div`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 40px;
-    width: 200px;
+    bottom: 50px;
+    width: 150px;
     border-radius: 10px;
     background-color: #3f2c49;
     color: #ecebed;
@@ -55,7 +55,7 @@ const StyledHome = styled.div`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width:200px;
+    width:150px;
     border-radius: 10px;
     background-color: #53624d;
     color: #ecebed;
