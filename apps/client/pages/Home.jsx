@@ -129,19 +129,19 @@ export default () => {
     const garnituriQuery = query(collection(db, "/garnituri"));
     const desertQuery = query(collection(db, "/desert"));
     const bauturiQuery = query(collection(db, "/bauturi"));
-  
+
     const combinedQuery = query(aperitiveQuery, felPrincipalQuery, supeCiorbeQuery, salateQuery, pasteQuery, pizzaQuery, garnituriQuery, desertQuery, bauturiQuery);
-  
-    const unsubscribe = onSnapshot(combinedQuery, (snapshot) => {
+
+    onSnapshot(combinedQuery, (snapshot) => {
       const _docs = [];
-  
+
       snapshot.forEach((doc) => {
         _docs.push({ ...doc.data(), id: doc.id });
       });
-  
       setDocs(_docs);
     });
   }, []);
+  
   return (
     <Layout>
       <StyledHome>
