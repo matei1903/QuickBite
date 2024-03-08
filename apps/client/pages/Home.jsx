@@ -147,7 +147,7 @@ export default () => {
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
-          {docs.map((doc) => (
+          {docs.map((doc_aper) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -155,7 +155,6 @@ export default () => {
                 onChange={() => handleSelect(doc.id)}
               />
               {doc_aper.nume}
-              {doc_fp.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
