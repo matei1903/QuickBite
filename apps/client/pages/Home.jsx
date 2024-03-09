@@ -16,6 +16,7 @@ const StyledHome = styled.div`
     font-family: fantasy;
     font-align: left;
     color: #191919;
+    padding: 10px;
   }
   .test {
     color: grey;
