@@ -12,9 +12,10 @@ const StyledHome = styled.div`
     text-align: center;
     font-family: fantasy;
   }
-  h3 {
+  h2 {
     font-family: fantasy;
     font-align: left;
+    color: #191919;
   }
   .test {
     color: grey;
