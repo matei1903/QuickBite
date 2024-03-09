@@ -12,7 +12,7 @@ const StyledHome = styled.div`
     text-align: center;
     font-family: fantasy;
   }
-  h2 {
+  h3 {
     font-family: fantasy;
     font-align: left;
   }
@@ -236,6 +236,7 @@ export default () => {
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
+          <h3>Aperitive</h3>
           {docs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -243,7 +244,6 @@ export default () => {
                 checked={selectedItems.includes(doc.id)}
                 onChange={() => handleSelect(doc.id)}
               />
-              <h2>Aperitive</h2>
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
               <div className="pret">{doc.pret} ron</div>
