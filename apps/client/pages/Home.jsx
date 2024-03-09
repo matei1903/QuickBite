@@ -237,7 +237,7 @@ export default () => {
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
-          <h3>Aperitive</h3>
+          <h2>Aperitive</h2>
           {docs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
