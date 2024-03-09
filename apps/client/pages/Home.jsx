@@ -105,7 +105,16 @@ const StyledDiv = styled.div`
 export default () => {
   const { db } = useFirebase();
 
-  const [docs, setDocs] = useState([]);
+  const [docs_aper, setDocs_aper] = useState([]);
+  const [docs_fp, setDocs_fp] = useState([]);
+  const [docs_sp, setDocs_sp] = useState([]);
+  const [docs_pas, setDocs_pas] = useState([]);
+  const [docs_piz, setDocs_piz] = useState([]);
+  const [docs_gar, setDocs_gar] = useState([]);
+  const [docs_sal, setDocs_sal] = useState([]);
+  const [docs_des, setDocs_des] = useState([]);
+  const [docs_ba, setDocs_ba] = useState([]);
+
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelect = (itemId) => {
@@ -121,53 +130,131 @@ export default () => {
 
   useEffect(
     () =>
-      onSnapshot(query(collection(db, "/aperitive")), (qs_aper) => {
+      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
         const _docs_aper = [];
-        qs_aper.forEach((doc_aper) => {
-          _docs_aper.push({ ...doc_aper.data(), id: doc_aper.id });
+        qs.forEach((doc) => {
+          _docs_aper.push({ ...doc.data(), id: doc.id });
         });
-        setDocs(_docs_aper);
+        setDocs_aper(_docs_aper);
       }),
-    onSnapshot(query(collection(db, "/fel_principal")), (qs_fp) => {
-      const _docs_fp = [];
-      qs_fp.forEach((doc_fp) => {
-        _docs_fp.push({ ...doc_fp.data(), id: doc_fp.id });
-      });
-      setDocs(_docs_fp);
-    }),
     []
-
   );
-
-
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
+        const _docs_fp = [];
+        qs.forEach((doc) => {
+          _docs_fp.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs_fp(_docs_fp);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/supe_ciorbe")), (qs) => {
+        const _docs_sp = [];
+        qs.forEach((doc_sp) => {
+          _docs_sp.push({ ...doc_sp.data(), id: doc_sp.id });
+        });
+        setDocs_sp(_docs_sp);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/paste")), (qs) => {
+        const _docs_pas = [];
+        qs.forEach((doc_pas) => {
+          _docs_pas.push({ ...doc_pas.data(), id: doc_pas.id });
+        });
+        setDocs_pas(_docs_pas);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/pizza")), (qs) => {
+        const _docs_piz = [];
+        qs.forEach((doc_piz) => {
+          _docs_piz.push({ ...doc_piz.data(), id: doc_piz.id });
+        });
+        setDocs_piz(_docs_piz);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/garnituri")), (qs) => {
+        const _docs_gar = [];
+        qs.forEach((doc_gar) => {
+          _docs_gar.push({ ...doc_gar.data(), id: doc_gar.id });
+        });
+        setDocs_gar(_docs_gar);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/salate")), (qs) => {
+        const _docs_sal = [];
+        qs.forEach((doc_sal) => {
+          _docs_sal.push({ ...doc_sal.data(), id: doc_sal.id });
+        });
+        setDocs_sal(_docs_sal);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/desert")), (qs) => {
+        const _docs_des = [];
+        qs.forEach((doc_des) => {
+          _docs_des.push({ ...doc_des.data(), id: doc_des.id });
+        });
+        setDocs_des(_docs_des);
+      }),
+    []
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, "/bauturi")), (qs) => {
+        const _docs_ba = [];
+        qs.forEach((doc_ba) => {
+          _docs_ba.push({ ...doc_ba.data(), id: doc_ba.id });
+        });
+        setDocs_ba(_docs_ba);
+      }),
+    []
+  );
   return (
     <Layout>
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
-          {docs.map((doc_aper) => (
-            <StyledDiv className="alimente" key={doc_aper.id}>
+          {docs_aper.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
-                checked={selectedItems.includes(doc_aper.id)}
-                onChange={() => handleSelect(doc_aper.id)}
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
               />
-              {doc_aper.nume}
-              <div className="ingrediente">{doc_aper.ingrediente}</div>
-              <div className="pret">{doc_aper.pret} ron</div>
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
           ))}
-          {docs.map((doc_fp) => (
-            <StyledDiv className="alimente" key={doc_fp.id}>
+          {docs_fp.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
-                checked={selectedItems.includes(doc_fp.id)}
-                onChange={() => handleSelect(doc_fp.id)}
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
               />
-              {doc_fp.nume}
-              <div className="ingrediente">{doc_fp.ingrediente}</div>
-              <div className="pret">{doc_fp.pret} ron</div>
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
           ))}
