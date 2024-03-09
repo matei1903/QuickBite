@@ -154,8 +154,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/supe_ciorbe")), (qs) => {
         const _docs_sp = [];
-        qs.forEach((doc_sp) => {
-          _docs_sp.push({ ...doc_sp.data(), id: doc_sp.id });
+        qs.forEach((doc) => {
+          _docs_sp.push({ ...doc.data(), id: doc.id });
         });
         setDocs_sp(_docs_sp);
       }),
@@ -165,8 +165,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/paste")), (qs) => {
         const _docs_pas = [];
-        qs.forEach((doc_pas) => {
-          _docs_pas.push({ ...doc_pas.data(), id: doc_pas.id });
+        qs.forEach((doc) => {
+          _docs_pas.push({ ...doc.data(), id: doc.id });
         });
         setDocs_pas(_docs_pas);
       }),
@@ -176,8 +176,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/pizza")), (qs) => {
         const _docs_piz = [];
-        qs.forEach((doc_piz) => {
-          _docs_piz.push({ ...doc_piz.data(), id: doc_piz.id });
+        qs.forEach((doc) => {
+          _docs_piz.push({ ...doc.data(), id: doc.id });
         });
         setDocs_piz(_docs_piz);
       }),
@@ -187,8 +187,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/garnituri")), (qs) => {
         const _docs_gar = [];
-        qs.forEach((doc_gar) => {
-          _docs_gar.push({ ...doc_gar.data(), id: doc_gar.id });
+        qs.forEach((doc) => {
+          _docs_gar.push({ ...doc.data(), id: doc.id });
         });
         setDocs_gar(_docs_gar);
       }),
@@ -198,8 +198,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/salate")), (qs) => {
         const _docs_sal = [];
-        qs.forEach((doc_sal) => {
-          _docs_sal.push({ ...doc_sal.data(), id: doc_sal.id });
+        qs.forEach((doc) => {
+          _docs_sal.push({ ...doc.data(), id: doc.id });
         });
         setDocs_sal(_docs_sal);
       }),
@@ -209,8 +209,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/desert")), (qs) => {
         const _docs_des = [];
-        qs.forEach((doc_des) => {
-          _docs_des.push({ ...doc_des.data(), id: doc_des.id });
+        qs.forEach((doc) => {
+          _docs_des.push({ ...doc.data(), id: doc.id });
         });
         setDocs_des(_docs_des);
       }),
@@ -220,8 +220,8 @@ export default () => {
     () =>
       onSnapshot(query(collection(db, "/bauturi")), (qs) => {
         const _docs_ba = [];
-        qs.forEach((doc_ba) => {
-          _docs_ba.push({ ...doc_ba.data(), id: doc_ba.id });
+        qs.forEach((doc) => {
+          _docs_ba.push({ ...doc.data(), id: doc.id });
         });
         setDocs_ba(_docs_ba);
       }),
@@ -246,6 +246,97 @@ export default () => {
             </StyledDiv>
           ))}
           {docs_fp.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_sp.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_pas.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_piz.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_gar.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_sal.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_des.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          {docs_ba.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
