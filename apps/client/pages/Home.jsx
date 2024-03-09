@@ -12,6 +12,10 @@ const StyledHome = styled.div`
     text-align: center;
     font-family: fantasy;
   }
+  h2 {
+    font-family: fantasy;
+    font-align: left;
+  }
   .test {
     color: grey;
     float: right;
@@ -239,6 +243,7 @@ export default () => {
                 checked={selectedItems.includes(doc.id)}
                 onChange={() => handleSelect(doc.id)}
               />
+              <h2>Aperitive</h2>
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
               <div className="pret">{doc.pret} ron</div>
