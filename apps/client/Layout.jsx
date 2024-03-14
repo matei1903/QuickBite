@@ -4,6 +4,12 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
+    position: sticky;
+    z-index: 999;
+    top: -10px;
+    box-shadow: 0 10px 10px 10px rgba(0,0,0,0.5);
+    opacity: 100%;
+    background-color: #202b1b;
   }
   .img {
     width: 150px;
