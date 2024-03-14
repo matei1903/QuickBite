@@ -252,6 +252,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Fel principal</h2>
           {docs_fp.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -265,6 +266,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Supe/Ciorbe</h2>
           {docs_sp.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -278,6 +280,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Paste</h2>
           {docs_pas.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -291,6 +294,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Pizza</h2>
           {docs_piz.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -304,6 +308,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Garnituri</h2>
           {docs_gar.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -317,6 +322,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Salate</h2>
           {docs_sal.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -330,6 +336,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Desert</h2>
           {docs_des.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
@@ -343,6 +350,7 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
+          <h2>Bauturi</h2>
           {docs_ba.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
