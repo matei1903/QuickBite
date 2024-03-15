@@ -24,7 +24,7 @@ const StyledLayout = styled.div`
     margin-top: -6px;
     float: right;
     position: relative;
-    z-index: 999;
+    z-index: 998;
   }
 `;
 const RoundButton = styled.button`
@@ -36,7 +36,7 @@ const RoundButton = styled.button`
     margin-top: -6px;
     float: right;
     position: relative;
-    z-index: 4;
+    z-index: 998;
    }
 `;
 const ProfileImage = styled.img`
