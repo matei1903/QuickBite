@@ -16,6 +16,16 @@ const StyledLayout = styled.div`
     height: auto;
     top: 10px;
   }
+  .profile_button {
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top: -6px;
+    float: right;
+    position: relative;
+    z-index: 999;
+  }
 `;
 const RoundButton = styled.button`
   .profile_button {
@@ -72,6 +82,7 @@ export default ({ children }) => {
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
               <RoundButton className="profile_button" onClick={handleButtonClick}>
+                    <img className="img_profil" src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b"></img>
                     <ProfileImage src={userImage} alt={isLoggedIn ? "Profile" : "Guest"} />
               </RoundButton>
             </div>
