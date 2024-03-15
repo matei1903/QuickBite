@@ -43,7 +43,7 @@ export default ({ children }) => {
     const [userImage, setUserImage] = useState(null);
 
     // Funcție pentru încărcarea imaginii utilizatorului
-    const loadUserImage = () => {
+   /* const loadUserImage = () => {
         // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
         // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
         const user = _firebase?.auth?.currentUser;
@@ -53,6 +53,7 @@ export default ({ children }) => {
             setUserImage(guestIcon);
         }
     };
+    */
 
     // Funcție pentru gestionarea clicului butonului
     const handleButtonClick = () => {
