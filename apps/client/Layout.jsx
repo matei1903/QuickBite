@@ -62,9 +62,9 @@ export default ({ children }) => {
     };
 
     // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
-    useEffect(() => {
+    /*useEffect(() => {
         loadUserImage();
-    }, [isLoggedIn]);
+    }, [isLoggedIn]);*/
     if (!db)
         return <div>loading...</div>
     return (
