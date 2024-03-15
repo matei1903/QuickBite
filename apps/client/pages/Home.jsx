@@ -81,7 +81,6 @@ const StyledHome = styled.div`
     font-size:14px;
   }
 `;
-
 const StyledCheckbox = styled.input`
   appearance: none;
   -webkit-appearance: none;
