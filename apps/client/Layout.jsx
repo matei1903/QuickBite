@@ -22,9 +22,13 @@ const StyledLayout = styled.div`
     height: 48px;
     border-radius: 50%;
     margin-top: -6px;
+    top: -10px;
     float: right;
     position: relative;
     z-index: 998;
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b');
+    background-size: cover;
+    background-position: center;
   }
 `;
 const RoundButton = styled.button`
