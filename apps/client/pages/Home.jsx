@@ -372,7 +372,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="gramaj">{doc.gramaj} g</div>
+              <div className="gramaj">{doc.gramaj} ml</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
