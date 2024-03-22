@@ -32,6 +32,7 @@ const RoundButton = styled.button`
     padding: 0;
     width: 48px;
     height: 48px;
+    top: -10px;
     border-radius: 50%;
     margin-top: -6px;
     float: right;
@@ -78,6 +79,9 @@ export default ({ children }) => {
     /*useEffect(() => {
         loadUserImage();
     }, [isLoggedIn]);*/
+
+    //<ProfileImage src={userImage} alt={isLoggedIn ? "Profile" : "Guest"}/>  - DE ADAUGAT INAPOI SUB <ROUNDButton>
+
     if (!db)
         return <div>loading...</div>
     return (
@@ -85,7 +89,7 @@ export default ({ children }) => {
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
               <RoundButton className="profile_button" onClick={handleButtonClick}>
-                    <ProfileImage src={userImage} alt={isLoggedIn ? "Profile" : "Guest"} />
+                
               </RoundButton>
             </div>
             <div>{children}</div>
