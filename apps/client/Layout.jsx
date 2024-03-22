@@ -21,7 +21,6 @@ const StyledLayout = styled.div`
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    margin-top: -6px;
     top: -10px;
     float: right;
     position: relative;
@@ -31,7 +30,7 @@ const StyledLayout = styled.div`
     background-position: center;
   }
 `;
-const RoundButton = styled.button`
+/*const RoundButton = styled.button`
   .profile_button {
     padding: 0;
     width: 48px;
@@ -46,7 +45,7 @@ const RoundButton = styled.button`
     background-size: cover;
     background-position: center;
    }
-`;
+`;*/
 const ProfileImage = styled.img`
   /* Stiluri pentru imaginea de profil */
 `;
