@@ -80,6 +80,12 @@ const StyledHome = styled.div`
     padding: 10px;
     font-size:14px;
   }
+  .gramaj {
+    text-align: left;
+    color: #191919;
+    padding: 10px;
+    font-size:14px;
+  }
 `;
 const StyledCheckbox = styled.input`
   appearance: none;
@@ -246,6 +252,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -260,6 +267,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -274,6 +282,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -288,6 +297,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -302,6 +312,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -316,6 +327,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -330,6 +342,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -344,6 +357,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
@@ -358,6 +372,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
