@@ -21,7 +21,7 @@ const StyledLayout = styled.div`
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    top: -10px;
+    top: 10px;
     float: right;
     position: relative;
     z-index: 998;
