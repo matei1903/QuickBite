@@ -91,9 +91,9 @@ export default ({ children }) => {
         <StyledLayout>
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
-              <RoundButton className="profile_button" onClick={handleButtonClick}>
+              <button className="profile_button" onClick={handleButtonClick}>
                 
-              </RoundButton>
+              </button>
             </div>
             <div>{children}</div>
         </StyledLayout>
