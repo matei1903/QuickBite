@@ -277,6 +277,7 @@ export default () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <h2>Aperitive</h2>
           {filteredDocs.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
