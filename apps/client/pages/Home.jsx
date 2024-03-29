@@ -4,7 +4,7 @@ const Layout = React.lazy(() => import("../Layout.jsx"));
 const Icon = React.lazy(() =>
   import("@quick-bite/components/common/Icon.jsx")
 );
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledHome = styled.div`
   h1 {
@@ -124,6 +124,9 @@ export default () => {
   const [docs_sal, setDocs_sal] = useState([]);
   const [docs_des, setDocs_des] = useState([]);
   const [docs_ba, setDocs_ba] = useState([]);
+  const [docs, setDocs] = useState([]);
+  const [filteredDocs, setFilteredDocs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -137,6 +140,32 @@ export default () => {
     }
   };
 
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/alimente"), orderBy("nume")),
+      (qs) => {
+        const _docs = [];
+        qs.forEach((doc) => {
+          _docs.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs(_docs);
+        setFilteredDocs(_docs);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs(docs);
+    } else {
+      const filtered = docs.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs(filtered);
+    }
+  }, [searchTerm, docs]);
 
   useEffect(
     () =>
@@ -242,6 +271,26 @@ export default () => {
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
+        <input
+            type="text"
+            placeholder="Caută după nume..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredDocs.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
           <h2>Aperitive</h2>
           {docs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
