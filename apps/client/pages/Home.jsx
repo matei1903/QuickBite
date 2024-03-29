@@ -124,8 +124,19 @@ export default () => {
   const [docs_sal, setDocs_sal] = useState([]);
   const [docs_des, setDocs_des] = useState([]);
   const [docs_ba, setDocs_ba] = useState([]);
+
   const [docs, setDocs] = useState([]);
-  const [filteredDocs, setFilteredDocs] = useState([]);
+
+  const [filteredDocs_aper, setFilteredDocs_aper] = useState([]);
+  const [filteredDocs_fp, setFilteredDocs_fp] = useState([]);
+  const [filteredDocs_sp, setFilteredDocs_sp] = useState([]);
+  const [filteredDocs_pas, setFilteredDocs_pas] = useState([]);
+  const [filteredDocs_piz, setFilteredDocs_piz] = useState([]);
+  const [filteredDocs_gar, setFilteredDocs_gar] = useState([]);
+  const [filteredDocs_sal, setFilteredDocs_sal] = useState([]);
+  const [filteredDocs_des, setFilteredDocs_des] = useState([]);
+  const [filteredDocs_ba, setFilteredDocs_ba] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -147,10 +158,10 @@ export default () => {
       (qs) => {
         const _docs_aper = [];
         qs.forEach((doc) => {
-          _docs.push({ ...doc.data(), id: doc.id });
+          _docs_aper.push({ ...doc.data(), id: doc.id });
         });
-        setDocs(_docs_aper);
-        setFilteredDocs(_docs_aper);
+        setDocs_aper(_docs_aper);
+        setFilteredDocs_aper(_docs_aper);
       }
     );
     return () => unsubscribe();
@@ -158,14 +169,40 @@ export default () => {
 
   useEffect(() => {
     if (searchTerm === "") {
-      setFilteredDocs(docs_aper);
+      setFilteredDocs_aper(docs_aper);
     } else {
       const filtered = docs_aper.filter((doc) =>
         doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredDocs(filtered);
+      setFilteredDocs_aper(filtered);
     }
   }, [searchTerm, docs_aper]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/fel_principal"), orderBy("nume")),
+      (qs) => {
+        const _docs_fp = [];
+        qs.forEach((doc) => {
+          _docs_fp.push({ ...doc.data(), id: doc.id });
+        });
+        setDocs_fp(_docs_fp);
+        setFilteredDocs_fp(_docs_fp);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_fp(docs_fp);
+    } else {
+      const filtered = docs_fp.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_fp(filtered);
+    }
+  }, [searchTerm, docs_fp]);
 
   useEffect(
     () =>
@@ -278,7 +315,22 @@ export default () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <h2>Aperitive</h2>
-          {filteredDocs.map((doc) => (
+          {filteredDocs_aper.map((doc) => (
+            <StyledDiv className="alimente" key={doc.id}>
+              <StyledCheckbox
+                type="checkbox"
+                checked={selectedItems.includes(doc.id)}
+                onChange={() => handleSelect(doc.id)}
+              />
+              {doc.nume}
+              <div className="ingrediente">{doc.ingrediente}</div>
+              <div className="gramaj">{doc.gramaj} g</div>
+              <div className="pret">{doc.pret} ron</div>
+              <hr />
+            </StyledDiv>
+          ))}
+          <h2>Fel principal</h2>
+          {filteredDocs_fp.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
