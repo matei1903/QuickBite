@@ -15,6 +15,8 @@ const StyledLayout = styled.div`
     width: 150px;
     height: auto;
     top: 10px;
+    margin: 0 auto;
+    display: block;
   }
   .profile_button {
     padding: 0;
