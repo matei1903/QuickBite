@@ -145,12 +145,12 @@ export default () => {
     const unsubscribe = onSnapshot(
       query(collection(db, "/aperitive"), orderBy("nume")),
       (qs) => {
-        const _docs = [];
+        const _docs_aper = [];
         qs.forEach((doc) => {
           _docs.push({ ...doc.data(), id: doc.id });
         });
-        setDocs(_docs);
-        setFilteredDocs(_docs);
+        setDocs(_docs_aper);
+        setFilteredDocs(_docs_aper);
       }
     );
     return () => unsubscribe();
@@ -158,14 +158,14 @@ export default () => {
 
   useEffect(() => {
     if (searchTerm === "") {
-      setFilteredDocs(docs);
+      setFilteredDocs(docs_aper);
     } else {
-      const filtered = docs.filter((doc) =>
+      const filtered = docs_aper.filter((doc) =>
         doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredDocs(filtered);
     }
-  }, [searchTerm, docs]);
+  }, [searchTerm, docs_aper]);
 
   useEffect(
     () =>
