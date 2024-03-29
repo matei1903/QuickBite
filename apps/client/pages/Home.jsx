@@ -143,7 +143,7 @@ export default () => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      query(collection(db, "/alimente"), orderBy("nume")),
+      query(collection(db, "/aperitive"), orderBy("nume")),
       (qs) => {
         const _docs = [];
         qs.forEach((doc) => {
