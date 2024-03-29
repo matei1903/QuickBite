@@ -204,105 +204,189 @@ export default () => {
     }
   }, [searchTerm, docs_fp]);
 
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/aperitive")), (qs) => {
-        const _docs_aper = [];
-        qs.forEach((doc) => {
-          _docs_aper.push({ ...doc.data(), id: doc.id });
-        });
-        setDocs_aper(_docs_aper);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/fel_principal")), (qs) => {
-        const _docs_fp = [];
-        qs.forEach((doc) => {
-          _docs_fp.push({ ...doc.data(), id: doc.id });
-        });
-        setDocs_fp(_docs_fp);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/supe_ciorbe")), (qs) => {
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/supe_ciorbe"), orderBy("nume")),
+      (qs) => {
         const _docs_sp = [];
         qs.forEach((doc) => {
           _docs_sp.push({ ...doc.data(), id: doc.id });
         });
         setDocs_sp(_docs_sp);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/paste")), (qs) => {
+        setFilteredDocs_sp(_docs_sp);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_sp(docs_sp);
+    } else {
+      const filtered = docs_sp.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_sp(filtered);
+    }
+  }, [searchTerm, docs_sp]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/paste"), orderBy("nume")),
+      (qs) => {
         const _docs_pas = [];
         qs.forEach((doc) => {
           _docs_pas.push({ ...doc.data(), id: doc.id });
         });
         setDocs_pas(_docs_pas);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/pizza")), (qs) => {
+        setFilteredDocs_pas(_docs_pas);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_pas(docs_pas);
+    } else {
+      const filtered = docs_pas.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_pas(filtered);
+    }
+  }, [searchTerm, docs_pas]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/pizza"), orderBy("nume")),
+      (qs) => {
         const _docs_piz = [];
         qs.forEach((doc) => {
           _docs_piz.push({ ...doc.data(), id: doc.id });
         });
         setDocs_piz(_docs_piz);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/garnituri")), (qs) => {
+        setFilteredDocs_piz(_docs_piz);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_piz(docs_piz);
+    } else {
+      const filtered = docs_piz.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_piz(filtered);
+    }
+  }, [searchTerm, docs_piz]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/garnituri"), orderBy("nume")),
+      (qs) => {
         const _docs_gar = [];
         qs.forEach((doc) => {
           _docs_gar.push({ ...doc.data(), id: doc.id });
         });
         setDocs_gar(_docs_gar);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/salate")), (qs) => {
+        setFilteredDocs_gar(_docs_gar);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_gar(docs_gar);
+    } else {
+      const filtered = docs_gar.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_gar(filtered);
+    }
+  }, [searchTerm, docs_gar]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/salate"), orderBy("nume")),
+      (qs) => {
         const _docs_sal = [];
         qs.forEach((doc) => {
           _docs_sal.push({ ...doc.data(), id: doc.id });
         });
         setDocs_sal(_docs_sal);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/desert")), (qs) => {
+        setFilteredDocs_sal(_docs_sal);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_sal(docs_sal);
+    } else {
+      const filtered = docs_sal.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_sal(filtered);
+    }
+  }, [searchTerm, docs_sal]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/desert"), orderBy("nume")),
+      (qs) => {
         const _docs_des = [];
         qs.forEach((doc) => {
           _docs_des.push({ ...doc.data(), id: doc.id });
         });
         setDocs_des(_docs_des);
-      }),
-    []
-  );
-  useEffect(
-    () =>
-      onSnapshot(query(collection(db, "/bauturi")), (qs) => {
+        setFilteredDocs_des(_docs_des);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_des(docs_des);
+    } else {
+      const filtered = docs_des.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_des(filtered);
+    }
+  }, [searchTerm, docs_des]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "/bauturi"), orderBy("nume")),
+      (qs) => {
         const _docs_ba = [];
         qs.forEach((doc) => {
           _docs_ba.push({ ...doc.data(), id: doc.id });
         });
         setDocs_ba(_docs_ba);
-      }),
-    []
-  );
+        setFilteredDocs_ba(_docs_ba);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredDocs_ba(docs_ba);
+    } else {
+      const filtered = docs_ba.filter((doc) =>
+        doc.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDocs_ba(filtered);
+    }
+  }, [searchTerm, docs_ba]);
+
+  
   return (
     <Layout>
       <StyledHome>
@@ -344,38 +428,8 @@ export default () => {
               <hr />
             </StyledDiv>
           ))}
-          <h2>Aperitive</h2>
-          {docs_aper.map((doc) => (
-            <StyledDiv className="alimente" key={doc.id}>
-              <StyledCheckbox
-                type="checkbox"
-                checked={selectedItems.includes(doc.id)}
-                onChange={() => handleSelect(doc.id)}
-              />
-              {doc.nume}
-              <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="gramaj">{doc.gramaj} g</div>
-              <div className="pret">{doc.pret} ron</div>
-              <hr />
-            </StyledDiv>
-          ))}
-          <h2>Fel principal</h2>
-          {docs_fp.map((doc) => (
-            <StyledDiv className="alimente" key={doc.id}>
-              <StyledCheckbox
-                type="checkbox"
-                checked={selectedItems.includes(doc.id)}
-                onChange={() => handleSelect(doc.id)}
-              />
-              {doc.nume}
-              <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="gramaj">{doc.gramaj} g</div>
-              <div className="pret">{doc.pret} ron</div>
-              <hr />
-            </StyledDiv>
-          ))}
           <h2>Supe/Ciorbe</h2>
-          {docs_sp.map((doc) => (
+          {filteredDocs_sp.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -390,7 +444,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Paste</h2>
-          {docs_pas.map((doc) => (
+          {filteredDocs_pas.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -405,7 +459,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Pizza</h2>
-          {docs_piz.map((doc) => (
+          {filteredDocs_piz.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -420,7 +474,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Garnituri</h2>
-          {docs_gar.map((doc) => (
+          {filteredDocs_gar.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -435,7 +489,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Salate</h2>
-          {docs_sal.map((doc) => (
+          {filteredDocs_sal.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -450,7 +504,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Desert</h2>
-          {docs_des.map((doc) => (
+          {filteredDocs_des.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -465,7 +519,7 @@ export default () => {
             </StyledDiv>
           ))}
           <h2>Bauturi</h2>
-          {docs_ba.map((doc) => (
+          {filteredDocs_ba.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
               <StyledCheckbox
                 type="checkbox"
@@ -474,7 +528,7 @@ export default () => {
               />
               {doc.nume}
               <div className="ingrediente">{doc.ingrediente}</div>
-              <div className="gramaj">{doc.gramaj} ml</div>
+              <div className="gramaj">{doc.gramaj} g</div>
               <div className="pret">{doc.pret} ron</div>
               <hr />
             </StyledDiv>
