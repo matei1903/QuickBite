@@ -86,6 +86,16 @@ const StyledHome = styled.div`
     padding: 10px;
     font-size:14px;
   }
+  input[type=text] {
+    background-color: #ddddd6;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+  }
+  input:focus {
+    background-color: #202b1b;
+  }
 `;
 const StyledCheckbox = styled.input`
   appearance: none;
