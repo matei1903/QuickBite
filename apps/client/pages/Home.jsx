@@ -88,13 +88,13 @@ const StyledHome = styled.div`
   }
   input[type=text] {
     background-color: #ddddd6;
-    background-image: url('searchicon.png');
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/Search--Streamline-Guidance.svg?alt=media&token=7358a974-9292-48d9-8ff7-085957390929');
     background-position: 10px 10px;
     background-repeat: no-repeat;
     padding-left: 40px;
   }
   input:focus {
-    background-color: #202b1b;
+    border-color: #202b1b;
   }
 `;
 const StyledCheckbox = styled.input`
