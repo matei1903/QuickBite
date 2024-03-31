@@ -10,6 +10,7 @@ const StyledLayout = styled.div`
     box-shadow: 0 10px 10px 10px rgba(0,0,0,0.5);
     opacity: 100%;
     background-color: #202b1b;
+    position: relative;
   }
   .img {
     width: 150px;
@@ -23,9 +24,8 @@ const StyledLayout = styled.div`
     width: 48px;
     height: 48px;
     border-radius: 50%;
+    position: absolute;
     top: 10px;
-    float: right;
-    position: relative;
     z-index: 998;
     background-image: url('https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b');
     background-size: cover;
