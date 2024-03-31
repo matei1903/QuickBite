@@ -86,13 +86,17 @@ const StyledHome = styled.div`
     padding: 10px;
     font-size:14px;
   }
+  input {
+    padding-left: 10px;
+    padding-top:10px;
+  }
   input[type=text] {
     background-color: #ddddd6;
     background-image: url('https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/Search--Streamline-Guidance.svg?alt=media&token=7358a974-9292-48d9-8ff7-085957390929');
     background-size: 20px; 
     background-position: 10px center; 
     background-repeat: no-repeat;
-    padding-left: 30px;
+    padding-left: 35px;
     width: 100px; 
     height: 40px;
   }
