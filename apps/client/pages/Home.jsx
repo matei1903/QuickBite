@@ -93,10 +93,10 @@ const StyledHome = styled.div`
     background-position: 10px center; 
     background-repeat: no-repeat;
     padding-left: 35px;
-    width: 100px; 
+    width: 105px; 
     height: 40px;
-    left: 10px;
-    top: 10px;
+    margin: 10px;
+    border: 1px solid;
   }
   input:focus {
     outline: none;
