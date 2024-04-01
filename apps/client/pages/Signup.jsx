@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
-  const history = useHistory();
   const handleSignup = (e) => {
     e.preventDefault();
     try {
