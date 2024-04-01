@@ -3,7 +3,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { withRouter } from 'react-router-dom';
 
 
-const Signup = () => {
+const Signup = ({history}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
