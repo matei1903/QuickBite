@@ -8,7 +8,7 @@ const Login = React.lazy(() => import("./pages/Login.jsx"));
 const Home = React.lazy(() => import("./pages/Home.jsx"));
 const NotFound = React.lazy(() => import("./pages/NotFound.jsx"));
 const router = createBrowserRouter([
-  { path: "/signup", element: <Signup />},
+  { path: "/", element: <Signup />},
   { path: "/login", element: <Login />},
   { path: "/home", element: <Home /> },
   { path: "/*", element: <NotFound /> },
