@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { Redirect } from 'react-router-dom';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
