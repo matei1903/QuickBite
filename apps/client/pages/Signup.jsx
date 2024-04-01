@@ -12,7 +12,7 @@ const Signup = () => {
     try {
       createUserWithEmailAndPassword(auth, email, password);
       alert("Contul a fost creat cu succes!");
-      window.location.href = '/home';
+      window.location.href = 'apps/client/pages/Home.jsx';
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
