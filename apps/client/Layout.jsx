@@ -63,7 +63,7 @@ export default ({ children }) => {
     const [userImage, setUserImage] = useState(null);
 
     // Funcție pentru încărcarea imaginii utilizatorului
-   /* const loadUserImage = () => {
+    const loadUserImage = () => {
         // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
         // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
         const user = _firebase?.auth?.currentUser;
@@ -73,7 +73,7 @@ export default ({ children }) => {
             setUserImage(guestIcon);
         }
     };
-    */
+    
 
     // Funcție pentru gestionarea clicului butonului
     const handleButtonClick = () => {
@@ -82,11 +82,11 @@ export default ({ children }) => {
     };
 
     // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
-    /*useEffect(() => {
+    useEffect(() => {
         loadUserImage();
-    }, [isLoggedIn]);*/
+    }, [isLoggedIn]);
 
-    //<ProfileImage src={userImage} alt={isLoggedIn ? "Profile" : "Guest"}/>  - DE ADAUGAT INAPOI SUB <ROUNDButton>
+
 
     if (!db)
         return <div>loading...</div>
@@ -95,7 +95,7 @@ export default ({ children }) => {
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
               <button className="profile_button" onClick={handleButtonClick}>
-                
+              <ProfileImage src={userImage} alt={isLoggedIn ? "Profile" : "Guest"}/>
               </button>
             </div>
             <div>{children}</div>
