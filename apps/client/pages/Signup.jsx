@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-
+import { navigate } from 'react-router-dom';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -12,7 +11,7 @@ const Signup = () => {
     try {
       createUserWithEmailAndPassword(auth, email, password);
       alert("Contul a fost creat cu succes!");
-      window.location.href = 'apps/client/pages/Home.jsx';
+      navigate('/home');
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
