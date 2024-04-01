@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -19,6 +19,17 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSignup = () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      alert("Autentificare cu Google reușită!");
+      navigate('/home');
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <div>
@@ -27,6 +38,7 @@ const Signup = () => {
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
         <button type="submit">Signup</button>
+        <button onClick={handleGoogleSignup}>Signup with Google</button>
       </form>
     </div>
   );
