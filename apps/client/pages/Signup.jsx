@@ -9,6 +9,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       await auth.createUserWithEmailAndPassword(email, password);
+      console.log(auth);
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
