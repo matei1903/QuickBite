@@ -67,6 +67,7 @@ export default ({ children }) => {
         // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
         // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
         const user = _firebase?.auth?.currentUser;
+        const guestIcon = 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b';
         if (user && user.photoURL) {
             setUserImage(user.photoURL);
         } else {
