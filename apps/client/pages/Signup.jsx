@@ -5,16 +5,22 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
+  const [redirect, setRedirect] = useState(false);
   const handleSignup = (e) => {
     e.preventDefault();
     try {
       createUserWithEmailAndPassword(auth, email, password);
-      console.log(auth);
+      alert("Contul a fost creat cu succes!");
+      setRedirect(true);
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
     }
   };
+
+  if (redirect) {
+    return <Redirect to="/Home.jsx" />
+  }
 
   return (
     <div>
