@@ -5,10 +5,10 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
-  const handleSignup = async (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
     try {
-      await auth.createUserWithEmailAndPassword(email, password);
+      createUserWithEmailAndPassword(auth, email, password);
       console.log(auth);
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
