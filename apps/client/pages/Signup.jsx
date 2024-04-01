@@ -11,7 +11,7 @@ const Signup = () => {
     try {
       createUserWithEmailAndPassword(auth, email, password);
       alert("Contul a fost creat cu succes!");
-      history.push('/Home.jsx');
+      history.push('/Home');
       // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
