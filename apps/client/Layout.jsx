@@ -28,19 +28,7 @@ const StyledLayout = styled.div`
     right: 10px;
     top: 10px;
     z-index: 998;
-    background-image: url('https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b');
-    background-size: cover;
-    background-position: center;
-  }
-  .profil {
-    padding: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 998;
+    background-image: url(${isLoggedIn ? userImage : 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b'});
     background-size: cover;
     background-position: center;
   }
@@ -106,7 +94,6 @@ export default ({ children }) => {
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
               <button className="profile_button" onClick={handleButtonClick}>
-              {isLoggedIn ? <img className="profil" src={userImage} alt="Profile" /> : <img className="profil" src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b" alt="Guest" />}
               </button>
             </div>
             <div>{children}</div>
