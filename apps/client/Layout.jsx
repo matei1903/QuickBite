@@ -50,7 +50,18 @@ const StyledLayout = styled.div`
    }
 `;*/
 const ProfileImage = styled.img`
-  /* Stiluri pentru imaginea de profil */
+  ProfileImage {
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 998;
+    background-size: cover;
+    background-position: center;
+  }
 `;
 
 
