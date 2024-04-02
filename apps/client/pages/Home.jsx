@@ -93,7 +93,7 @@ const StyledHome = styled.div`
     background-position: 10px center; 
     background-repeat: no-repeat;
     padding-left: 35px;
-    width: 105px; 
+    width: 110px; 
     height: 40px;
     margin: 10px;
     border: 1px solid;
