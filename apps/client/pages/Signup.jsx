@@ -19,10 +19,10 @@ const Signup = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
+  const handleGoogleSignup = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
       const user = result.user;
       alert("Autentificare cu Google reușită!");
       navigate('/home');
