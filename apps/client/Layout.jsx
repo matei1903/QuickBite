@@ -78,15 +78,16 @@ export default ({ children }) => {
         loadUserImage();
     }, [isLoggedIn]);
 
-    const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
-    const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
+    //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
+    //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
     if (!db)
         return <div>loading...</div>
     return (
         <StyledLayout>
             <div className="header">
               <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
-              <button className={buttonClass} onClick={handleButtonClick}>
+              <button  className={`profile_button ${isLoggedIn ? 'loggedIn' : ''}`}
+                    style={{ backgroundImage: isLoggedIn ? `url(${userImage})` : 'url(https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b)' }} onClick={handleButtonClick}>
               </button>
             </div>
             <div>{children}</div>
