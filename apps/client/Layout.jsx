@@ -31,24 +31,13 @@ const StyledLayout = styled.div`
     background-size: cover;
     background-position: center;
   }
-  .profile_button.loggedIn {
-    padding: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 998;
-    background-size: cover;
-    background-position: center;
-}
 `;
 
 const ProfileButton = ({ children }) => {
     const _firebase = useFirebase();
     const db = _firebase?.db;
-
+    const [userImageURL, setUserImageURL] = useState(null);
+    
     // Starea pentru imaginea utilizatorului și conectare
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userImage, setUserImage] = useState(null);
