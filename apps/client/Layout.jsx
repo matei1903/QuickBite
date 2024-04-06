@@ -77,6 +77,7 @@ export default ({ children }) => {
 
     // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
     useEffect(() => {
+        console.log("Calling loadUserImage()...");
         loadUserImage();
     }, [isLoggedIn]);
 
