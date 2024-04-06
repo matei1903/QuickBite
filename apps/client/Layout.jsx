@@ -61,9 +61,10 @@ export default ({ children }) => {
         const guestIcon = 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b';
         if (user && user.photoURL) {
             setUserImage(user.photoURL);
-            console.log(userImage);
+            console.log("User image set to:", user.photoURL);
         } else {
             setUserImage(guestIcon);
+            console.log("User image set to default icon");
         }
     };
     
