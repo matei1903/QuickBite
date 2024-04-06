@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc } from 'firebase/firestore';
-import { useFirestore } from 'reactfire';
+import { useFirestore, collection, addDoc } from 'firebase/firestore';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
