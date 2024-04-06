@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { useFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
-  const firestore = useFirestore();
+  const firestore = getFirestore();
 
   const handleSignup = (e) => {
     e.preventDefault();
