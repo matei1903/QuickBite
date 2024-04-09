@@ -10,14 +10,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const firestore = getFirestore();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const authResult = createUserWithEmailAndPassword(auth, email, password);
-      addUserInfoToFirestore(authResult.user.uid, email, authResult.user.photoURL);
+      const authResult = await createUserWithEmailAndPassword(auth, email, password);
+      await addUserInfoToFirestore(authResult.user.uid, email, authResult.user.photoURL);
       alert("Contul a fost creat cu succes!");
       navigate('/home');
-      // Redirect user to dashboard or any other page after signup
     } catch (error) {
       console.error(error.message);
     }
