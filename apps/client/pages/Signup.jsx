@@ -2,48 +2,54 @@ import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import styled from "styled-components";
+import { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
-const StyledSignup = styled.div`
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-html,body{
-  display: grid;
-  height: 100%;
-  width: 100%;
-  place-items: center;
-  background: -webkit-linear-gradient(left, #003366,#004080,#0059b3
-, #0073e6);
-}
-::selection{
-  background: #1a75ff;
-  color: #fff;
-}
-.wrapper{
+const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  html,body {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    place-items: center;
+    background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+  }
+
+  ::selection {
+    background: #1a75ff;
+    color: #fff;
+  }
+`;
+
+export default GlobalStyles;
+
+const Wrapper = styled.div`
   overflow: hidden;
   max-width: 390px;
   background: #fff;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
-}
-.wrapper .title-text{
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+`;
+
+export default Wrapper;
+
+const TitleText = styled.div`
   display: flex;
   width: 200%;
-}
-.wrapper .title{
-  width: 50%;
-  font-size: 35px;
-  font-weight: 600;
-  text-align: center;
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-.wrapper .slide-controls{
+`;
+
+export default TitleText;
+
+const SlideControls = styled.div`
   position: relative;
   display: flex;
   height: 50px;
@@ -53,72 +59,141 @@ html,body{
   justify-content: space-between;
   border: 1px solid lightgrey;
   border-radius: 15px;
-}
-.slide-controls .slide{
+`;
+
+export default SlideControls;
+
+const SlideControlLabel = styled.label`
   height: 100%;
   width: 100%;
-  color: #fff;
+  color: ${({ checked }) => (checked ? '#fff' : '#000')};
   font-size: 18px;
   font-weight: 500;
   text-align: center;
   line-height: 48px;
-  cursor: pointer;
+  cursor: ${({ checked }) => (checked ? 'default' : 'pointer')};
   z-index: 1;
   transition: all 0.6s ease;
-}
-.slide-controls label.signup{
-  color: #000;
-}
-.slide-controls .slider-tab{
+`;
+
+export default SlideControlLabel;
+
+const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  html, body {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    place-items: center;
+    background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+  }
+
+  ::selection {
+    background: #1a75ff;
+    color: #fff;
+  }
+`;
+
+export default GlobalStyles;
+
+const Wrapper = styled.div`
+  overflow: hidden;
+  max-width: 390px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+`;
+
+export default Wrapper;
+
+const TitleText = styled.div`
+  display: flex;
+  width: 200%;
+`;
+
+export default TitleText;
+
+const SlideControls = styled.div`
+  position: relative;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+  margin: 30px 0 10px 0;
+  justify-content: space-between;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+`;
+
+export default SlideControls;
+
+const SlideControlLabel = styled.label`
+  height: 100%;
+  width: 100%;
+  color: ${({ checked }) => (checked ? '#fff' : '#000')};
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 48px;
+  cursor: ${({ checked }) => (checked ? 'default' : 'pointer')};
+  z-index: 1;
+  transition: all 0.6s ease;
+`;
+
+export default SlideControlLabel;
+
+const SliderTab = styled.div`
   position: absolute;
   height: 100%;
   width: 50%;
-  left: 0;
+  left: ${({ checked }) => (checked ? '50%' : '0')};
   z-index: 0;
   border-radius: 15px;
-  background: -webkit-linear-gradient(left,#003366,#004080,#0059b3
-, #0073e6);
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-input[type="radio"]{
-  display: none;
-}
-#signup:checked ~ .slider-tab{
-  left: 50%;
-}
-#signup:checked ~ label.signup{
-  color: #fff;
-  cursor: default;
-  user-select: none;
-}
-#signup:checked ~ label.login{
-  color: #000;
-}
-#login:checked ~ label.signup{
-  color: #000;
-}
-#login:checked ~ label.login{
-  cursor: default;
-  user-select: none;
-}
-.wrapper .form-container{
+  background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+`;
+
+export default SliderTab;
+
+const FormContainer = styled.div`
   width: 100%;
   overflow: hidden;
-}
-.form-container .form-inner{
+`;
+
+export default FormContainer;
+
+const FormInner = styled.div`
   display: flex;
   width: 200%;
-}
-.form-container .form-inner form{
+`;
+
+export default FormInner;
+
+const Form = styled.form`
   width: 50%;
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-.form-inner form .field{
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+`;
+
+export default Form;
+
+const Field = styled.div`
   height: 50px;
   width: 100%;
   margin-top: 20px;
-}
-.form-inner form .field input{
+`;
+
+export default Field;
+
+const Input = styled.input`
   height: 100%;
   width: 100%;
   outline: none;
@@ -128,55 +203,55 @@ input[type="radio"]{
   border-bottom-width: 2px;
   font-size: 17px;
   transition: all 0.3s ease;
-}
-.form-inner form .field input:focus{
-  border-color: #1a75ff;
-  /* box-shadow: inset 0 0 3px #fb6aae; */
-}
-.form-inner form .field input::placeholder{
-  color: #999;
-  transition: all 0.3s ease;
-}
-form .field input:focus::placeholder{
-  color: #1a75ff;
-}
-.form-inner form .pass-link{
+
+  &:focus {
+    border-color: #1a75ff;
+  }
+
+  &::placeholder {
+    color: #999;
+    transition: all 0.3s ease;
+  }
+`;
+
+export default Input;
+
+const PassLink = styled.div`
   margin-top: 5px;
-}
-.form-inner form .signup-link{
+`;
+
+export default PassLink;
+
+const SignupLink = styled.div`
   text-align: center;
   margin-top: 30px;
-}
-.form-inner form .pass-link a,
-.form-inner form .signup-link a{
-  color: #1a75ff;
-  text-decoration: none;
-}
-.form-inner form .pass-link a:hover,
-.form-inner form .signup-link a:hover{
-  text-decoration: underline;
-}
-form .btn{
+`;
+
+export default SignupLink;
+
+const Button = styled.div`
   height: 50px;
   width: 100%;
   border-radius: 15px;
   position: relative;
   overflow: hidden;
-}
-form .btn .btn-layer{
+`;
+
+export default Button;
+
+const ButtonLayer = styled.div`
   height: 100%;
   width: 300%;
   position: absolute;
   left: -100%;
-  background: -webkit-linear-gradient(right,#003366,#004080,#0059b3
-, #0073e6);
+  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
   border-radius: 15px;
-  transition: all 0.4s ease;;
-}
-form .btn:hover .btn-layer{
-  left: 0;
-}
-form .btn input[type="submit"]{
+  transition: all 0.4s ease;
+`;
+
+export default ButtonLayer;
+
+const ButtonInput = styled.input`
   height: 100%;
   width: 100%;
   z-index: 1;
@@ -189,8 +264,180 @@ form .btn input[type="submit"]{
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-}
-`
+`;
+
+export default ButtonInput;
+
+const PassLinkAnchor = styled.a`
+  color: #1a75ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export default PassLinkAnchor;
+
+const SignupLinkAnchor = styled.a`
+  color: #1a75ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export default SignupLinkAnchor;
+
+const BtnWrapper = styled.div`
+  height: 50px;
+  width: 100%;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+`;
+
+export default BtnWrapper;
+
+const BtnLayer = styled.div`
+  height: 100%;
+  width: 300%;
+  position: absolute;
+  left: -100%;
+  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+  border-radius: 15px;
+  transition: all 0.4s ease;
+`;
+
+export default BtnLayer;
+
+const BtnInput = styled.input`
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  background: none;
+  border: none;
+  color: #fff;
+  padding-left: 0;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
+export default BtnInput;
+
+const PassLinkWrapper = styled.div`
+  margin-top: 5px;
+`;
+
+export default PassLinkWrapper;
+
+const PassLinkAnchor = styled.a`
+  color: #1a75ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export default PassLinkAnchor;
+
+const SignupLinkWrapper = styled.div`
+  text-align: center;
+  margin-top: 30px;
+`;
+
+export default SignupLinkWrapper;
+
+const SignupLinkAnchor = styled.a`
+  color: #1a75ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export default SignupLinkAnchor;
+
+const BtnWrapper = styled.div`
+  height: 50px;
+  width: 100%;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+`;
+
+export default BtnWrapper;
+
+const BtnLayer = styled.div`
+  height: 100%;
+  width: 300%;
+  position: absolute;
+  left: -100%;
+  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+  border-radius: 15px;
+  transition: all 0.4s ease;
+`;
+
+export default BtnLayer;
+
+const BtnInput = styled.input`
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  background: none;
+  border: none;
+  color: #fff;
+  padding-left: 0;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
+export default BtnInput;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+export default ErrorMessage;
+
+const SuccessMessage = styled.div`
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+export default SuccessMessage;
+
+const GoogleSignupButton = styled.button`
+  height: 50px;
+  width: 100%;
+  border-radius: 15px;
+  background-color: #db4437;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #c1351d;
+  }
+`;
+
+export default GoogleSignupButton;
+
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -244,55 +491,55 @@ const Signup = () => {
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
   // <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
   return (
-    <StyledSignup class="wrapper">
-      <StyledSignup class="title-text">
-        <StyledSignup class="title login">Login Form</StyledSignup>
-        <StyledSignup class="title signup">Signup Form</StyledSignup>
-      </StyledSignup>
-      <StyledSignup class="form-container">
-        <StyledSignup class="slide-controls">
-          <input type="radio" name="slide" id="login" checked>
-          </input>
-          <input type="radio" name="slide" id="signup">
-          </input>
-          <label for="login" class="slide login">Login</label>
-          <label for="signup" class="slide signup">Signup</label>
-          <StyledSignup class="slider-tab"></StyledSignup>
-        </StyledSignup>
-        <StyledSignup class="form-inner">
-          <form action="#" class="login">
-            <StyledSignup class="field">
-              <input type="text" placeholder="Email Address" required />
-            </StyledSignup>
-            <StyledSignup class="field">
-              <input type="password" placeholder="Password" required />
-            </StyledSignup>
-            <StyledSignup class="pass-link"><a href="#">Forgot password?</a></StyledSignup>
-            <StyledSignup class="field btn">
-              <StyledSignup class="btn-layer"></StyledSignup>
-              <input type="submit" value="Login" />
-            </StyledSignup>
-            <StyledSignup class="signup-link">Not a member? <a href="">Signup now</a></StyledSignup>
-          </form>
-          <form action="#" class="signup">
-            <StyledSignup class="field">
-              <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
-            </StyledSignup>
-            <StyledSignup class="field">
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-            </StyledSignup>
-            <StyledSignup class="field">
-              <input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
-            </StyledSignup>
-            <StyledSignup class="field btn">
-              <StyledSignup class="btn-layer"></StyledSignup>
-              <input type="submit" onClick={handleSignup} value="Signup" />
+    <Wrapper class="wrapper">
+      <TitleText class="title-text">
+        <TitleText class="title login">Login Form</TitleText>
+        <TitleText class="title signup">Signup Form</TitleText>
+      </TitleText>
+      <FormContainer class="form-container">
+        <SlideControls class="slide-controls">
+          <Input type="radio" name="slide" id="login" checked>
+          </Input>
+          <Input type="radio" name="slide" id="signup">
+          </Input>
+          <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
+          <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
+          <SliderTab class="slider-tab"></SliderTab>
+        </SlideControls>
+        <FormInner class="form-inner">
+          <Form action="#" class="login">
+            <Field class="field">
+              <Input type="text" placeholder="Email Address" required />
+            </Field>
+            <Field class="field">
+              <Input type="password" placeholder="Password" required />
+            </Field>
+            <PassLink class="pass-link"><a href="#">Forgot password?</a></PassLink>
+            <div class="field btn">
+              <BtnLayer class="btn-layer"></BtnLayer>
+              <Input type="submit" value="Login" />
+            </div>
+            <SignupLink class="signup-link">Not a member? <a href="">Signup now</a></SignupLink>
+          </Form>
+          <Form action="#" class="signup">
+            <Field class="field">
+              <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
+            </Field>
+            <Field class="field">
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+            </Field>
+            <Field class="field">
+              <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
+            </Field>
+            <div class="field btn">
+              <BtnLayer class="btn-layer"></BtnLayer>
+              <Input type="submit" onClick={handleSignup} value="Signup" />
               <button onClick={handleGoogleSignup}>Signup with Google</button>
-            </StyledSignup>
-          </form>
-        </StyledSignup>
-      </StyledSignup>
-    </StyledSignup>
+            </div>
+          </Form>
+        </FormInner>
+      </FormContainer>
+    </Wrapper>
 
   );
 };
