@@ -341,12 +341,12 @@ const Signup = () => {
             <Field class="field">
               <Input type="password" placeholder="Password" required />
             </Field>
-            <PassLink class="pass-link"><a href="#">Forgot password?</a></PassLink>
-            <div class="field btn">
+            <PassLink class="pass-link"><PassLinkAnchor href="#">Forgot password?</PassLinkAnchor></PassLink>
+            <BtnWrapper class="field btn">
               <BtnLayer class="btn-layer"></BtnLayer>
               <Input type="submit" value="Login" />
-            </div>
-            <SignupLink class="signup-link">Not a member? <a href="">Signup now</a></SignupLink>
+            </BtnWrapper>
+            <SignupLink class="signup-link">Not a member? <SignupLinkAnchor href="">Signup now</SignupLinkAnchor></SignupLink>
           </Form>
           <Form action="#" class="signup">
             <Field class="field">
@@ -358,16 +358,15 @@ const Signup = () => {
             <Field class="field">
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
-            <div class="field btn">
+            <BtnWrapper class="field btn">
               <BtnLayer class="btn-layer"></BtnLayer>
               <Input type="submit" onClick={handleSignup} value="Signup" />
-              <button onClick={handleGoogleSignup}>Signup with Google</button>
-            </div>
+              <Button onClick={handleGoogleSignup}>Signup with Google</Button>
+            </BtnWrapper>
           </Form>
         </FormInner>
       </FormContainer>
     </Wrapper>
-
   );
 };
 
