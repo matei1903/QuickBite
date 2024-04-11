@@ -315,22 +315,22 @@ const Signup = () => {
   };
 
   const loginText = document.querySelector(".title-text .login");
-      const loginForm = document.querySelector("form.login");
-      const loginBtn = document.querySelector("label.login");
-      const signupBtn = document.querySelector("label.signup");
-      const signupLink = document.querySelector("form .signup-link a");
-      signupBtn.onclick = (()=>{
-        loginForm.style.marginLeft = "-50%";
-        loginText.style.marginLeft = "-50%";
-      });
-      loginBtn.onclick = (()=>{
-        loginForm.style.marginLeft = "0%";
-        loginText.style.marginLeft = "0%";
-      });
-      signupLink.onclick = (()=>{
-        signupBtn.click();
-        return false;
-      });
+  const loginForm = document.querySelector("form.login");
+  const loginBtn = document.querySelector("label.login");
+  const signupBtn = document.querySelector("label.signup");
+  const signupLink = document.querySelector("form .signup-link a");
+  signupBtn.onclick = (() => {
+    loginForm.style.marginLeft = "-50%";
+    loginText.style.marginLeft = "-50%";
+  });
+  loginBtn.onclick = (() => {
+    loginForm.style.marginLeft = "0%";
+    loginText.style.marginLeft = "0%";
+  });
+  signupLink.onclick = (() => {
+    signupBtn.click();
+    return false;
+  });
   //<button onClick={handleGoogleSignup}>Signup with Google</button>
   //<button onClick={handleSignup}>Signup</button>
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
@@ -344,9 +344,9 @@ const Signup = () => {
       <FormContainer class="form-container">
         <SlideControls class="slide-controls">
           <Input type="radio" name="slide" id="login" checked />
-          <Input type="radio" name="slide" id="signup"/>
+          <Input type="radio" name="slide" id="signup" />
           <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
-         <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
+          <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
           <SliderTab class="slider-tab">
           </SliderTab>
         </SlideControls>
@@ -376,13 +376,8 @@ const Signup = () => {
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
             <BtnWrapper class="field btn">
-<<<<<<< HEAD
-              <BtnLayer class="btn-layer" /> 
-                <BtnInput type="submit" onClick={handleSignup} value="Signup" />
-=======
-              <BtnLayer class="btn-layer" /> 
+              <BtnLayer class="btn-layer" />
               <BtnInput type="submit" onClick={handleSignup} value="Signup" />
->>>>>>> c3e4bf76c099d9d301d4145ab63c17ed352250fc
             </BtnWrapper>
             <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
