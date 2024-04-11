@@ -376,8 +376,13 @@ const Signup = () => {
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
             <BtnWrapper class="field btn">
+<<<<<<< HEAD
+              <BtnLayer class="btn-layer" /> 
+                <BtnInput type="submit" onClick={handleSignup} value="Signup" />
+=======
               <BtnLayer class="btn-layer" /> 
               <BtnInput type="submit" onClick={handleSignup} value="Signup" />
+>>>>>>> c3e4bf76c099d9d301d4145ab63c17ed352250fc
             </BtnWrapper>
             <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
