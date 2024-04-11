@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import styled from "styled-components";
 
-const StyledSignup = styled.StyledSignup`
+const StyledSignup = styled.div`
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
   margin: 0;
