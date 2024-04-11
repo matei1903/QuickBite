@@ -331,6 +331,8 @@ const Signup = () => {
           </Input>
           <SliderTab class="slider-tab">
             <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
+          </SliderTab>
+          <SliderTab>
             <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
           </SliderTab>
         </SlideControls>
