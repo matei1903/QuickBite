@@ -313,6 +313,24 @@ const Signup = () => {
       console.error("Error adding user info to Firestore:", error);
     }
   };
+
+  const loginText = document.querySelector(".title-text .login");
+      const loginForm = document.querySelector("form.login");
+      const loginBtn = document.querySelector("label.login");
+      const signupBtn = document.querySelector("label.signup");
+      const signupLink = document.querySelector("form .signup-link a");
+      signupBtn.onclick = (()=>{
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+      });
+      loginBtn.onclick = (()=>{
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+      });
+      signupLink.onclick = (()=>{
+        signupBtn.click();
+        return false;
+      });
   //<button onClick={handleGoogleSignup}>Signup with Google</button>
   //<button onClick={handleSignup}>Signup</button>
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
@@ -325,15 +343,11 @@ const Signup = () => {
       </TitleText>
       <FormContainer class="form-container">
         <SlideControls class="slide-controls">
-          <Input type="radio" name="slide" id="login" checked>
-          </Input>
-          <Input type="radio" name="slide" id="signup">
-          </Input>
+          <Input type="radio" name="slide" id="login" checked />
+          <Input type="radio" name="slide" id="signup"/>
+          <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
+         <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
           <SliderTab class="slider-tab">
-            <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
-          </SliderTab>
-          <SliderTab>
-            <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
           </SliderTab>
         </SlideControls>
         <FormInner class="form-inner">
@@ -346,9 +360,8 @@ const Signup = () => {
             </Field>
             <PassLink class="pass-link"><PassLinkAnchor href="#">Forgot password?</PassLinkAnchor></PassLink>
             <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer">
-                <BtnInput type="submit" value="Login" />
-              </BtnLayer>
+              <BtnLayer class="btn-layer" />
+              <BtnInput type="submit" value="Login" />
             </BtnWrapper>
             <SignupLink class="signup-link">Not a member? <SignupLinkAnchor href="">Signup now</SignupLinkAnchor></SignupLink>
           </Form>
@@ -363,9 +376,8 @@ const Signup = () => {
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
             <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer">
-                <BtnInput type="submit" onClick={handleSignup} value="Signup" />
-              </BtnLayer>
+              <BtnLayer class="btn-layer" /> 
+              <BtnInput type="submit" onClick={handleSignup} value="Signup" />
             </BtnWrapper>
             <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
