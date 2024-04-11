@@ -56,7 +56,7 @@ const SlideControls = styled.div`
 
 const SlideControlLabel = styled.label`
  
-  width: 50%;
+  width: 100%;
   position: relative;
   display: block;
   padding: 10px 0;
@@ -75,8 +75,8 @@ const SlideControlLabel = styled.label`
 const SliderTab = styled.div`
   position: absolute;
   height: 100%;
-  width: 50%;
-  left: ${({ checked }) => (checked ? '50%' : '0')};
+  width: 100%;
+  left: ${({ checked }) => (checked ? '0%' : '0')};
   z-index: 0;
   border-radius: 15px;
   background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
@@ -94,7 +94,7 @@ const FormInner = styled.div`
 `;
 
 const Form = styled.form`
-  width: 50%;
+  width: 100%;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 `;
 
@@ -238,7 +238,7 @@ const Signup = () => {
   const handleSlide = () => {
     setShowLoginForm(!showLoginForm);
   };
-  
+
   //<button onClick={handleGoogleSignup}>Signup with Google</button>
   //<button onClick={handleSignup}>Signup</button>
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
@@ -246,15 +246,15 @@ const Signup = () => {
   return (
     <Wrapper className="wrapper">
       <TitleText className="title-text">
-        <div className="title login">Login Form</div>
-        <div className="title signup">Signup Form</div>
+        <TitleText className="title login">Login Form</TitleText>
+        <TitleText className="title signup">Signup Form</TitleText>
       </TitleText>
       <FormContainer className="form-container">
         <SlideControls className="slide-controls">
           <Input type="radio" name="slide" id="login" checked={showLoginForm} onChange={handleSlide} />
           <Input type="radio" name="slide" id="signup" checked={!showLoginForm} onChange={handleSlide} />
-          <SlideControlLabel htmlFor="login" className="slide login" checked={showLoginForm}>Login</SlideControlLabel>
-          <SlideControlLabel htmlFor="signup" className="slide signup" checked={!showLoginForm}>Signup</SlideControlLabel>
+          <SlideControlLabel htmlFor="login" className="slide login" checked={showLoginForm} onClick={handleSlide}>Login</SlideControlLabel>
+          <SlideControlLabel htmlFor="signup" className="slide signup" checked={!showLoginForm} onClick={handleSlide}>Signup</SlideControlLabel>
           <SliderTab className="slider-tab" checked={!showLoginForm} />
         </SlideControls>
         <FormInner className="form-inner">
