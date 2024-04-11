@@ -29,7 +29,7 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export default GlobalStyles;
+
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -40,14 +40,14 @@ const Wrapper = styled.div`
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 `;
 
-export default Wrapper;
+
 
 const TitleText = styled.div`
   display: flex;
   width: 200%;
 `;
 
-export default TitleText;
+
 
 const SlideControls = styled.div`
   position: relative;
@@ -61,7 +61,7 @@ const SlideControls = styled.div`
   border-radius: 15px;
 `;
 
-export default SlideControls;
+
 
 const SlideControlLabel = styled.label`
   height: 100%;
@@ -76,33 +76,6 @@ const SlideControlLabel = styled.label`
   transition: all 0.6s ease;
 `;
 
-export default SlideControlLabel;
-
-const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
-
-  html, body {
-    display: grid;
-    height: 100%;
-    width: 100%;
-    place-items: center;
-    background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
-  }
-
-  ::selection {
-    background: #1a75ff;
-    color: #fff;
-  }
-`;
-
-export default GlobalStyles;
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -113,7 +86,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 `;
 
-export default Wrapper;
+
 
 const TitleText = styled.div`
   display: flex;
