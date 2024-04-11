@@ -25,6 +25,7 @@ const FormField = styled.div`
 const Input = styled.input`
   border: 0;
   font: inherit;
+  padding: 0.5rem 1rem;
 
   &::placeholder {
     color: #7e8ba3;
