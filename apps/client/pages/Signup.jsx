@@ -77,53 +77,6 @@ const SlideControlLabel = styled.label`
 `;
 
 
-const Wrapper = styled.div`
-  overflow: hidden;
-  max-width: 390px;
-  background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
-`;
-
-
-
-const TitleText = styled.div`
-  display: flex;
-  width: 200%;
-`;
-
-export default TitleText;
-
-const SlideControls = styled.div`
-  position: relative;
-  display: flex;
-  height: 50px;
-  width: 100%;
-  overflow: hidden;
-  margin: 30px 0 10px 0;
-  justify-content: space-between;
-  border: 1px solid lightgrey;
-  border-radius: 15px;
-`;
-
-export default SlideControls;
-
-const SlideControlLabel = styled.label`
-  height: 100%;
-  width: 100%;
-  color: ${({ checked }) => (checked ? '#fff' : '#000')};
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-  line-height: 48px;
-  cursor: ${({ checked }) => (checked ? 'default' : 'pointer')};
-  z-index: 1;
-  transition: all 0.6s ease;
-`;
-
-export default SlideControlLabel;
-
 const SliderTab = styled.div`
   position: absolute;
   height: 100%;
@@ -135,28 +88,27 @@ const SliderTab = styled.div`
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 `;
 
-export default SliderTab;
+
 
 const FormContainer = styled.div`
   width: 100%;
   overflow: hidden;
 `;
 
-export default FormContainer;
 
 const FormInner = styled.div`
   display: flex;
   width: 200%;
 `;
 
-export default FormInner;
+
 
 const Form = styled.form`
   width: 50%;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 `;
 
-export default Form;
+
 
 const Field = styled.div`
   height: 50px;
@@ -164,7 +116,7 @@ const Field = styled.div`
   margin-top: 20px;
 `;
 
-export default Field;
+
 
 const Input = styled.input`
   height: 100%;
@@ -187,20 +139,20 @@ const Input = styled.input`
   }
 `;
 
-export default Input;
+
 
 const PassLink = styled.div`
   margin-top: 5px;
 `;
 
-export default PassLink;
+
 
 const SignupLink = styled.div`
   text-align: center;
   margin-top: 30px;
 `;
 
-export default SignupLink;
+
 
 const Button = styled.div`
   height: 50px;
@@ -210,36 +162,6 @@ const Button = styled.div`
   overflow: hidden;
 `;
 
-export default Button;
-
-const ButtonLayer = styled.div`
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
-  border-radius: 15px;
-  transition: all 0.4s ease;
-`;
-
-export default ButtonLayer;
-
-const ButtonInput = styled.input`
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  position: relative;
-  background: none;
-  border: none;
-  color: #fff;
-  padding-left: 0;
-  border-radius: 15px;
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-`;
-
-export default ButtonInput;
 
 const PassLinkAnchor = styled.a`
   color: #1a75ff;
@@ -250,7 +172,7 @@ const PassLinkAnchor = styled.a`
   }
 `;
 
-export default PassLinkAnchor;
+
 
 const SignupLinkAnchor = styled.a`
   color: #1a75ff;
@@ -261,17 +183,6 @@ const SignupLinkAnchor = styled.a`
   }
 `;
 
-export default SignupLinkAnchor;
-
-const BtnWrapper = styled.div`
-  height: 50px;
-  width: 100%;
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-`;
-
-export default BtnWrapper;
 
 const BtnLayer = styled.div`
   height: 100%;
@@ -283,7 +194,7 @@ const BtnLayer = styled.div`
   transition: all 0.4s ease;
 `;
 
-export default BtnLayer;
+
 
 const BtnInput = styled.input`
   height: 100%;
@@ -300,42 +211,19 @@ const BtnInput = styled.input`
   cursor: pointer;
 `;
 
-export default BtnInput;
+
 
 const PassLinkWrapper = styled.div`
   margin-top: 5px;
 `;
 
-export default PassLinkWrapper;
 
-const PassLinkAnchor = styled.a`
-  color: #1a75ff;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-export default PassLinkAnchor;
 
 const SignupLinkWrapper = styled.div`
   text-align: center;
   margin-top: 30px;
 `;
 
-export default SignupLinkWrapper;
-
-const SignupLinkAnchor = styled.a`
-  color: #1a75ff;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-export default SignupLinkAnchor;
 
 const BtnWrapper = styled.div`
   height: 50px;
@@ -345,36 +233,6 @@ const BtnWrapper = styled.div`
   overflow: hidden;
 `;
 
-export default BtnWrapper;
-
-const BtnLayer = styled.div`
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
-  border-radius: 15px;
-  transition: all 0.4s ease;
-`;
-
-export default BtnLayer;
-
-const BtnInput = styled.input`
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  position: relative;
-  background: none;
-  border: none;
-  color: #fff;
-  padding-left: 0;
-  border-radius: 15px;
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-`;
-
-export default BtnInput;
 
 const ErrorMessage = styled.div`
   color: red;
@@ -382,7 +240,6 @@ const ErrorMessage = styled.div`
   margin-top: 5px;
 `;
 
-export default ErrorMessage;
 
 const SuccessMessage = styled.div`
   color: green;
@@ -390,7 +247,6 @@ const SuccessMessage = styled.div`
   margin-top: 5px;
 `;
 
-export default SuccessMessage;
 
 const GoogleSignupButton = styled.button`
   height: 50px;
@@ -408,8 +264,6 @@ const GoogleSignupButton = styled.button`
     background-color: #c1351d;
   }
 `;
-
-export default GoogleSignupButton;
 
 
 const Signup = () => {
