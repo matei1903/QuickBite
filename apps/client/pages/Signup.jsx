@@ -28,9 +28,6 @@ const GlobalStyles = createGlobalStyle`
     color: #fff;
   }
 `;
-
-
-
 const Wrapper = styled.div`
   overflow: hidden;
   max-width: 390px;
@@ -40,14 +37,10 @@ const Wrapper = styled.div`
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 `;
 
-
-
 const TitleText = styled.div`
   display: flex;
   width: 200%;
 `;
-
-
 
 const SlideControls = styled.div`
   position: relative;
@@ -60,8 +53,6 @@ const SlideControls = styled.div`
   border: 1px solid lightgrey;
   border-radius: 15px;
 `;
-
-
 
 const SlideControlLabel = styled.label`
   height: 100%;
@@ -76,7 +67,6 @@ const SlideControlLabel = styled.label`
   transition: all 0.6s ease;
 `;
 
-
 const SliderTab = styled.div`
   position: absolute;
   height: 100%;
@@ -88,35 +78,26 @@ const SliderTab = styled.div`
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 `;
 
-
-
 const FormContainer = styled.div`
   width: 100%;
   overflow: hidden;
 `;
-
 
 const FormInner = styled.div`
   display: flex;
   width: 200%;
 `;
 
-
-
 const Form = styled.form`
   width: 50%;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 `;
-
-
 
 const Field = styled.div`
   height: 50px;
   width: 100%;
   margin-top: 20px;
 `;
-
-
 
 const Input = styled.input`
   height: 100%;
@@ -139,20 +120,14 @@ const Input = styled.input`
   }
 `;
 
-
-
 const PassLink = styled.div`
   margin-top: 5px;
 `;
-
-
 
 const SignupLink = styled.div`
   text-align: center;
   margin-top: 30px;
 `;
-
-
 
 const Button = styled.div`
   height: 50px;
@@ -161,7 +136,6 @@ const Button = styled.div`
   position: relative;
   overflow: hidden;
 `;
-
 
 const PassLinkAnchor = styled.a`
   color: #1a75ff;
@@ -172,8 +146,6 @@ const PassLinkAnchor = styled.a`
   }
 `;
 
-
-
 const SignupLinkAnchor = styled.a`
   color: #1a75ff;
   text-decoration: none;
@@ -182,7 +154,6 @@ const SignupLinkAnchor = styled.a`
     text-decoration: underline;
   }
 `;
-
 
 const BtnLayer = styled.div`
   height: 100%;
@@ -193,8 +164,6 @@ const BtnLayer = styled.div`
   border-radius: 15px;
   transition: all 0.4s ease;
 `;
-
-
 
 const BtnInput = styled.input`
   height: 100%;
@@ -212,64 +181,11 @@ const BtnInput = styled.input`
 `;
 
 
-
-const PassLinkWrapper = styled.div`
-  margin-top: 5px;
-`;
-
-
-
-const SignupLinkWrapper = styled.div`
-  text-align: center;
-  margin-top: 30px;
-`;
-
-
-const BtnWrapper = styled.div`
-  height: 50px;
-  width: 100%;
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-`;
-
-
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-`;
-
-
-const SuccessMessage = styled.div`
-  color: green;
-  font-size: 14px;
-  margin-top: 5px;
-`;
-
-
-const GoogleSignupButton = styled.button`
-  height: 50px;
-  width: 100%;
-  border-radius: 15px;
-  background-color: #db4437;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: #c1351d;
-  }
-`;
-
-
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [conf_pass, setConf_pass] = useState('');
+  const [showLoginForm, setShowLoginForm] = useState(true);
   const auth = getAuth();
   const navigate = useNavigate();
   const firestore = getFirestore();
@@ -314,78 +230,63 @@ const Signup = () => {
     }
   };
 
+  const handleSlide = () => {
+    setShowLoginForm(!showLoginForm);
+  };
   
   //<button onClick={handleGoogleSignup}>Signup with Google</button>
   //<button onClick={handleSignup}>Signup</button>
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
   // <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
   return (
-    <Wrapper class="wrapper">
-      <TitleText class="title-text">
-        <TitleText class="title login">Login Form</TitleText>
-        <TitleText class="title signup">Signup Form</TitleText>
+    <Wrapper className="wrapper">
+      <TitleText className="title-text">
+        <div className="title login">Login Form</div>
+        <div className="title signup">Signup Form</div>
       </TitleText>
-      <FormContainer class="form-container">
-        <SlideControls class="slide-controls">
-          <Input type="radio" name="slide" id="login" checked />
-          <Input type="radio" name="slide" id="signup" />
-          <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
-          <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
-          <SliderTab class="slider-tab">
-          </SliderTab>
+      <FormContainer className="form-container">
+        <SlideControls className="slide-controls">
+          <Input type="radio" name="slide" id="login" checked={showLoginForm} onChange={handleSlide} />
+          <Input type="radio" name="slide" id="signup" checked={!showLoginForm} onChange={handleSlide} />
+          <SlideControlLabel htmlFor="login" className="slide login" checked={showLoginForm}>Login</SlideControlLabel>
+          <SlideControlLabel htmlFor="signup" className="slide signup" checked={!showLoginForm}>Signup</SlideControlLabel>
+          <SliderTab className="slider-tab" checked={!showLoginForm} />
         </SlideControls>
-        <FormInner class="form-inner">
-          <Form action="#" class="login">
-            <Field class="field">
+        <FormInner className="form-inner">
+          <Form action="#" className="login" style={{ marginLeft: showLoginForm ? '0%' : '-50%' }}>
+            <Field className="field">
               <Input type="text" placeholder="Email Address" required />
             </Field>
-            <Field class="field">
+            <Field className="field">
               <Input type="password" placeholder="Password" required />
             </Field>
-            <PassLink class="pass-link"><PassLinkAnchor href="#">Forgot password?</PassLinkAnchor></PassLink>
-            <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer" />
+            <PassLink className="pass-link"><PassLinkAnchor href="#">Forgot password?</PassLinkAnchor></PassLink>
+            <Button className="field btn">
+              <BtnLayer className="btn-layer" />
               <BtnInput type="submit" value="Login" />
-            </BtnWrapper>
-            <SignupLink class="signup-link">Not a member? <SignupLinkAnchor href="">Signup now</SignupLinkAnchor></SignupLink>
+            </Button>
+            <SignupLink className="signup-link">Not a member? <SignupLinkAnchor href="#">Signup now</SignupLinkAnchor></SignupLink>
           </Form>
-          <Form action="#" class="signup">
-            <Field class="field">
+          <Form action="#" className="signup" style={{ marginLeft: showLoginForm ? '50%' : '0%' }}>
+            <Field className="field">
               <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
             </Field>
-            <Field class="field">
+            <Field className="field">
               <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
             </Field>
-            <Field class="field">
+            <Field className="field">
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
-            <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer" />
+            <Button className="field btn">
+              <BtnLayer className="btn-layer" />
               <BtnInput type="submit" onClick={handleSignup} value="Signup" />
-            </BtnWrapper>
+            </Button>
             <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
         </FormInner>
       </FormContainer>
     </Wrapper>
   );
-  const loginText = document.querySelector(".title-text .login");
-  const loginForm = document.querySelector("form.login");
-  const loginBtn = document.querySelector("label.login");
-  const signupBtn = document.querySelector("label.signup");
-  const signupLink = document.querySelector("form .signup-link a");
-  signupBtn.onclick = (() => {
-    loginForm.style.marginLeft = "-50%";
-    loginText.style.marginLeft = "-50%";
-  });
-  loginBtn.onclick = (() => {
-    loginForm.style.marginLeft = "0%";
-    loginText.style.marginLeft = "0%";
-  });
-  signupLink.onclick = (() => {
-    signupBtn.click();
-    return false;
-  });
 };
 
 export default Signup;
