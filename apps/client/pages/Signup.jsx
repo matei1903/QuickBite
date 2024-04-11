@@ -329,9 +329,10 @@ const Signup = () => {
           </Input>
           <Input type="radio" name="slide" id="signup">
           </Input>
-          <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
-          <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
-          <SliderTab class="slider-tab"></SliderTab>
+          <SliderTab class="slider-tab">
+            <SlideControlLabel for="login" class="slide login">Login</SlideControlLabel>
+            <SlideControlLabel for="signup" class="slide signup">Signup</SlideControlLabel>
+          </SliderTab>
         </SlideControls>
         <FormInner class="form-inner">
           <Form action="#" class="login">
@@ -343,8 +344,9 @@ const Signup = () => {
             </Field>
             <PassLink class="pass-link"><PassLinkAnchor href="#">Forgot password?</PassLinkAnchor></PassLink>
             <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer"></BtnLayer>
-              <Input type="submit" value="Login" />
+              <BtnLayer class="btn-layer">
+                <BtnInput type="submit" value="Login" />
+              </BtnLayer>
             </BtnWrapper>
             <SignupLink class="signup-link">Not a member? <SignupLinkAnchor href="">Signup now</SignupLinkAnchor></SignupLink>
           </Form>
@@ -359,10 +361,11 @@ const Signup = () => {
               <Input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
             </Field>
             <BtnWrapper class="field btn">
-              <BtnLayer class="btn-layer"></BtnLayer>
-              <Input type="submit" onClick={handleSignup} value="Signup" />
-              <Button onClick={handleGoogleSignup}>Signup with Google</Button>
+              <BtnLayer class="btn-layer">
+                <BtnInput type="submit" onClick={handleSignup} value="Signup" />
+              </BtnLayer>
             </BtnWrapper>
+            <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
         </FormInner>
       </FormContainer>
