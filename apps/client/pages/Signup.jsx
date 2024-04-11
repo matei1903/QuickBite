@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import styled from "styled-components";
 
-const StyledSignup = styled.div`
+const StyledSignup = styled.StyledSignup`
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
   margin: 0;
@@ -244,55 +244,55 @@ const Signup = () => {
   //<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
   // <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
   return (
-    <div class="wrapper">
-      <div class="title-text">
-        <div class="title login">Login Form</div>
-        <div class="title signup">Signup Form</div>
-      </div>
-      <div class="form-container">
-        <div class="slide-controls">
+    <StyledSignup class="wrapper">
+      <StyledSignup class="title-text">
+        <StyledSignup class="title login">Login Form</StyledSignup>
+        <StyledSignup class="title signup">Signup Form</StyledSignup>
+      </StyledSignup>
+      <StyledSignup class="form-container">
+        <StyledSignup class="slide-controls">
           <input type="radio" name="slide" id="login" checked>
           </input>
           <input type="radio" name="slide" id="signup">
           </input>
           <label for="login" class="slide login">Login</label>
           <label for="signup" class="slide signup">Signup</label>
-          <div class="slider-tab"></div>
-        </div>
-        <div class="form-inner">
+          <StyledSignup class="slider-tab"></StyledSignup>
+        </StyledSignup>
+        <StyledSignup class="form-inner">
           <form action="#" class="login">
-            <div class="field">
+            <StyledSignup class="field">
               <input type="text" placeholder="Email Address" required />
-            </div>
-            <div class="field">
+            </StyledSignup>
+            <StyledSignup class="field">
               <input type="password" placeholder="Password" required />
-            </div>
-            <div class="pass-link"><a href="#">Forgot password?</a></div>
-            <div class="field btn">
-              <div class="btn-layer"></div>
+            </StyledSignup>
+            <StyledSignup class="pass-link"><a href="#">Forgot password?</a></StyledSignup>
+            <StyledSignup class="field btn">
+              <StyledSignup class="btn-layer"></StyledSignup>
               <input type="submit" value="Login" />
-            </div>
-            <div class="signup-link">Not a member? <a href="">Signup now</a></div>
+            </StyledSignup>
+            <StyledSignup class="signup-link">Not a member? <a href="">Signup now</a></StyledSignup>
           </form>
           <form action="#" class="signup">
-            <div class="field">
+            <StyledSignup class="field">
               <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
-            </div>
-            <div class="field">
+            </StyledSignup>
+            <StyledSignup class="field">
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-            </div>
-            <div class="field">
+            </StyledSignup>
+            <StyledSignup class="field">
               <input type="password" value={conf_pass} onChange={(e) => setConf_pass(e.target.value)} placeholder="Confirm password" required />
-            </div>
-            <div class="field btn">
-              <div class="btn-layer"></div>
+            </StyledSignup>
+            <StyledSignup class="field btn">
+              <StyledSignup class="btn-layer"></StyledSignup>
               <input type="submit" onClick={handleSignup} value="Signup" />
               <button onClick={handleGoogleSignup}>Signup with Google</button>
-            </div>
+            </StyledSignup>
           </form>
-        </div>
-      </div>
-    </div>
+        </StyledSignup>
+      </StyledSignup>
+    </StyledSignup>
 
   );
 };
