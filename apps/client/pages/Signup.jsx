@@ -55,14 +55,19 @@ const SlideControls = styled.div`
 `;
 
 const SlideControlLabel = styled.label`
-  height: 100%;
-  width: 100%;
+ 
+  width: 50%;
+  position: relative;
+  display: block;
+  padding: 10px 0;
   color: ${({ checked }) => (checked ? '#fff' : '#000')};
   font-size: 18px;
   font-weight: 500;
   text-align: center;
   line-height: 48px;
   cursor: ${({ checked }) => (checked ? 'default' : 'pointer')};
+  border: none;
+  border-bottom: 1px solid lightgrey;
   z-index: 1;
   transition: all 0.6s ease;
 `;
@@ -185,7 +190,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [conf_pass, setConf_pass] = useState('');
-  const [showLoginForm, setShowLoginForm] = useState(true);
+  const [showLoginForm, setShowLoginForm] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
   const firestore = getFirestore();
@@ -281,10 +286,10 @@ const Signup = () => {
               <BtnLayer className="btn-layer" />
               <BtnInput type="submit" onClick={handleSignup} value="Signup" />
             </Button>
-            <Button onClick={handleGoogleSignup}>Signup with Google</Button>
           </Form>
         </FormInner>
       </FormContainer>
+      <Button onClick={handleGoogleSignup}>Signup with Google</Button>
     </Wrapper>
   );
 };
