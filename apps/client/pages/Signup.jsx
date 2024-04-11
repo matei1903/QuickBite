@@ -7,8 +7,8 @@ import styled from 'styled-components';
 const Align = styled.div`
   align-items: center;
   display: flex;
-  flex-direction: row;
-  width: 100%;
+  justify-content: center;
+  height: 100vh;
 `;
 
 const RegisterWrapper = styled.div`
@@ -25,7 +25,8 @@ const FormField = styled.div`
 const Input = styled.input`
   border: 0;
   font: inherit;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
+  width: calc(100% - 2rem);
 
   &::placeholder {
     color: #7e8ba3;
@@ -33,9 +34,9 @@ const Input = styled.input`
 
   &[type="email"],
   &[type="password"] {
-    width: 100%;
+   
     outline: 0;
-    padding: .5rem 1rem;
+    
   }
 `;
 
