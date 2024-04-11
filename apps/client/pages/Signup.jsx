@@ -8,12 +8,14 @@ const Align = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;
 
 const RegisterWrapper = styled.div`
   box-shadow: 0 0 250px #000;
   text-align: center;
   padding: 4rem 2rem;
+  width: 100%;
 `;
 
 const FormField = styled.div`
