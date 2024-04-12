@@ -80,6 +80,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [conf_pass, setConf_pass] = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const comenzi = [];
   const auth = getAuth();
   const navigate = useNavigate();
   const firestore = getFirestore();
@@ -116,13 +117,13 @@ const Signup = () => {
     }
   };
 
-  const addUserInfoToFirestore = async (userId, userEmail, userPhotoURL) => {
+  const addUserInfoToFirestore = async (userId, userEmail, userPhotoURL, comenzi) => {
     try {
       await addDoc(collection(firestore, 'users'), {
         userId: userId,
         email: userEmail,
         photoURL: userPhotoURL,
-        comenzi: []
+        comenzi: comenzi
         // puteți adăuga și alte informații despre utilizator aici
       });
     } catch (error) {
