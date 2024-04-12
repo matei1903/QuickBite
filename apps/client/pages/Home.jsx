@@ -7,6 +7,7 @@ const Icon = React.lazy(() =>
 import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 const StyledHome = styled.div`
   h1 {
     color: #dfc780;
@@ -170,6 +171,7 @@ export default () => {
   };
 
   const handleComanda = async () => {
+    const auth = getAuth();
     try {
       // Obține ID-ul utilizatorului conectat
       const userID = auth.currentUser.uid;
