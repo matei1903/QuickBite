@@ -19,6 +19,7 @@ const Align = styled.div`
 const RegisterWrapper = styled.div`
   text-align: center;
   padding: 80px;
+  padding-top: 30px;
   width: 60%;
   margin: 0 auto;
   background-color: #202b1b;
