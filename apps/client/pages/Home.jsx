@@ -171,6 +171,10 @@ export default () => {
 
   const handleComanda = async () => {
     // Creează obiectul cu comenzile selectate
+    try {
+      // Obține ID-ul utilizatorului conectat
+      const userID = auth.currentUser.uid;
+
     const comenzi = {
       aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
       fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
@@ -182,8 +186,7 @@ export default () => {
       desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
       bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
     };
-  
-    try {
+
       // Obține referința către documentul utilizatorului
       const userDocRef = doc(db, "users", "userId");
       
