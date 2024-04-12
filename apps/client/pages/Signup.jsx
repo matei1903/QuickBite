@@ -33,7 +33,7 @@ const Input = styled.input`
   border: 0;
   font: inherit;
   padding: 0.5rem;
-  width: 50%;
+  width: 100%;
   border-radius: 25px;
 
   &::placeholder {
@@ -49,12 +49,12 @@ const Input = styled.input`
 `;
 
 const Img = styled.img`
-  width: max;
+  width: 50%;
   height: 50%;
 
   .site_logo {
-    width: max;
-    height: max;
+    width: 100%;
+    height: 100%;
   }
   `;
 
