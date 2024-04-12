@@ -46,8 +46,8 @@ const Img = styled.img`
   height: 10%;
 
   .site_logo {
-    width:200px;
-    height:200px;
+    width:500px;
+    height:500px;
   }
   `;
 
