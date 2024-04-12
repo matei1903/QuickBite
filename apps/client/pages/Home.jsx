@@ -216,7 +216,7 @@ export default () => {
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
-    const userDocRef = doc(db, "users", userID);
+    const userDocRef = doc(db, "users", doc.id);
     console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log()
