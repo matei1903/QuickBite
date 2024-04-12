@@ -187,22 +187,17 @@ export default () => {
       setSelectedItems([...selectedItems, itemId]);
     }
   };
-  const { getAuth } = useFirebase();
-  const auth = getAuth();
-  const handleComanda = async (auth) => {
+  
+  
+  const handleComanda = async () => {
     
-
-    console.log(auth.currentUser);
+    const userID = localStorage.getItem('userID');
+    console.log(userID);
     // Verifică dacă utilizatorul este autentificat
-    if (!auth.currentUser) {
-      // Dacă utilizatorul nu este autentificat, afișează un mesaj și oprește funcția
-      alert("Trebuie să fii autentificat pentru a plasa o comandă!");
-      return;
-    }
-
+  
     try {
       // Obține ID-ul utilizatorului conectat
-      const userID = auth.currentUser.uid;
+      
       console.log("selectedItems:", selectedItems);
       console.log("docs_aper:", docs_aper);
 
