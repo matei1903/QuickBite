@@ -199,7 +199,7 @@ export default () => {
       // Obține ID-ul utilizatorului conectat
       
       console.log("selectedItems:", selectedItems);
-      console.log("docs_aper:", docs_aper);
+  
 
       // Creează obiectul cu comenzile selectate
       const comenzi = {
@@ -213,6 +213,7 @@ export default () => {
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
       };
+      console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
       const userDocRef = doc(db, "users", userID);
