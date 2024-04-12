@@ -187,19 +187,19 @@ export default () => {
       setSelectedItems([...selectedItems, itemId]);
     }
   };
-  
-  
+
+
   const handleComanda = async () => {
-    
+
     const userID = localStorage.getItem('userID');
     console.log(userID);
     // Verifică dacă utilizatorul este autentificat
-  
+
     try {
       // Obține ID-ul utilizatorului conectat
-      
+
       console.log("selectedItems:", selectedItems);
-  
+
 
       // Creează obiectul cu comenzile selectate
       const comenzi = [{
@@ -216,12 +216,22 @@ export default () => {
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
-      const userDocRef = doc(db, "users", userID);
+      const docSnapshot = await getDoc(doc(db, "users", documentID));
 
-      // Actualizează documentul pentru a adăuga comenzile
-      await updateDoc(userDocRef, {
-        comenzi: comenzi,
-      });
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+        const userID = userData.userID;
+        // Utilizați userID în continuare
+
+        const userDocRef = doc(db, "users", userID);
+
+        // Actualizează documentul pentru a adăuga comenzile
+        await updateDoc(userDocRef, {
+          comenzi: comenzi,
+        });
+      } else {
+        console.log("Documentul nu există!");
+      }
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       // Alertă pentru succes
