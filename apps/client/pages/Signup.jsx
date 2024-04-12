@@ -26,15 +26,16 @@ const RegisterWrapper = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 1rem;
-  border-radius: 25%;
+  border-radius: 25px;
 `;
 
 const Input = styled.input`
   border: 0;
   font: inherit;
   padding: 0.5rem;
-  width: 100%
-
+  width: 100%;
+  border-radius: 25px;
+  
   &::placeholder {
     color: #7e8ba3;
   }
@@ -52,13 +53,13 @@ const Img = styled.img`
   height: 50%;
 
   .site_logo {
-    width:500px;
-    height:500px;
+    width: max;
+    height: max;
   }
   `;
 
 const SubmitButton = styled.input`
-background: linear - gradient(160deg, #8ceabb 0 %, #378f7b 100 %);
+background: linear-gradient(160deg, #8ceabb 0%, #378f7b 100 %);
 border: 0;
 border - radius: 999px;
 color: #fff;
