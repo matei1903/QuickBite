@@ -42,8 +42,8 @@ const Input = styled.input`
 `;
 
 const Img = styled.img`
-  width: 10%;
-  height: 10%;
+  width: 50%;
+  height: 50%;
 
   .site_logo {
     width:500px;
