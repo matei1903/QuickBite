@@ -187,10 +187,11 @@ export default () => {
       setSelectedItems([...selectedItems, itemId]);
     }
   };
+  const { getAuth } = useFirebase();
+  const auth = getAuth();
+  const handleComanda = async (auth) => {
+    
 
-  const handleComanda = async () => {
-    const { getAuth } = useFirebase();
-    const auth = getAuth();
     console.log(auth.currentUser);
     // Verifică dacă utilizatorul este autentificat
     if (!auth.currentUser) {
@@ -198,13 +199,13 @@ export default () => {
       alert("Trebuie să fii autentificat pentru a plasa o comandă!");
       return;
     }
-  
+
     try {
       // Obține ID-ul utilizatorului conectat
       const userID = auth.currentUser.uid;
       console.log("selectedItems:", selectedItems);
       console.log("docs_aper:", docs_aper);
-  
+
       // Creează obiectul cu comenzile selectate
       const comenzi = {
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -220,7 +221,7 @@ export default () => {
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
       const userDocRef = doc(db, "users", userID);
-  
+
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
         comenzi: comenzi,
@@ -235,7 +236,7 @@ export default () => {
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
   };
-  
+
 
 
   const handePlata = () => {
