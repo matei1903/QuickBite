@@ -10,7 +10,7 @@ const Align = styled.div`
   justify-content: center;
   height: 100vh;
   background-image: url("https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/360_F_637166455_RZOHg6K3M6noLPKQmOHH5ZI70zXEyDaq.jpg?alt=media&token=af02128c-0b80-4fdc-af73-ae565a3c3cbd");
-  background-color: rgba(255, 255, 255, 0.7); /* Opacitatea de 0.7 (70%) */
+  background-color: rgba(255, 255, 255, 0.7); /* Opacitatea de 0.3 (70%) */
   background-blend-mode: lighten;
 
 `;
@@ -21,6 +21,7 @@ const RegisterWrapper = styled.div`
   padding: 4rem 2rem;
   width: 100%;
   margin: 0 auto;
+  background-color: #202b1b;
 `;
 
 const FormField = styled.div`
