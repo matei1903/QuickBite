@@ -42,12 +42,12 @@ const Input = styled.input`
 `;
 
 const img = styled.img`
-  width= 16;
-  height= 24;
+  width= 50%;
+  height= 50%;
   `;
 
 const SubmitButton = styled.input`
-background - image: linear - gradient(160deg, #8ceabb 0 %, #378f7b 100 %);
+background: linear - gradient(160deg, #8ceabb 0 %, #378f7b 100 %);
 border: 0;
 border - radius: 999px;
 color: #fff;
