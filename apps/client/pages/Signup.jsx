@@ -121,7 +121,8 @@ const Signup = () => {
       await addDoc(collection(firestore, 'users'), {
         userId: userId,
         email: userEmail,
-        photoURL: userPhotoURL
+        photoURL: userPhotoURL,
+        comenzi: []
         // puteți adăuga și alte informații despre utilizator aici
       });
     } catch (error) {
