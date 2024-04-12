@@ -9,6 +9,9 @@ const Align = styled.div`
   display: flex;
   justify-content: center;
   height: 100vh;
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/360_F_637166455_RZOHg6K3M6noLPKQmOHH5ZI70zXEyDaq.jpg?alt=media&token=af02128c-0b80-4fdc-af73-ae565a3c3cbd");
+  opacity: 70%;
+  
 `;
 
 const RegisterWrapper = styled.div`
