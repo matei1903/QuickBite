@@ -190,7 +190,7 @@ export default () => {
 
   const handleComanda = async () => {
     const auth = getAuth();
-    
+    console.log(auth.currentUser);
     // Verifică dacă utilizatorul este autentificat
     if (!auth.currentUser) {
       // Dacă utilizatorul nu este autentificat, afișează un mesaj și oprește funcția
