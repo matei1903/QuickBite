@@ -18,7 +18,7 @@ const Align = styled.div`
 const RegisterWrapper = styled.div`
   box-shadow: 0 0 250px #000;
   text-align: center;
-  padding: 2%;
+  padding: 10%;
   width: 100%;
   margin: 0 auto;
   background-color: #202b1b;
