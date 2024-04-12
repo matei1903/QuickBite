@@ -42,8 +42,8 @@ const Input = styled.input`
 `;
 
 const img = styled.img`
-  width= 56;
-  height= 84;
+  width= 16;
+  height= 24;
   `;
 
 const SubmitButton = styled.input`
