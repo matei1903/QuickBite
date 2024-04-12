@@ -18,7 +18,7 @@ const Align = styled.div`
 const RegisterWrapper = styled.div`
   box-shadow: 0 0 250px #000;
   text-align: center;
-  padding: 100px;
+  padding: 50px;
   width: 100%;
   margin: 0 auto;
   background-color: #202b1b;
@@ -26,6 +26,7 @@ const RegisterWrapper = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 1rem;
+  border-radius: 25%;
 `;
 
 const Input = styled.input`
@@ -33,7 +34,6 @@ const Input = styled.input`
   font: inherit;
   padding: 0.5rem;
   width: 100%
-  border-radius: 25%;
 
   &::placeholder {
     color: #7e8ba3;
