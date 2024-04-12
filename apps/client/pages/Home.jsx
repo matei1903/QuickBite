@@ -216,24 +216,13 @@ export default () => {
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
-      const docSnapshot = await getDoc(doc(db, "users", documentID));
-
-      if (docSnapshot.exists()) {
-        const userData = docSnapshot.data();
-        const userID = userData.userID;
-        // Utilizați userID în continuare
-
-        const userDocRef = doc(db, "users", userID);
-
-        // Actualizează documentul pentru a adăuga comenzile
-        await updateDoc(userDocRef, {
-          comenzi: comenzi,
-        });
-      } else {
-        console.log("Documentul nu există!");
-      }
-      console.log("userID:", userID);
+    const userDocRef = doc(db, "users", userID);
+    console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
+    await updateDoc(userDocRef, {
+      comenzi: comenzi,
+    });
+      
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {

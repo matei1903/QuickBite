@@ -109,7 +109,7 @@ const Signup = () => {
       const user = result.user;
       const comenzi = [];
       await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi);
-      localStorage.setItem('userID', user.uid);
+      localStorage.setItem('userID', uid);
       alert("Autentificare cu Google reușită!");
       navigate('/home');
     } catch (error) {
