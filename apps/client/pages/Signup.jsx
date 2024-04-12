@@ -9,8 +9,9 @@ const Align = styled.div`
   display: flex;
   justify-content: center;
   height: 100vh;
+  width: 100vw;
   background-image: url("https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/360_F_637166455_RZOHg6K3M6noLPKQmOHH5ZI70zXEyDaq.jpg?alt=media&token=af02128c-0b80-4fdc-af73-ae565a3c3cbd");
-  background-color: rgba(255, 255, 255, 0.7); /* Opacitatea de 0.3 (70%) */
+  background-color: rgba(255, 255, 255, 0.5); /* Opacitatea de 0.3 (70%) */
   background-blend-mode: lighten;
   background-size: cover;
 `;
@@ -18,7 +19,7 @@ const Align = styled.div`
 const RegisterWrapper = styled.div`
   box-shadow: 0 0 250px #000;
   text-align: center;
-  padding: 50px;
+  padding: 80px;
   width: 50%;
   margin: 0 auto;
   background-color: #202b1b;
@@ -84,7 +85,7 @@ const Signup = () => {
     try {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
       await addUserInfoToFirestore(authResult.user.uid, email, authResult.user.photoURL);
-      if (password !== conf_pass)
+      if (password != conf_pass)
         alert("Parola confirmata este diferita!");
       else {
         alert("Contul a fost creat cu succes!");
