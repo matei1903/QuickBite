@@ -42,8 +42,8 @@ const Input = styled.input`
 `;
 
 const img = styled.img`
-  width= 50%;
-  height= 50%;
+  width= 10%;
+  height= 10%;
   `;
 
 const SubmitButton = styled.input`
@@ -54,7 +54,7 @@ color: #fff;
 margin - bottom: 6rem;
 width: 100 %;
 font - size: 24px;
-padding: 1rem 2rem;
+padding: 5px 5px;
 `;
 
 const Signup = () => {
