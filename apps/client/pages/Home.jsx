@@ -193,6 +193,8 @@ export default () => {
 
     const userID = localStorage.getItem('userID');
     console.log(userID);
+    console.log(doc.id);
+
     // Verifică dacă utilizatorul este autentificat
 
     try {
@@ -200,7 +202,7 @@ export default () => {
 
       console.log("selectedItems:", selectedItems);
 
-
+      const userDocRef = doc(db, "users", userID);
       // Creează obiectul cu comenzile selectate
       const comenzi = [{
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -216,7 +218,7 @@ export default () => {
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
-    const userDocRef = doc(db, "users", doc.id);
+    
     console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log()

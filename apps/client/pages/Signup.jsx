@@ -108,8 +108,8 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const comenzi = [];
-      await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi);
-      localStorage.setItem('userID', uid);
+      const userID = await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi);
+      localStorage.setItem('userID', userID);
       alert("Autentificare cu Google reușită!");
       navigate('/home');
     } catch (error) {
@@ -119,13 +119,14 @@ const Signup = () => {
 
   const addUserInfoToFirestore = async (userId, userEmail, userPhotoURL, comenzi) => {
     try {
-      await addDoc(collection(firestore, 'users'), {
+      const docRef = await addDoc(collection(firestore, 'users'), {
         userId: userId,
         email: userEmail,
         photoURL: userPhotoURL,
         comenzi: comenzi
         // puteți adăuga și alte informații despre utilizator aici
       });
+      return docRef.id;
     } catch (error) {
       console.error("Error adding user info to Firestore:", error);
     }
