@@ -219,6 +219,7 @@ export default () => {
     const userDocRef = doc(db, "users", userID);
     console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
+      console.log()
     await updateDoc(userDocRef, {
       comenzi: comenzi,
     });
