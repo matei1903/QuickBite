@@ -202,7 +202,7 @@ export default () => {
   
 
       // Creează obiectul cu comenzile selectate
-      const comenzi = {
+      const comenzi = [{
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
         fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
         supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
@@ -212,7 +212,7 @@ export default () => {
         salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
-      };
+      }];
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
@@ -220,7 +220,7 @@ export default () => {
 
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
-        comenzi: selectedItems,
+        comenzi: comenzi,
       });
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
