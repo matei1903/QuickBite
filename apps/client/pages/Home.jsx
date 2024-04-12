@@ -220,7 +220,7 @@ export default () => {
 
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
-        comenzi: comenzi,
+        comenzi: selectedItems,
       });
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
