@@ -173,7 +173,9 @@ export default () => {
     try {
       // Obține ID-ul utilizatorului conectat
       const userID = auth.currentUser.uid;
-  
+      console.log("selectedItems:", selectedItems);
+      console.log("docs_aper:", docs_aper);
+
       // Creează obiectul cu comenzile selectate
       const comenzi = {
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -186,15 +188,16 @@ export default () => {
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
       };
-  
+      console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
       const userDocRef = doc(db, "users", userID);
-  
+
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
         comenzi: comenzi,
       });
-  
+      console.log("userID:", userID);
+      console.log("userDocRef:", userDocRef);
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
@@ -203,7 +206,7 @@ export default () => {
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
   };
-  
+
 
   const handePlata = () => {
     alert("Nota de plata a fost ceruta!");
@@ -442,13 +445,13 @@ export default () => {
     }
   }, [searchTerm, docs_ba]);
 
-  
+
   return (
     <Layout>
       <StyledHome>
         <h1>Meniu</h1>
         <div className="alimente-container">
-        <input
+          <input
             type="text"
             placeholder="Caută după nume..."
             value={searchTerm}
