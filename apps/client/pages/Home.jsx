@@ -189,6 +189,7 @@ export default () => {
   };
 
   const handleComanda = async () => {
+    const { getAuth } = useFirebase();
     const auth = getAuth();
     console.log(auth.currentUser);
     // Verifică dacă utilizatorul este autentificat
