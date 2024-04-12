@@ -80,7 +80,6 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [conf_pass, setConf_pass] = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const comenzi = [];
   const auth = getAuth();
   const navigate = useNavigate();
   const firestore = getFirestore();
@@ -108,7 +107,8 @@ const Signup = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      await addUserInfoToFirestore(user.uid, user.email, user.photoURL);
+      const comenzi = [];
+      await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi);
       localStorage.setItem('userID', user.uid);
       alert("Autentificare cu Google reușită!");
       navigate('/home');
