@@ -17,10 +17,9 @@ const Align = styled.div`
 `;
 
 const RegisterWrapper = styled.div`
-  box-shadow: 0 0 250px #000;
   text-align: center;
   padding: 80px;
-  width: 50%;
+  width: 60%;
   margin: 0 auto;
   background-color: #202b1b;
 `;
@@ -55,7 +54,8 @@ const Input = styled.input`
 `;
 
 const Img = styled.img`
-  width: 200px;
+  margin-top: 20px;
+  width: 500px;
   height: auto;
   }
   `;
@@ -65,7 +65,8 @@ const SubmitButton = styled.input`
   border: 0;
   border-radius: 999px; /* Am eliminat spațiul în jurul operatorului - */
   color: #fff;
-  margin-bottom: 10px; /* Am eliminat spațiul în jurul operatorului - */
+  margin-bottom: 10px;
+  margin-top: 30px; /* Am eliminat spațiul în jurul operatorului - */
   width: 100%;
   font-size: 20px; /* Am eliminat spațiul în jurul operatorului - */
   padding: 5px 5px; /* Am eliminat spațiul în jurul operatorului - */
