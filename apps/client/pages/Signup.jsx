@@ -28,17 +28,22 @@ const RegisterWrapper = styled.div`
 const FormField = styled.div`
   margin-bottom: 1rem;
   border-radius: 25px;
+  text-align: center;
+  justify-content: center;
 `;
 
 const Input = styled.input`
   border: 0;
   font: inherit;
   padding: 0.5rem;
-  width: 100%;
+  width: 80%;
   border-radius: 25px;
+  text-align: center;
+  justify-content: center;
 
   &::placeholder {
     color: #7e8ba3;
+    text-align: center;
   }
 
   &[type="email"],
@@ -50,12 +55,8 @@ const Input = styled.input`
 `;
 
 const Img = styled.img`
-  width: 50%;
-  height: 50%;
-
-  .site_logo {
-    width: 100%;
-    height: 100%;
+  width: 200px;
+  height: auto;
   }
   `;
 
