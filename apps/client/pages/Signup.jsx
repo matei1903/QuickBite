@@ -36,7 +36,7 @@ const Input = styled.input`
   border: 0;
   font: inherit;
   padding: 0.5rem;
-  width: 80%;
+  width: 90%;
   border-radius: 25px;
   text-align: center;
   justify-content: center;
@@ -61,14 +61,14 @@ const Img = styled.img`
   `;
 
 const SubmitButton = styled.input`
-background: linear-gradient(160deg, #8ceabb 0%, #378f7b 100 %);
-border: 0;
-border - radius: 999px;
-color: #fff;
-margin - bottom: 6rem;
-width: 100 %;
-font - size: 24px;
-padding: 5px 5px;
+  background: linear-gradient(160deg, #8ceabb 0%, #378f7b 100%);
+  border: 0;
+  border-radius: 999px; /* Am eliminat spațiul în jurul operatorului - */
+  color: #fff;
+  margin-bottom: 6rem; /* Am eliminat spațiul în jurul operatorului - */
+  width: 100%;
+  font-size: 24px; /* Am eliminat spațiul în jurul operatorului - */
+  padding: 5px 5px; /* Am eliminat spațiul în jurul operatorului - */
 `;
 
 const Signup = () => {
