@@ -65,9 +65,9 @@ const SubmitButton = styled.input`
   border: 0;
   border-radius: 999px; /* Am eliminat spațiul în jurul operatorului - */
   color: #fff;
-  margin-bottom: 6rem; /* Am eliminat spațiul în jurul operatorului - */
+  margin-bottom: 10px; /* Am eliminat spațiul în jurul operatorului - */
   width: 100%;
-  font-size: 24px; /* Am eliminat spațiul în jurul operatorului - */
+  font-size: 20px; /* Am eliminat spațiul în jurul operatorului - */
   padding: 5px 5px; /* Am eliminat spațiul în jurul operatorului - */
 `;
 
