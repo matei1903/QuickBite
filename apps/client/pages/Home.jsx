@@ -7,7 +7,7 @@ const Icon = React.lazy(() =>
 import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const StyledHome = styled.div`
   h1 {
     color: #dfc780;
@@ -132,6 +132,24 @@ const StyledDiv = styled.div`
   }
 `;
 export default () => {
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Utilizatorul este autentificat
+        setUser(user);
+      } else {
+        // Utilizatorul nu este autentificat
+        setUser(null);
+      }
+    });
+
+    // Curăță efectul
+    return () => unsubscribe();
+  }, []);
+
   const { db } = useFirebase();
 
   const [docs_aper, setDocs_aper] = useState([]);
@@ -172,12 +190,20 @@ export default () => {
 
   const handleComanda = async () => {
     const auth = getAuth();
+    
+    // Verifică dacă utilizatorul este autentificat
+    if (!auth.currentUser) {
+      // Dacă utilizatorul nu este autentificat, afișează un mesaj și oprește funcția
+      alert("Trebuie să fii autentificat pentru a plasa o comandă!");
+      return;
+    }
+  
     try {
       // Obține ID-ul utilizatorului conectat
       const userID = auth.currentUser.uid;
       console.log("selectedItems:", selectedItems);
       console.log("docs_aper:", docs_aper);
-
+  
       // Creează obiectul cu comenzile selectate
       const comenzi = {
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -193,7 +219,7 @@ export default () => {
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
       const userDocRef = doc(db, "users", userID);
-
+  
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
         comenzi: comenzi,
@@ -208,6 +234,7 @@ export default () => {
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
   };
+  
 
 
   const handePlata = () => {
