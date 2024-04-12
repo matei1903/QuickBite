@@ -19,7 +19,7 @@ const RegisterWrapper = styled.div`
   box-shadow: 0 0 250px #000;
   text-align: center;
   padding: 50px;
-  width: 100%;
+  width: 50%;
   margin: 0 auto;
   background-color: #202b1b;
 `;
@@ -33,9 +33,9 @@ const Input = styled.input`
   border: 0;
   font: inherit;
   padding: 0.5rem;
-  width: 100%;
+  width: 50;
   border-radius: 25px;
-  
+
   &::placeholder {
     color: #7e8ba3;
   }
@@ -49,8 +49,8 @@ const Input = styled.input`
 `;
 
 const Img = styled.img`
-  width: 50%;
-  height: 50%;
+  width: max;
+  height: max;
 
   .site_logo {
     width: max;
