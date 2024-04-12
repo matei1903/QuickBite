@@ -168,7 +168,12 @@ export default () => {
     }
   };
 
-
+  const handleComanda = () => {
+    alert("Comanda a fost plasata cu succes!");
+  }
+  const handePlata = () => {
+    alert("Nota de plata a fost ceruta!");
+  }
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "/aperitive"), orderBy("nume")),
@@ -552,8 +557,8 @@ export default () => {
           ))}
         </div>
         <Icon className="test" path="profile.svg" />
-        <button className="comanda">Comanda</button>
-        <button className="plateste">Plateste</button>
+        <button className="comanda" onClick={handleComanda}>Comanda</button>
+        <button className="plateste" onClick={handePlata}>Plateste</button>
       </StyledHome>
     </Layout>
   );
