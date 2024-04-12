@@ -170,29 +170,29 @@ export default () => {
   };
 
   const handleComanda = async () => {
-    // Creează obiectul cu comenzile selectate
     try {
       // Obține ID-ul utilizatorului conectat
       const userID = auth.currentUser.uid;
-
-    const comenzi = {
-      aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
-      fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
-      supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
-      paste: selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id)),
-      pizza: selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id)),
-      garnituri: selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id)),
-      salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
-      desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
-      bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
-    };
-
+  
+      // Creează obiectul cu comenzile selectate
+      const comenzi = {
+        aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
+        fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
+        supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
+        paste: selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id)),
+        pizza: selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id)),
+        garnituri: selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id)),
+        salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
+        desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
+        bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
+      };
+  
       // Obține referința către documentul utilizatorului
-      const userDocRef = doc(db, "users", "userId");
-      
+      const userDocRef = doc(db, "users", userID);
+  
       // Actualizează documentul pentru a adăuga comenzile
       await updateDoc(userDocRef, {
-        comenzi: arrayUnion(comenzi),
+        comenzi: comenzi,
       });
   
       // Alertă pentru succes
@@ -203,6 +203,7 @@ export default () => {
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
   };
+  
 
   const handePlata = () => {
     alert("Nota de plata a fost ceruta!");
