@@ -55,8 +55,10 @@ const Input = styled.input`
 
 const Img = styled.img`
   margin-top: 20px;
-  width: 500px;
+  width: 250px;
   height: auto;
+  margin-left: auto;
+  mergin-right: auto;
   }
   `;
 
