@@ -135,6 +135,9 @@ const Signup = () => {
     setShowLoginForm(!showLoginForm);
   };
 
+  const navigateToLogin = () => {
+      navigate.push('/Login');
+    };
 
   return (
     <Align>
@@ -165,7 +168,7 @@ const Signup = () => {
 
           </form>
 
-          <p>Already have an account? <a href="#">Log in</a></p>
+          <p>Already have an account? <a href="#" onClick={navigateToLogin}>Log in</a></p>
 
         </RegisterWrapper>
       </div>
