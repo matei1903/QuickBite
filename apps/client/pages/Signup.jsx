@@ -136,7 +136,7 @@ const Signup = () => {
   };
 
   const navigateToLogin = () => {
-    navigate('/Login');
+    navigate('/login');
   };
 
   return (

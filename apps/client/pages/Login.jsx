@@ -93,7 +93,7 @@ const Login = () => {
   };
 
 const navigateToSignup = () => {
-    navigate('/Signup');
+    navigate('/');
   };
 
   return (
