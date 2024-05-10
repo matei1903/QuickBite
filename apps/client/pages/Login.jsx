@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, handleLogin } from "firebase/auth";
+import { getAuth, handleLogin, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import styled from 'styled-components';
@@ -84,7 +84,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const user = await handleLogin(email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       navigate('/home');
       // Redirect user to dashboard or any other page after login
     } catch (error) {
