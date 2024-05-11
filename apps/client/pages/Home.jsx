@@ -235,7 +235,9 @@ export default () => {
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
       });
+      console.log("update selected items:",setSelectedItems);
       setSelectedItems([]);
+      console.log("update selected items:",setSelectedItems);
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
