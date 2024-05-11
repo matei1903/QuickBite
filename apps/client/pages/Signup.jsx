@@ -86,7 +86,6 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     try {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
       const userS = authResult.userS

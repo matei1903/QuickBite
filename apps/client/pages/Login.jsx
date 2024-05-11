@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, handleLogin, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import styled from 'styled-components';
@@ -79,17 +79,18 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
- // const auth = getAuth();
+  const auth = getAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      await signInWithEmailAndPassword(auth, email, password);
+      // Dacă autentificarea este reușită, navighează către pagina de start
       navigate('/home');
-      // Redirect user to dashboard or any other page after login
     } catch (error) {
-      alert("Emailul sau parola sunt incorecte");
+      // Gestionează erorile de autentificare
+      console.error(error);
+      alert("Eroare la autentificare. Verifică adresa de email și parola și încearcă din nou.");
     }
   };
 
