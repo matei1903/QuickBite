@@ -231,11 +231,11 @@ export default () => {
       console.log();
 
       const updatedComenzi = [...existingComenzi, newComenzi];
-      console.log("updatecomenzi:",updatedComenzi);
+      console.log("updatecomenzi:", updatedComenzi);
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
       });
-
+      setSelectedItems([]);
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
@@ -243,7 +243,7 @@ export default () => {
       // Alertă pentru eroare
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
-};
+  };
 
 
 
