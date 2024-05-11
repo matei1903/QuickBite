@@ -210,56 +210,35 @@ export default () => {
 
         console.log("selectedItems:", selectedItems);
 
-        // Actualizează vectorul de comenzi existent
-        const updatedComenzi = existingComenzi.map((comanda) => ({
-            ...comanda,
-            aperitive: [
-                ...comanda.aperitive,
-                ...selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id))
-            ],
-            fel_principal: [
-                ...comanda.fel_principal,
-                ...selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id))
-            ],
-            supe_ciorbe: [
-                ...comanda.supe_ciorbe,
-                ...selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id))
-            ],
-            paste: [
-                ...comanda.paste,
-                ...selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id))
-            ],
-            pizza: [
-                ...comanda.pizza,
-                ...selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id))
-            ],
-            garnituri: [
-                ...comanda.garnituri,
-                ...selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id))
-            ],
-            salate: [
-                ...comanda.salate,
-                ...selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id))
-            ],
-            desert: [
-                ...comanda.desert,
-                ...selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id))
-            ],
-            bauturi: [
-                ...comanda.bauturi,
-                ...selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id))
-            ]
-        }));
+        // Creează obiectul cu comenzile selectate
+        const newComenzi = {
+            aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
+            fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
+            supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
+            paste: selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id)),
+            pizza: selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id)),
+            garnituri: selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id)),
+            salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
+            desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
+            bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
+        };
 
+        console.log("docs_aper:", docs_aper);
+        console.log("comenzi:", newComenzi);
+
+        console.log("userID:", userID);
+        console.log("userDocRef:", userDocRef);
+        console.log();
+
+        // Dacă nu există comenzi în Firestore, creează un vector nou
+        const updatedComenzi = existingComenzi.length > 0 ? [...existingComenzi, newComenzi] : [newComenzi];
         console.log("updatecomenzi:", updatedComenzi);
-
         await updateDoc(userDocRef, {
             comenzi: updatedComenzi,
         });
-
-        // Resetarea listei de produse selectate
+        console.log("update selected items:", setSelectedItems);
         setSelectedItems([]);
-
+        console.log("update selected items:", setSelectedItems);
         // Alertă pentru succes
         alert("Comanda a fost plasată cu succes!");
     } catch (error) {
@@ -268,6 +247,7 @@ export default () => {
         alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
 };
+
 
 
 
