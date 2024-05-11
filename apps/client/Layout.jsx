@@ -77,6 +77,8 @@ const Nav = styled.nav`
     ul.text-list{
       text-align: left;
       width: 90%;
+      right: 10px;
+      top: 25px;
       margin: auto;
       border-top: 1px solid #eee;
       border-bottom: 1px solid #eee;
