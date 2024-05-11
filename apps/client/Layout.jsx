@@ -34,7 +34,7 @@ const StyledLayout = styled.div`
   `;
 const Nav = styled.nav`
   
-.navmenu{
+.navmenu {
   width: 240px;
   margin-top: 20px;
   padding-top: 10px;
@@ -42,44 +42,39 @@ const Nav = styled.nav`
   background: #fff;
   text-align: center;
   position: absolute;
-  right: 10px;
-  top: 25px;
-  box-shadow: 0 0 10px 2px fade(#000, 15%);
+  right: 10px; /* Ajustează distanța de la marginea dreaptă */
+  top: calc(100% + 10px); /* Ajustează distanța de la butonul de profil */
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
   z-index: 10;
   visibility: hidden;
-  opacity:0;
-  -webkit-transition: all 300ms ease;
+  opacity: 0;
   transition: all 300ms ease;
-  
-  &.opened{
-    visibility: visible;
-    opacity:1;
 
+  &.opened {
+    visibility: visible;
+    opacity: 1;
   }
-    
-  &::before{
+
+  &::before {
     content: '';
     position: absolute;
     top: -5px;
-    right:7px;
+    right: 7px;
     width: 15px;
     height: 15px;
     background: #fff;
-    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
   }
-  
-  h4{
-    
-  }
-  
-  ul{
+
+  h4 {}
+
+  ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  
-  ul.text-list{
+
+  ul.text-list {
     text-align: left;
     width: 90%;
     margin: auto;
@@ -87,9 +82,9 @@ const Nav = styled.nav`
     border-bottom: 1px solid #eee;
     padding-top: 10px;
     padding-bottom: 10px;
-    
-    li{
-      a{
+
+    li {
+      a {
         text-decoration: none;
         padding-left: 5px;
         padding-right: 5px;
@@ -97,16 +92,15 @@ const Nav = styled.nav`
         font-weight: 600;
         display: block;
         line-height: 27px;
-        -webkit-transition: all 200ms ease;
         transition: all 200ms ease;
-        
-        &:hover{
+
+        &:hover {
           color: tomato;
         }
       }
     }
-    
   }
+}
 `;
 
 const ProfileButton = ({ children }) => {
