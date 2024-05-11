@@ -84,8 +84,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const firestore = getFirestore();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+  const handleSignup = async () => {
     try {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
       const userS = authResult.userS
