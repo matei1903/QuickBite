@@ -34,35 +34,79 @@ const StyledLayout = styled.div`
   `;
 const Nav = styled.nav`
   
-.navmenu {
-  top: calc(100% + 10px); /* Adjust the space between button and menu */
-  right: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: ${({ isMenuOpen }) => (isMenuOpen ? 'flex' : 'none')};
-  z-index: 999; /* Ensure menu is above other content */
-  justify-content: right;
-}
-
-.text-list {
-  list-style-type: none;
+.navmenu{
+  width: 240px;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #fff;
+  text-align: center;
   position: absolute;
-  padding: 0;
-  margin: 0;
   right: 10px;
-}
+  top: 25px;
+  box-shadow: 0 0 10px 2px fade(#000, 15%);
+  z-index: 10;
+  visibility: hidden;
+  opacity:0;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+  
+  &.opened{
+    visibility: visible;
+    opacity:1;
 
-.text-list li {
-  padding: 10px;
-  right: 10px;
-}
-
-.text-list li a {
-  text-decoration: none;
-  color: #333;
-}
+  }
+    
+  &::before{
+    content: '';
+    position: absolute;
+    top: -5px;
+    right:7px;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  
+  h4{
+    
+  }
+  
+  ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  ul.text-list{
+    text-align: left;
+    width: 90%;
+    margin: auto;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+    li{
+      a{
+        text-decoration: none;
+        padding-left: 5px;
+        padding-right: 5px;
+        color: #343434;
+        font-weight: 600;
+        display: block;
+        line-height: 27px;
+        -webkit-transition: all 200ms ease;
+        transition: all 200ms ease;
+        
+        &:hover{
+          color: tomato;
+        }
+      }
+    }
+    
+  }
 `;
 
 const ProfileButton = ({ children }) => {
