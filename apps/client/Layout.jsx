@@ -115,7 +115,7 @@ const ProfileButton = ({ children }) => {
               </button>
             </div>
             {isMenuOpen && (
-                <Nav className="navmenu">
+                <Nav className="navmenu" isMenuOpen={isMenuOpen}>
                     <ul className="text-list">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Gallery</a></li>
