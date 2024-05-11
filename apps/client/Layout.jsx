@@ -5,7 +5,7 @@ const StyledLayout = styled.div`
   .header {
     text-align: center;
     position: sticky;
-    z-index: 999;
+    z-index: 998;
     top: -10px;
     box-shadow: 0 10px 10px 10px rgba(0,0,0,0.5);
     opacity: 100%;
