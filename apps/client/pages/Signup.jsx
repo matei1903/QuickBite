@@ -84,12 +84,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const firestore = getFirestore();
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     try {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
-      const userS = authResult.userS
+      const user = authResult.user
       const comenzi = [];
-      localStorage.setItem('userID', await addUserInfoToFirestore(userS.uid, userS.email, userS.photoURL, comenzi));
+      localStorage.setItem('userID', await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi));
       if (password != conf_pass)
         alert("Parola confirmata este diferita!");
       else {
