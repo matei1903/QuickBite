@@ -224,13 +224,14 @@ export default () => {
       };
 
       console.log("docs_aper:", docs_aper);
-      console.log("comenzi:", comenzi);
+      console.log("comenzi:", newComenzi);
 
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log();
 
       const updatedComenzi = [...existingComenzi, newComenzi];
+      console.log("updatecomenzi:",updatedComenzi);
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
       });
