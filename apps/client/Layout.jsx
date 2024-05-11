@@ -31,70 +31,60 @@ const StyledLayout = styled.div`
     background-size: cover;
     background-position: center;
   }
+  .navmenu {
+    position: absolute;
+    top: calc(100% + 10px); /* Adjust the space between button and menu */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: ${({ isMenuOpen }) => (isMenuOpen ? 'block' : 'none')};
+    z-index: 999; /* Ensure menu is above other content */
+  }
+
+  .text-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .text-list li {
+    padding: 10px;
+  }
+
+  .text-list li a {
+    text-decoration: none;
+    color: #333;
+  }
   `;
 const Nav = styled.nav`
   
 .navmenu {
-  width: 240px;
-  margin-top: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background: #333;
-  text-align: center;
   position: absolute;
-  top: 70px; /* Ajustează în funcție de înălțimea butonului */
-  left: 10px;
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 300ms ease;
+  top: calc(100% + 10px); /* Adjust the space between button and menu */
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: ${({ isMenuOpen }) => (isMenuOpen ? 'block' : 'none')};
+  z-index: 999; /* Ensure menu is above other content */
 }
 
-.navmenu.opened {
-    visibility: visible;
-    opacity: 1;
-    z-index: 9999;
-}
-
-.navmenu::before {
-  content: '';
-  position: absolute;
-  top: -5px;
-  right: 7px;
-  width: 15px;
-  height: 15px;
-  background: #333;
-  transform: rotate(45deg);
-}
-ul.text-list {
-  list-style: none;
-  margin: 0;
+.text-list {
+  list-style-type: none;
   padding: 0;
-  width: 240px; /* Limitarea lățimii meniului */
-  text-align: right; /* Alinierea la dreapta */
-  z-index: 9999;
+  margin: 0;
 }
 
-ul.text-list li {
-  text-align: right;
+.text-list li {
+  padding: 10px;
 }
 
-ul.text-list li a {
+.text-list li a {
   text-decoration: none;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #343434;
-  font-weight: 600;
-  display: block;
-  line-height: 27px;
-  -webkit-transition: all 200ms ease;
-  transition: all 200ms ease;
-  z-index: 9999;
-
-  &:hover {
-    color: tomato;
-  }
+  color: #333;
 }
 `;
 
