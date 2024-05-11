@@ -51,11 +51,12 @@ const Nav = styled.nav`
   list-style-type: none;
   padding: 0;
   margin: 0;
-  
+  justify-content: right;
 }
 
 .text-list li {
   padding: 10px;
+  justify-content: right;
 }
 
 .text-list li a {
