@@ -42,7 +42,7 @@ const StyledLayout = styled.div`
     right: 10px;
     top: 25px;
     box-shadow: 0 0 10px 2px fade(#000, 15%);
-    z-index: 10;
+    z-index: 999;
     visibility: hidden;
     opacity:0;
     -webkit-transition: all 300ms ease;
