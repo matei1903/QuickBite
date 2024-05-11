@@ -89,7 +89,9 @@ const Signup = () => {
 
     try {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
-      await addUserInfoToFirestore(authResult.user.uid, email, authResult.user.photoURL);
+      const userS = authResult.userS
+      const comenzi = [];
+      localStorage.setItem('userID', await addUserInfoToFirestore(userS.uid, userS.email, userS.photoURL, comenzi));
       if (password != conf_pass)
         alert("Parola confirmata este diferita!");
       else {
