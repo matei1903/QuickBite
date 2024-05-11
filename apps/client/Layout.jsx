@@ -42,7 +42,7 @@ const Nav = styled.nav`
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: ${({ isMenuOpen }) => (isMenuOpen ? 'block' : 'none')};
+  display: ${({ isMenuOpen }) => (isMenuOpen ? 'flex' : 'none')};
   z-index: 999; /* Ensure menu is above other content */
   justify-content: right;
 }
