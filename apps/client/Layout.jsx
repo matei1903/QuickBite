@@ -31,32 +31,6 @@ const StyledLayout = styled.div`
     background-size: cover;
     background-position: center;
   }
-  .navmenu {
-    position: absolute;
-    top: calc(100% + 10px); /* Adjust the space between button and menu */
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: ${({ isMenuOpen }) => (isMenuOpen ? 'block' : 'none')};
-    z-index: 999; /* Ensure menu is above other content */
-  }
-
-  .text-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .text-list li {
-    padding: 10px;
-  }
-
-  .text-list li a {
-    text-decoration: none;
-    color: #333;
-  }
   `;
 const Nav = styled.nav`
   
