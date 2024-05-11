@@ -42,7 +42,7 @@ const StyledLayout = styled.div`
     right: 10px;
     top: 25px;
     box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15); /* Modificare a transparenței folosind rgba */
-    z-index: 999;
+    z-index: 9999;
     visibility: hidden;
     opacity: 0;
     transition: all 300ms ease;
@@ -51,6 +51,7 @@ const StyledLayout = styled.div`
 .navmenu.opened {
     visibility: visible;
     opacity: 1;
+    z-index: 9999;
 }
 
 .navmenu::before {
@@ -67,6 +68,7 @@ const StyledLayout = styled.div`
       list-style: none;
       margin: 0;
       padding: 0;
+      z-index: 9999;
     }
     
     ul.text-list{
@@ -77,6 +79,7 @@ const StyledLayout = styled.div`
       border-bottom: 1px solid #eee;
       padding-top: 10px;
       padding-bottom: 10px;
+      z-index: 9999;
       
       li{
         a{
@@ -89,6 +92,7 @@ const StyledLayout = styled.div`
           line-height: 27px;
           -webkit-transition: all 200ms ease;
           transition: all 200ms ease;
+          z-index: 9999;
           
           &:hover{
             color: tomato;
