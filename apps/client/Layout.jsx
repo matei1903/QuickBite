@@ -4,6 +4,7 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
+    position: relative;
     position: sticky;
     z-index: 998;
     top: -10px;
@@ -37,7 +38,7 @@ const Nav = styled.nav`
 .navmenu {
   position: absolute;
   top: calc(100% + 10px); /* Adjust the space between button and menu */
-  right: 0;
+  right: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
