@@ -43,7 +43,7 @@ const Nav = styled.nav`
   text-align: center;
   position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
-  right: 10px;
+  left: 10px;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
   z-index: 9999;
   visibility: hidden;
