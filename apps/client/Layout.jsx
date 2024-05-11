@@ -37,6 +37,7 @@ const ProfileButton = ({ children }) => {
     const _firebase = useFirebase();
     const db = _firebase?.db;
     const [userImageURL, setUserImageURL] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     
     // Starea pentru imaginea utilizatorului și conectare
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +61,7 @@ const ProfileButton = ({ children }) => {
 
     // Funcție pentru gestionarea clicului butonului
     const handleButtonClick = () => {
+      setIsMenuOpen(!isMenuOpen);
         // Implementați aici acțiunea butonului
         // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
     };
@@ -83,6 +85,15 @@ const ProfileButton = ({ children }) => {
                       onClick={handleButtonClick}>
               </button>
             </div>
+            {isMenuOpen && (
+                <nav className="navmenu">
+                    <ul className="text-list">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            )}
             <div>{children}</div>
         </StyledLayout>
     );
