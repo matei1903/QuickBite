@@ -33,72 +33,13 @@ const StyledLayout = styled.div`
   }
   `;
 const Nav = styled.nav`
-  .menubtn{
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    right: 0;
-    top: 10px;
-    position: absolute;
-  }
-  .menubtn span{
-    display: block;
-    width: 30px;
-    height: 3px;
-    position: absolute;
-    background: #fff;
-    -webkit-transition: all 300ms ease;
-    transition: all 300ms ease;
   
-   
-    &::before{
-      content:'';
-      width: 30px;
-      height: 3px;
-      position: absolute;
-      top: 8px;
-      background: #fff;
-     -webkit-transition: all 100ms ease;
-      transition: all 100ms ease;
-    }
-    &::after{
-      content:'';
-      width: 30px;
-      height: 3px;
-      position: absolute;
-      top: 16px;
-      background: #fff;
-      -webkit-transition: all 300ms ease;
-      transition: all 300ms ease;
-    }
-   
-   
-  }
-  
-     .menubtn.opened span{
-      -webkit-transform: rotate(45deg);
-      transform: rotate(45deg);
-      top: 7px;
-    
-      &::before{
-        opacity:0;
-      }
-       
-      &::after{
-        -webkit-transform: rotate(-90deg);
-        transform: rotate(-90deg);
-        top: 0px;
-              
-      }
-       
-       
-    }
   .navmenu {
     width: 240px;
     margin-top: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background: rgba(255, 255, 255, 0.85); /* Modificare a transparenței folosind rgba */
+    background: fff; /* Modificare a transparenței folosind rgba */
     text-align: center;
     position: absolute;
     right: 10px;
