@@ -190,7 +190,6 @@ export default () => {
 
 
   const handleComanda = async () => {
-
     const userID = localStorage.getItem('userID');
     console.log(userID);
 
@@ -201,8 +200,10 @@ export default () => {
       return;
     }
 
+    // Definirea variabilei userDocRef înainte de blocul try-catch
+    const userDocRef = doc(db, "users", userID);
+
     try {
-      const userDocRef = doc(db, "users", userID);
       // Obține ID-ul utilizatorului conectat
       const userDocSnapshot = await getDoc(userDocRef);
       const existingComenzi = userDocSnapshot.data().comenzi || [];
@@ -225,8 +226,6 @@ export default () => {
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
 
-      // Obține referința către documentul utilizatorului
-
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log();
@@ -243,7 +242,7 @@ export default () => {
       // Alertă pentru eroare
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
-  };
+};
 
 
 
