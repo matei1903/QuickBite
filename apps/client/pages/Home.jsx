@@ -6,7 +6,7 @@ const Icon = React.lazy(() =>
 );
 import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 const StyledHome = styled.div`
   h1 {
