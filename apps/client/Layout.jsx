@@ -4,7 +4,6 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
-    position: relative;
     position: sticky;
     z-index: 998;
     top: -10px;
@@ -49,14 +48,15 @@ const Nav = styled.nav`
 
 .text-list {
   list-style-type: none;
+  position: absolute;
   padding: 0;
   margin: 0;
-  justify-content: right;
+  right: 10px;
 }
 
 .text-list li {
   padding: 10px;
-  justify-content: right;
+  right: 10px;
 }
 
 .text-list li a {
