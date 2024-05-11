@@ -36,7 +36,6 @@ const StyledLayout = styled.div`
 const Nav = styled.nav`
   
 .navmenu {
-  position: absolute;
   top: calc(100% + 10px); /* Adjust the space between button and menu */
   right: 10px;
   background-color: #fff;
@@ -45,12 +44,14 @@ const Nav = styled.nav`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: ${({ isMenuOpen }) => (isMenuOpen ? 'block' : 'none')};
   z-index: 999; /* Ensure menu is above other content */
+  justify-content: right;
 }
 
 .text-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  
 }
 
 .text-list li {
