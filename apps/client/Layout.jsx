@@ -34,21 +34,21 @@ const StyledLayout = styled.div`
   `;
 const Nav = styled.nav`
   
-  .navmenu {
-    width: 240px;
-    margin-top: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background: fff; /* Modificare a transparenței folosind rgba */
-    text-align: center;
-    position: absolute;
-    right: 10px;
-    top: 25px;
-    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15); /* Modificare a transparenței folosind rgba */
-    z-index: 9999;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 300ms ease;
+.navmenu {
+  width: 240px;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: fff;
+  text-align: center;
+  position: absolute;
+  top: 70px; /* Ajustează în funcție de înălțimea butonului */
+  right: 10px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 300ms ease;
 }
 
 .navmenu.opened {
@@ -58,54 +58,44 @@ const Nav = styled.nav`
 }
 
 .navmenu::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    right: 7px;
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    transform: rotate(45deg);
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 7px;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  transform: rotate(45deg);
 }
-    ul{
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      z-index: 9999;
-    }
-    
-    ul.text-list{
-      text-align: left;
-      width: 90%;
-      right: 10px;
-      top: 25px;
-      margin: auto;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      z-index: 9999;
-      
-      li{
-        a{
-          text-decoration: none;
-          padding-left: 5px;
-          padding-right: 5px;
-          color: #343434;
-          font-weight: 600;
-          display: block;
-          line-height: 27px;
-          -webkit-transition: all 200ms ease;
-          transition: all 200ms ease;
-          z-index: 9999;
-          
-          &:hover{
-            color: tomato;
-          }
-        }
-      }
-      
-    }
+ul.text-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 240px; /* Limitarea lățimii meniului */
+  text-align: right; /* Alinierea la dreapta */
+  z-index: 9999;
+}
+
+ul.text-list li {
+  text-align: left;
+}
+
+ul.text-list li a {
+  text-decoration: none;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #343434;
+  font-weight: 600;
+  display: block;
+  line-height: 27px;
+  -webkit-transition: all 200ms ease;
+  transition: all 200ms ease;
+  z-index: 9999;
+
+  &:hover {
+    color: tomato;
+  }
+}
 `;
 
 const ProfileButton = ({ children }) => {
