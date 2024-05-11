@@ -31,6 +31,8 @@ const StyledLayout = styled.div`
     background-size: cover;
     background-position: center;
   }
+  `;
+const Nav = styled.nav`
   .menubtn{
     cursor: pointer;
     width: 40px;
@@ -216,13 +218,13 @@ const ProfileButton = ({ children }) => {
               </button>
             </div>
             {isMenuOpen && (
-                <nav className="navmenu">
+                <Nav className="navmenu">
                     <ul className="text-list">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Gallery</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
-                </nav>
+                </Nav>
             )}
             <div>{children}</div>
         </StyledLayout>
