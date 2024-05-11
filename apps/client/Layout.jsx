@@ -39,7 +39,7 @@ const Nav = styled.nav`
   margin-top: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-  background: fff;
+  background: #333;
   text-align: center;
   position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
@@ -64,7 +64,7 @@ const Nav = styled.nav`
   right: 7px;
   width: 15px;
   height: 15px;
-  background: #fff;
+  background: #333;
   transform: rotate(45deg);
 }
 ul.text-list {
@@ -77,7 +77,7 @@ ul.text-list {
 }
 
 ul.text-list li {
-  text-align: left;
+  text-align: right;
 }
 
 ul.text-list li a {
