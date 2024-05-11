@@ -199,12 +199,14 @@ export default () => {
 
     try {
       // Obține ID-ul utilizatorului conectat
+      const userDocSnapshot = await getDoc(userDocRef);
+      const existingComenzi = userDocSnapshot.data().comenzi || [];
 
       console.log("selectedItems:", selectedItems);
 
       const userDocRef = doc(db, "users", userID);
       // Creează obiectul cu comenzile selectate
-      const comenzi = [{
+      const newComenzi = {
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
         fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
         supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
@@ -214,18 +216,19 @@ export default () => {
         salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
-      }];
+      };
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
       // Obține referința către documentul utilizatorului
-    
-    console.log("userID:", userID);
+
+      console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log()
-    await updateDoc(userDocRef, {
-      comenzi: comenzi,
-    });
-      
+      const updatedComenzi = [...existingComenzi, newComenzi];
+      await updateDoc(userDocRef, {
+        comenzi: updatedComenzi,
+      });
+
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
