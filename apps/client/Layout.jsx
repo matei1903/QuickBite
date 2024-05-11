@@ -32,19 +32,22 @@ const StyledLayout = styled.div`
     background-position: center;
   }
   `;
-const Nav = styled.nav`
-  .navmenu {
-    right: 10px;
-    padding: 5px;
-    position: fixed;
-    z-index: 999;
-    opacity: 0;
-  }
-  &.opened{
-    visibility: visible;
-    opacity:1;
+  const Menu = styled.nav`
+  position: absolute;
+  top: 70px; /* Ajustează în funcție de înălțimea butonului */
+  right: 10px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  visibility: ${(props) => (props.isOpen ? "visible" : "hidden")};
+  opacity: ${(props) => (props.isOpen ? 1 : 0)};
+  transition: all 300ms ease;
+`;
 
-  }
+const MenuItem = styled.div`
+  margin-bottom: 10px;
 `;
 
 const ProfileButton = ({ children }) => {
@@ -99,15 +102,18 @@ const ProfileButton = ({ children }) => {
                       onClick={handleButtonClick}>
               </button>
             </div>
-            {isMenuOpen && (
-                <Nav className="navmenu" isMenuOpen={isMenuOpen}>
-                    <ul className="text-list">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Gallery</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </Nav>
-            )}
+            <Menu isOpen={isMenuOpen}>
+                <MenuItem>
+                    <button>Comenzile mele</button>
+                </MenuItem>
+                <MenuItem>
+                    <label htmlFor="search">Cuvânt:</label>
+                    <input type="text" id="search" />
+                </MenuItem>
+                <MenuItem>
+                    <button>Delogare</button>
+                </MenuItem>
+            </Menu>
             <div>{children}</div>
         </StyledLayout>
     );
