@@ -31,40 +31,38 @@ const StyledLayout = styled.div`
     background-size: cover;
     background-position: center;
   }
-  .navmenu{
+  .navmenu {
     width: 240px;
     margin-top: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.85); /* Modificare a transparenței folosind rgba */
     text-align: center;
     position: absolute;
     right: 10px;
     top: 25px;
-    box-shadow: 0 0 10px 2px fade(#000, 15%);
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15); /* Modificare a transparenței folosind rgba */
     z-index: 999;
     visibility: hidden;
-    opacity:0;
-    -webkit-transition: all 300ms ease;
+    opacity: 0;
     transition: all 300ms ease;
-    
-    &.opened{
-      visibility: visible;
-      opacity:1;
-  
-    }
-      
-    &::before{
-      content: '';
-      position: absolute;
-      top: -5px;
-      right:7px;
-      width: 15px;
-      height: 15px;
-      background: #fff;
-      -webkit-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
+}
+
+.navmenu.opened {
+    visibility: visible;
+    opacity: 1;
+}
+
+.navmenu::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 7px;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    transform: rotate(45deg);
+}
     ul{
       list-style: none;
       margin: 0;
