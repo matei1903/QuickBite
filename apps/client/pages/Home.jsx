@@ -254,7 +254,7 @@ export default () => {
         console.log("updatecomenzi:", updatedComenzi);
 
         await updateDoc(userDocRef, {
-            comenzi: updatedComenzi,
+            comenzi: selectedItems,
         });
 
         // Resetarea listei de produse selectate
