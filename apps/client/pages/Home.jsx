@@ -230,8 +230,8 @@ export default () => {
         console.log("userDocRef:", userDocRef);
         console.log();
 
-        // Dacă nu există comenzi în Firestore, creează un vector nou
-        const updatedComenzi = existingComenzi.length > 0 ? [...existingComenzi, newComenzi] : [newComenzi];
+        // Actualizează vectorul de comenzi existent
+        const updatedComenzi = [...existingComenzi, newComenzi];
         console.log("updatecomenzi:", updatedComenzi);
         await updateDoc(userDocRef, {
             comenzi: updatedComenzi,
@@ -247,6 +247,7 @@ export default () => {
         alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
 };
+
 
 
 
