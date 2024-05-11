@@ -193,18 +193,22 @@ export default () => {
 
     const userID = localStorage.getItem('userID');
     console.log(userID);
-    console.log(doc.id);
 
     // Verifică dacă utilizatorul este autentificat
+    if (!user) {
+      console.error("Utilizatorul nu este autentificat.");
+      alert("Trebuie să fii autentificat pentru a plasa o comandă.");
+      return;
+    }
 
     try {
+      const userDocRef = doc(db, "users", userID);
       // Obține ID-ul utilizatorului conectat
       const userDocSnapshot = await getDoc(userDocRef);
       const existingComenzi = userDocSnapshot.data().comenzi || [];
 
       console.log("selectedItems:", selectedItems);
 
-      const userDocRef = doc(db, "users", userID);
       // Creează obiectul cu comenzile selectate
       const newComenzi = {
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -217,13 +221,16 @@ export default () => {
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
       };
+
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", comenzi);
+
       // Obține referința către documentul utilizatorului
 
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
-      console.log()
+      console.log();
+
       const updatedComenzi = [...existingComenzi, newComenzi];
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
