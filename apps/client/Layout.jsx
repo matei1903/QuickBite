@@ -108,6 +108,19 @@ const ProfileButton = ({ children }) => {
       // Convertirea valorii recuperate într-un număr și actualizarea stării 'plata'
       setPlata(parseFloat(storedPlata));
     }
+    const handlePlataUpdate = () => {
+      const updatedPlata = localStorage.getItem('plata');
+      if (updatedPlata) {
+        setPlata(parseFloat(updatedPlata));
+      }
+    };
+    
+    window.addEventListener('plataUpdated', handlePlataUpdate);
+    
+    // Curăță efectul secundar pentru a evita memory leaks
+    return () => {
+      window.removeEventListener('plataUpdated', handlePlataUpdate);
+    };
   }, []);
   useEffect(() => {
     // Actualizează 'storedPlata' în localStorage când valoarea 'plata' este schimbată

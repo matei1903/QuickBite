@@ -251,6 +251,8 @@ export default () => {
       // Salvarea variabilei 'plata' în localStorage
       console.log("Plata actualizată:", plata);
       localStorage.setItem('plata', plata.toString());
+      const event = new Event('plataUpdated');
+      window.dispatchEvent(event);
 
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
