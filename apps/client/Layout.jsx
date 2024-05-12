@@ -51,7 +51,7 @@ const MenuItem = styled.div`
   margin-bottom: 10px;
 `;
 
-const ProfileButton = ({ children, plata }) => {
+const ProfileButton = ({ children }) => {
   const _firebase = useFirebase();
   const db = _firebase?.db;
   const [userImageURL, setUserImageURL] = useState(null);
