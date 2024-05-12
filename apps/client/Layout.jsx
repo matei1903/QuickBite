@@ -58,7 +58,7 @@ const ProfileButton = ({ children, plata }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-
+  const [plata, setPlata] = useState(null);
   // Starea pentru imaginea utilizatorului și conectare
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userImage, setUserImage] = useState(null);
