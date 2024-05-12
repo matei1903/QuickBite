@@ -244,7 +244,7 @@ export default () => {
         plata: sumaTotala
       });
       console.log("update selected items:", setSelectedItems);
-
+      setSelectedItems([]);
       console.log("update selected items:", setSelectedItems);
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
@@ -258,7 +258,7 @@ export default () => {
     // Salvarea variabilei 'plata' în localStorage
     localStorage.setItem('plata', plata.toString());
   }, [plata]);
-  setSelectedItems([]);
+
   const handePlata = () => {
     alert("Nota de plata a fost ceruta!");
   }
