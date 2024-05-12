@@ -151,6 +151,7 @@ export default () => {
   }, []);
 
   const { db } = useFirebase();
+  const [sumaTotala, setSumaTotala] = useState(0);
 
   const [docs_aper, setDocs_aper] = useState([]);
   const [docs_fp, setDocs_fp] = useState([]);
@@ -210,11 +211,12 @@ export default () => {
 
       console.log("selectedItems:", selectedItems);
 
-      let sumaTotala = sumaTotala + 0;;
+      let sumaNoua = sumaTotala;
       selectedItems.forEach((id) => {
         const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
-        sumaTotala += preparat.pret;
+        sumaNoua += preparat.pret;
       });
+      setSumaTotala(sumaNoua);
       setPlata(sumaTotala);
       // Creează obiectul cu comenzile selectate
       const newComenzi = {
