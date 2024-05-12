@@ -34,7 +34,7 @@ const StyledLayout = styled.div`
   }
   `;
 const Menu = styled.nav`
-  position: sticky;
+  position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
   right: 10px;
   background-color: #212121;
