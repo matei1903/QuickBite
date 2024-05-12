@@ -51,7 +51,7 @@ const MenuItem = styled.div`
   margin-bottom: 10px;
 `;
 
-const ProfileButton = ({ children }) => {
+const ProfileButton = ({ children, plata }) => {
   const _firebase = useFirebase();
   const db = _firebase?.db;
   const [userImageURL, setUserImageURL] = useState(null);
@@ -100,6 +100,7 @@ const ProfileButton = ({ children }) => {
     console.log("Calling loadUserImage()...");
     loadUserImage();
   }, [isLoggedIn]);
+
   useEffect(() => {
     // Recuperarea variabilei 'plata' din localStorage la încărcarea componentei
     const storedPlata = localStorage.getItem('plata');
@@ -114,9 +115,9 @@ const ProfileButton = ({ children }) => {
         setPlata(parseFloat(updatedPlata));
       }
     };
-    
+
     window.addEventListener('plataUpdated', handlePlataUpdate);
-    
+
     // Curăță efectul secundar pentru a evita memory leaks
     return () => {
       window.removeEventListener('plataUpdated', handlePlataUpdate);
@@ -128,32 +129,32 @@ const ProfileButton = ({ children }) => {
       localStorage.setItem('plata', plata.toString());
     }
   }, [plata]);
-//const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
-//const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
-if (!db)
-  return <div>loading...</div>
-return (
-  <StyledLayout>
-    <div className="header">
-      <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
-      <button className={`profile_button ${isLoggedIn ? 'loggedIn' : ''}`}
-        style={{ backgroundImage: `url(${userImage})` }}
-        onClick={handleButtonClick}>
-      </button>
-    </div>
-    <Menu isOpen={isMenuOpen}>
-      <MenuItem>
-        <button>Comenzile mele</button>
-      </MenuItem>
-      <MenuItem>
-        <label htmlFor="search">Total de plata: {plata !== null ? plata.toFixed(2) : "0.00"}</label>
-      </MenuItem>
-      <MenuItem>
-        <button onClick={handleSignOut}>Delogare</button>
-      </MenuItem>
-    </Menu>
-    <div>{children}</div>
-  </StyledLayout>
-);
+  //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
+  //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
+  if (!db)
+    return <div>loading...</div>
+  return (
+    <StyledLayout>
+      <div className="header">
+        <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
+        <button className={`profile_button ${isLoggedIn ? 'loggedIn' : ''}`}
+          style={{ backgroundImage: `url(${userImage})` }}
+          onClick={handleButtonClick}>
+        </button>
+      </div>
+      <Menu isOpen={isMenuOpen}>
+        <MenuItem>
+          <button>Comenzile mele</button>
+        </MenuItem>
+        <MenuItem>
+          <label htmlFor="search">Total de plata: {plata !== null ? plata.toFixed(2) : "0.00"}</label>
+        </MenuItem>
+        <MenuItem>
+          <button onClick={handleSignOut}>Delogare</button>
+        </MenuItem>
+      </Menu>
+      <div>{children}</div>
+    </StyledLayout>
+  );
 };
 export default ProfileButton;
