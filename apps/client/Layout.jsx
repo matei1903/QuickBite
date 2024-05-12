@@ -54,9 +54,10 @@ const MenuItem = styled.div`
     background-color: white;
     color: black;
     border-radius: 10em;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
-    padding: 1em 2em;
+    padding: 5px;
+    width: 50px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: 1px solid black;
