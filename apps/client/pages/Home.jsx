@@ -244,7 +244,10 @@ export default () => {
         plata: sumaTotala
       });
       console.log("update selected items:", setSelectedItems);
-      setPlata(plata);
+      useEffect(() => {
+        // Salvarea variabilei 'plata' în localStorage
+        localStorage.setItem('plata', plata.toString());
+      }, [plata]);
       setSelectedItems([]);
       console.log("update selected items:", setSelectedItems);
       // Alertă pentru succes

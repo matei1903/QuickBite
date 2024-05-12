@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { useNavigate } from 'react-router-dom';
-import { plata, setPlata } from "./Home.jsx";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
@@ -59,7 +58,7 @@ const ProfileButton = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const [sumaAchitat, setSumaAchitat] = useState(null);
+  const [plata, setPlata] = useState(null);
 
   // Starea pentru imaginea utilizatorului și conectare
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -101,7 +100,14 @@ const ProfileButton = ({ children }) => {
     console.log("Calling loadUserImage()...");
     loadUserImage();
   }, [isLoggedIn]);
- 
+  useEffect(() => {
+    // Recuperarea variabilei 'plata' din localStorage la încărcarea componentei
+    const storedPlata = localStorage.getItem('plata');
+    if (storedPlata) {
+      // Convertirea valorii recuperate într-un număr și actualizarea stării 'plata'
+      setPlata(parseFloat(storedPlata));
+    }
+  }, []);
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
 //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
 if (!db)
