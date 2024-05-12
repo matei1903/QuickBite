@@ -99,7 +99,7 @@ const ProfileButton = ({ children }) => {
   useEffect(() => {
     console.log("Calling loadUserImage()...");
     loadUserImage();
-  }, [isLoggedIn]);
+  
 
   const fetchSumaAchitat = async () => {
     try {
@@ -120,7 +120,7 @@ const ProfileButton = ({ children }) => {
     fetchSumaAchitat();
     console.log("plata:",sumaAchitat);
   }
- [];
+ }, [isLoggedIn, db]);
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
 //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
 if (!db)
