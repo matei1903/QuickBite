@@ -188,7 +188,7 @@ export default () => {
     }
   };
 
-  let sumaTotala = 0;
+
   const handleComanda = async () => {
     const userID = localStorage.getItem('userID');
     console.log(userID);
@@ -210,7 +210,7 @@ export default () => {
 
       console.log("selectedItems:", selectedItems);
 
-
+      let sumaTotala = sumaTotala + 0;;
       selectedItems.forEach((id) => {
         const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
         sumaTotala += preparat.pret;
