@@ -126,7 +126,7 @@ return (
         <button>Comenzile mele</button>
       </MenuItem>
       <MenuItem>
-        <label htmlFor="search">Total de plata:{plata}</label>
+        <label htmlFor="search">Total de plata: {plata !== null ? plata.toFixed(2) : "0.00"}</label>
       </MenuItem>
       <MenuItem>
         <button onClick={handleSignOut}>Delogare</button>

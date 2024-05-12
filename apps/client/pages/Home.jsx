@@ -243,14 +243,15 @@ export default () => {
         comenzi: updatedComenzi,
         plata: sumaTotala
       });
+      setPlata(sumaTotala);
       console.log("update selected items:", setSelectedItems);
       setSelectedItems([]);
       console.log("update selected items:", setSelectedItems);
-      useEffect(() => {
-        // Salvarea variabilei 'plata' în localStorage
-        console.log("Plata actualizată:", plata);
-        localStorage.setItem('plata', plata.toString());
-      }, [plata]);
+
+      // Salvarea variabilei 'plata' în localStorage
+      console.log("Plata actualizată:", plata);
+      localStorage.setItem('plata', plata.toString());
+
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
