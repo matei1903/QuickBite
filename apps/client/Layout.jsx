@@ -118,6 +118,7 @@ const ProfileButton = ({ children }) => {
 
   if (db) {
     fetchSumaAchitat();
+    console.log("plata:",sumaAchitat);
   }
  [];
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
