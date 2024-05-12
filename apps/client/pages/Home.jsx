@@ -210,6 +210,12 @@ export default () => {
 
         console.log("selectedItems:", selectedItems);
 
+        let sumaTotala = 0;
+        selectedItems.forEach((id) => {
+            const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
+            sumaTotala += preparat.pret;
+        });
+
         // Creează obiectul cu comenzile selectate
         const newComenzi = {
             aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -235,6 +241,7 @@ export default () => {
         console.log("updatecomenzi:", updatedComenzi);
         await updateDoc(userDocRef, {
             comenzi: updatedComenzi,
+            plata: sumaTotala
         });
         console.log("update selected items:", setSelectedItems);
         setSelectedItems([]);

@@ -118,7 +118,6 @@ const ProfileButton = ({ children }) => {
                 </MenuItem>
                 <MenuItem>
                     <label htmlFor="search">Cuvânt:</label>
-                    <input type="text" id="search" />
                 </MenuItem>
                 <MenuItem>
                     <button onClick={handleSignOut}>Delogare</button>

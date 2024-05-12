@@ -90,7 +90,8 @@ const Signup = () => {
       const authResult = await createUserWithEmailAndPassword(auth, email, password);
       const user = authResult.user
       const comenzi = [];
-      localStorage.setItem('userID', await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi));
+      const plata = 0;
+      localStorage.setItem('userID', await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi, plata));
       if (password != conf_pass)
         alert("Parola confirmata este diferita!");
       else {
@@ -109,7 +110,8 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const comenzi = [];
-      localStorage.setItem('userID', await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi));
+      const plata = 0;
+      localStorage.setItem('userID', await addUserInfoToFirestore(user.uid, user.email, user.photoURL, comenzi, plata));
       alert("Autentificare cu Google reușită!");
       navigate('/home');
     } catch (error) {
@@ -117,13 +119,14 @@ const Signup = () => {
     }
   };
 
-  const addUserInfoToFirestore = async (userId, userEmail, userPhotoURL, comenzi) => {
+  const addUserInfoToFirestore = async (userId, userEmail, userPhotoURL, comenzi, plata) => {
     try {
       const docRef = await addDoc(collection(firestore, 'users'), {
         userId: userId,
         email: userEmail,
         photoURL: userPhotoURL,
-        comenzi: comenzi
+        comenzi: comenzi,
+        plata: plata
         // puteți adăuga și alte informații despre utilizator aici
       });
       return docRef.id;
