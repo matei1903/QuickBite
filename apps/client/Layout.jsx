@@ -109,6 +109,12 @@ const ProfileButton = ({ children }) => {
       setPlata(parseFloat(storedPlata));
     }
   }, []);
+  useEffect(() => {
+    // Actualizează 'storedPlata' în localStorage când valoarea 'plata' este schimbată
+    if (plata !== null) {
+      localStorage.setItem('plata', plata.toString());
+    }
+  }, [plata]);
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
 //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
 if (!db)
