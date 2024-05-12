@@ -99,28 +99,25 @@ const ProfileButton = ({ children }) => {
   useEffect(() => {
     console.log("Calling loadUserImage()...");
     loadUserImage();
-  
+  }, [isLoggedIn]);
 
-  const fetchSumaAchitat = async () => {
+  const fetchPlata = async () => {
     try {
       const user = _firebase.auth.currentUser;
       const userDoc = await db.collection("users").doc(user.uid).get();
       if (userDoc.exists) {
         const userData = userDoc.data();
-        setSumaAchitat(userData?.plata);
+        const plata = userData.plata; // Salvați valoarea câmpului "plata" într-o variabilă locală
+        console.log("Valoarea din câmpul 'plata':", plata);
       } else {
-        console.log("Document not found for current user.");
+        console.log("Documentul nu a fost găsit pentru utilizatorul curent.");
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("Eroare la preluarea datelor utilizatorului:", error);
     }
   };
-
-  if (db) {
-    fetchSumaAchitat();
-    console.log("plata:",sumaAchitat);
-  }
- }, [isLoggedIn, db]);
+  let plata = fetchPlata;
+ 
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
 //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
 if (!db)
@@ -139,7 +136,7 @@ return (
         <button>Comenzile mele</button>
       </MenuItem>
       <MenuItem>
-        <label htmlFor="search">{sumaAchitat}</label>
+        <label htmlFor="search">{plata}</label>
       </MenuItem>
       <MenuItem>
         <button onClick={handleSignOut}>Delogare</button>
