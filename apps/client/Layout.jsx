@@ -37,7 +37,7 @@ const Menu = styled.nav`
   position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
   right: 10px;
-  background-color: #333;
+  background-color: ##212121;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
@@ -49,6 +49,19 @@ const Menu = styled.nav`
 
 const MenuItem = styled.div`
   margin-bottom: 10px;
+
+  .button { 
+    background-color: white;
+    color: black;
+    border-radius: 10em;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 1em 2em;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid black;
+    box-shadow: 0 0 0 0 black;
+  }
 `;
 
 const ProfileButton = ({ children }) => {
