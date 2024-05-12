@@ -243,7 +243,7 @@ export default () => {
       console.log("updatecomenzi:", updatedComenzi);
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
-        plata: sumaTotala
+        plata: sumaNoua
       });
       setPlata(sumaTotala);
       console.log("update selected items:", setSelectedItems);
