@@ -103,6 +103,7 @@ const ProfileButton = ({ children }) => {
   useEffect(() => {
     // Recuperarea variabilei 'plata' din localStorage la încărcarea componentei
     const storedPlata = localStorage.getItem('plata');
+    console.log("storedPlata:", storedPlata);
     if (storedPlata) {
       // Convertirea valorii recuperate într-un număr și actualizarea stării 'plata'
       setPlata(parseFloat(storedPlata));
