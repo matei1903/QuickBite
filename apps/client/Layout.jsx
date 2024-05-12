@@ -40,7 +40,7 @@ const Menu = styled.nav`
   background-color: #212121;
   padding: 10px;
   border-radius: 5px;
-  border-color: white;
+  border: 2px solid white;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
   z-index: 9999;
   visibility: ${(props) => (props.isOpen ? "visible" : "hidden")};
