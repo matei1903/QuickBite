@@ -33,7 +33,7 @@ const StyledLayout = styled.div`
     background-position: center;
   }
   `;
-  const Menu = styled.nav`
+const Menu = styled.nav`
   position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
   right: 10px;
@@ -52,79 +52,100 @@ const MenuItem = styled.div`
 `;
 
 const ProfileButton = ({ children }) => {
-    const _firebase = useFirebase();
-    const db = _firebase?.db;
-    const [userImageURL, setUserImageURL] = useState(null);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navigate = useNavigate();
-    
-    // Starea pentru imaginea utilizatorului și conectare
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userImage, setUserImage] = useState(null);
+  const _firebase = useFirebase();
+  const db = _firebase?.db;
+  const [userImageURL, setUserImageURL] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-    // Funcție pentru încărcarea imaginii utilizatorului
-    const loadUserImage = () => {
-        // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
-        // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
-        const user = _firebase?.auth?.currentUser;
-        const guestIcon = 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b';
-        if (user && user.photoURL) {
-            setUserImage(user.photoURL);
-            console.log("User image set to:", user.photoURL);
-        } else {
-            setUserImage(guestIcon);
-            console.log("User image set to default icon");
-        }
-    };
-    
+  const [sumaAchitat, setSumaAchitat] = useState(null);
 
-    // Funcție pentru gestionarea clicului butonului
-    const handleButtonClick = () => {
-      setIsMenuOpen(!isMenuOpen);
-        // Implementați aici acțiunea butonului
-        // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
-    };
-    const handleSignOut = () => {
-      _firebase.auth.signOut().then(() => {
-          console.log("User signed out successfully.");
-          navigate('/login');
-          // Poți face orice alte acțiuni aici, cum ar fi redirecționarea către pagina de autentificare.
-      }).catch((error) => {
-          console.error("Error signing out:", error);
-      });
+  // Starea pentru imaginea utilizatorului și conectare
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userImage, setUserImage] = useState(null);
+
+  // Funcție pentru încărcarea imaginii utilizatorului
+  const loadUserImage = () => {
+    // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
+    // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
+    const user = _firebase?.auth?.currentUser;
+    const guestIcon = 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b';
+    if (user && user.photoURL) {
+      setUserImage(user.photoURL);
+      console.log("User image set to:", user.photoURL);
+    } else {
+      setUserImage(guestIcon);
+      console.log("User image set to default icon");
+    }
   };
-    // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
-    useEffect(() => {
-        console.log("Calling loadUserImage()...");
-        loadUserImage();
-    }, [isLoggedIn]);
 
-    //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
-    //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
-    if (!db)
-        return <div>loading...</div>
-    return (
-        <StyledLayout>
-            <div className="header">
-              <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
-              <button className={`profile_button ${isLoggedIn ? 'loggedIn' : ''}`}
-                      style={{ backgroundImage: `url(${userImage})` }}
-                      onClick={handleButtonClick}>
-              </button>
-            </div>
-            <Menu isOpen={isMenuOpen}>
-                <MenuItem>
-                    <button>Comenzile mele</button>
-                </MenuItem>
-                <MenuItem>
-                    <label htmlFor="search">Cuvânt:</label>
-                </MenuItem>
-                <MenuItem>
-                    <button onClick={handleSignOut}>Delogare</button>
-                </MenuItem>
-            </Menu>
-            <div>{children}</div>
-        </StyledLayout>
-    );
+
+  // Funcție pentru gestionarea clicului butonului
+  const handleButtonClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+    // Implementați aici acțiunea butonului
+    // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
+  };
+  const handleSignOut = () => {
+    _firebase.auth.signOut().then(() => {
+      console.log("User signed out successfully.");
+      navigate('/login');
+      // Poți face orice alte acțiuni aici, cum ar fi redirecționarea către pagina de autentificare.
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+    });
+  };
+  // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
+  useEffect(() => {
+    console.log("Calling loadUserImage()...");
+    loadUserImage();
+  }, [isLoggedIn]);
+
+  const fetchSumaAchitat = async () => {
+    try {
+      const user = _firebase.auth.currentUser;
+      const userDoc = await db.collection("users").doc(user.uid).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setSumaAchitat(userData?.plata);
+      } else {
+        console.log("Document not found for current user.");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  if (db) {
+    fetchSumaAchitat();
+  }
+ [];
+//const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
+//const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
+if (!db)
+  return <div>loading...</div>
+return (
+  <StyledLayout>
+    <div className="header">
+      <img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="img"></img>
+      <button className={`profile_button ${isLoggedIn ? 'loggedIn' : ''}`}
+        style={{ backgroundImage: `url(${userImage})` }}
+        onClick={handleButtonClick}>
+      </button>
+    </div>
+    <Menu isOpen={isMenuOpen}>
+      <MenuItem>
+        <button>Comenzile mele</button>
+      </MenuItem>
+      <MenuItem>
+        <label htmlFor="search">{sumaAchitat}</label>
+      </MenuItem>
+      <MenuItem>
+        <button onClick={handleSignOut}>Delogare</button>
+      </MenuItem>
+    </Menu>
+    <div>{children}</div>
+  </StyledLayout>
+);
 };
 export default ProfileButton;
