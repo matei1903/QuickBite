@@ -246,6 +246,11 @@ export default () => {
       console.log("update selected items:", setSelectedItems);
       setSelectedItems([]);
       console.log("update selected items:", setSelectedItems);
+      useEffect(() => {
+        // Salvarea variabilei 'plata' în localStorage
+        console.log("Plata actualizată:", plata);
+        localStorage.setItem('plata', plata.toString());
+      }, [plata]);
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
@@ -254,10 +259,7 @@ export default () => {
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
     }
   };
-  useEffect(() => {
-    // Salvarea variabilei 'plata' în localStorage
-    localStorage.setItem('plata', plata.toString());
-  }, [plata]);
+
 
   const handePlata = () => {
     alert("Nota de plata a fost ceruta!");
