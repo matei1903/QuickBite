@@ -146,7 +146,7 @@ const ProfileButton = ({ children }) => {
           <button>Comenzile mele</button>
         </MenuItem>
         <MenuItem>
-          <label htmlFor="search">Total de plata: {plata ? plata.toFixed(2) : "0.00"}</label>
+          <label htmlFor="search">Total de plata: {plata ? plata.toFixed(2) : "0.00"} RON</label>
         </MenuItem>
         <MenuItem>
           <button onClick={handleSignOut}>Delogare</button>
