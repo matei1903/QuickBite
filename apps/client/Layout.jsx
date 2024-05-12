@@ -37,7 +37,7 @@ const Menu = styled.nav`
   position: absolute;
   top: 70px; /* Ajustează în funcție de înălțimea butonului */
   right: 10px;
-  background-color: ##212121;
+  background-color: #212121;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
@@ -156,13 +156,13 @@ const ProfileButton = ({ children }) => {
       </div>
       <Menu isOpen={isMenuOpen}>
         <MenuItem>
-          <button>Comenzile mele</button>
+          <button className="button">Comenzile mele</button>
         </MenuItem>
         <MenuItem>
           <label htmlFor="search">Total de plata: {plata ? plata.toFixed(2) : "0.00"} RON</label>
         </MenuItem>
         <MenuItem>
-          <button onClick={handleSignOut}>Delogare</button>
+          <button className="button" onClick={handleSignOut}>Delogare</button>
         </MenuItem>
       </Menu>
       <div>{children}</div>
