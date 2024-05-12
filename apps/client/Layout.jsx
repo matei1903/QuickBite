@@ -56,8 +56,8 @@ const MenuItem = styled.div`
     border-radius: 10em;
     font-size: 15px;
     font-weight: 600;
-    padding: 5px;
-    width: 50px;
+    padding: 8px;
+    width: 120px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: 1px solid black;
