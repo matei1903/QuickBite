@@ -188,7 +188,7 @@ export default () => {
     }
   };
 
-
+  const [plata, setPlata] = useState(0);
   const handleComanda = async () => {
     const userID = localStorage.getItem('userID');
     console.log(userID);
@@ -215,7 +215,7 @@ export default () => {
             const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
             sumaTotala += preparat.pret;
         });
-
+        setPlata(sumaTotala);
         // Creează obiectul cu comenzile selectate
         const newComenzi = {
             aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
@@ -244,6 +244,7 @@ export default () => {
             plata: sumaTotala
         });
         console.log("update selected items:", setSelectedItems);
+        setPlata(plata);
         setSelectedItems([]);
         console.log("update selected items:", setSelectedItems);
         // Alertă pentru succes
@@ -652,3 +653,4 @@ export default () => {
     </Layout>
   );
 };
+export { plata, setPlata };

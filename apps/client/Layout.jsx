@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { useNavigate } from 'react-router-dom';
+import { plata, setPlata } from "./Home.jsx";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
@@ -100,23 +101,6 @@ const ProfileButton = ({ children }) => {
     console.log("Calling loadUserImage()...");
     loadUserImage();
   }, [isLoggedIn]);
-
-  const fetchPlata = async () => {
-    try {
-      const user = _firebase.auth.currentUser;
-      const userDoc = await db.collection("users").doc(user.uid).get();
-      if (userDoc.exists) {
-        const userData = userDoc.data();
-        const plata = userData.plata; // Salvați valoarea câmpului "plata" într-o variabilă locală
-        console.log("Valoarea din câmpul 'plata':", plata);
-      } else {
-        console.log("Documentul nu a fost găsit pentru utilizatorul curent.");
-      }
-    } catch (error) {
-      console.error("Eroare la preluarea datelor utilizatorului:", error);
-    }
-  };
-  let plata = fetchPlata;
  
 //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
 //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
@@ -136,7 +120,7 @@ return (
         <button>Comenzile mele</button>
       </MenuItem>
       <MenuItem>
-        <label htmlFor="search">{plata}</label>
+        <label htmlFor="search">Total de plata:{plata}</label>
       </MenuItem>
       <MenuItem>
         <button onClick={handleSignOut}>Delogare</button>
