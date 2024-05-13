@@ -251,6 +251,7 @@ const handleTableSelect = (tableNumber) => {
       // Obține ID-ul utilizatorului conectat
       const userDocSnapshot = await getDoc(userDocRef);
       const existingComenzi = userDocSnapshot.data().comenzi || [];
+      const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
 
       console.log("selectedItems:", selectedItems);
 
@@ -298,6 +299,15 @@ const handleTableSelect = (tableNumber) => {
       localStorage.setItem('plata', plata.toString());
       const event = new Event('plataUpdated');
       window.dispatchEvent(event);
+
+
+      await updateDoc(mesaRef, {
+        comenzi: arrayUnion(newComenzi) // Adăugați noile comenzi într-un array existent de comenzi al mesei
+      });
+      await updateDoc(userDocRef, {
+        comenzi: updatedComenzi,
+        plata: sumaNoua
+      });
 
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
