@@ -107,8 +107,7 @@ const StyledHome = styled.div`
     border-color: #202b1b;
   }
   .masa {
-    display:flex;
-    margin-left: 10px;
+    width: 100px;
   }
 `;
 const StyledCheckbox = styled.input`
