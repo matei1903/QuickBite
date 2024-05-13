@@ -14,7 +14,7 @@ const Popup = ({ onClose, onSelect }) => {
   useEffect(() => {
     // Obține numărul de mese din Firestore
     const fetchNumberOfTables = async () => {
-      const tablesRef = collection(firebase.firestore(), "tables");
+      const tablesRef = collection(firebase.firestore(), "/tables");
       const snapshot = await getDoc(tablesRef);
       const data = snapshot.data();
       console.log("numarul de mese:",data.number);
