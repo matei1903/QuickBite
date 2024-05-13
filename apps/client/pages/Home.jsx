@@ -221,7 +221,7 @@ export default () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
-  const [plata, setPlata] = useState(0);
+  export const [plata, setPlata] = useState(0);
   const handleSelect = (itemId) => {
     if (selectedItems.includes(itemId)) {
       // Deselect item
