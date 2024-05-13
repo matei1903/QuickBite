@@ -97,25 +97,7 @@ const ProfileButton = ({ children }) => {
   // Funcție pentru gestionarea clicului butonului
   const handleButtonClick = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Implementați aici acțiunea butonului
-    // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
-  };
-  const handleSignOut = () => {
-    _firebase.auth.signOut().then(() => {
-      console.log("User signed out successfully.");
-      navigate('/login');
-      // Poți face orice alte acțiuni aici, cum ar fi redirecționarea către pagina de autentificare.
-    }).catch((error) => {
-      console.error("Error signing out:", error);
-    });
-  };
-  // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
-  useEffect(() => {
-    console.log("Calling loadUserImage()...");
-    loadUserImage();
-  }, [isLoggedIn]);
-
-  useEffect(() => {
+    useEffect(() => {
     // Recuperarea variabilei 'plata' din localStorage la încărcarea componentei
     const storedPlata = localStorage.getItem('plata');
     console.log("storedPlata:", storedPlata);
@@ -137,6 +119,25 @@ const ProfileButton = ({ children }) => {
       window.removeEventListener('plataUpdated', handlePlataUpdate);
     };
   }, []);
+    // Implementați aici acțiunea butonului
+    // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
+  };
+  const handleSignOut = () => {
+    _firebase.auth.signOut().then(() => {
+      console.log("User signed out successfully.");
+      navigate('/login');
+      // Poți face orice alte acțiuni aici, cum ar fi redirecționarea către pagina de autentificare.
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+    });
+  };
+  // Efect secundar pentru încărcarea imaginii utilizatorului atunci când este conectat
+  useEffect(() => {
+    console.log("Calling loadUserImage()...");
+    loadUserImage();
+  }, [isLoggedIn]);
+
+  
   useEffect(() => {
     // Actualizează 'storedPlata' în localStorage când valoarea 'plata' este schimbată
     if (plata !== null) {
