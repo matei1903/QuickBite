@@ -108,6 +108,21 @@ const StyledHome = styled.div`
   }
   .masa {
     width: 100px;
+    margin: 10px;
+    color: black;
+    border: 1px solid;
+  }
+  .select_masa {
+    background-color: #212121;
+    color: white;
+    border-radius: 10em;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid black;
+    box-shadow: 0 0 0 0 black;
   }
 `;
 const StyledCheckbox = styled.input`
@@ -540,7 +555,7 @@ const handleTableSelect = (tableNumber) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={openPopup}>Selectează masă</button>
+          <button className="select_masa" onClick={openPopup}>Selectează masă</button>
           {isPopupOpen && <Popup onSelect={handleTableSelect} onClose={closePopup} />}
           {selectedTable && <label className="masa">Numărul mesei: {selectedTable}</label>}
           <h2>Aperitive</h2>
