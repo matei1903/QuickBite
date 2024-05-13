@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { useNavigate } from 'react-router-dom';
-import { plata, setPlata } from "./Home.jsx";
 const StyledLayout = styled.div`
   .header {
     text-align: center;
@@ -74,7 +73,7 @@ const ProfileButton = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  //const [plata, setPlata] = useState(null);
+  const [plata, setPlata] = useState(null);
   // Starea pentru imaginea utilizatorului și conectare
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userImage, setUserImage] = useState(null);
