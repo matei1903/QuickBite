@@ -14,16 +14,21 @@ const Popup = ({ onClose, onSelect }) => {
   useEffect(() => {
     // Obține numărul de mese din Firestore
     const fetchNumberOfTables = async () => {
-      const tablesRef = collection(firebase.firestore(), "/tables");
-      const snapshot = await getDoc(tablesRef);
-      const data = snapshot.data();
-      console.log("numarul de mese:",data.number);
-      if (data && data.number && data.number > 0) {
-        setNumberOfTables(data.number);
-      } else {
-        console.error("Numărul de mese din Firestore este incorect.");
-      }
-    };
+        try {
+          const tablesRef = doc(firebase.firestore(), "tables/0Cf7CChhQEN1HlRcVO3P"); 
+          const docSnapshot = await getDoc(tablesRef);
+          if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
+            const numberOfTables = data.number;
+            console.log("numarul de mese:", numberOfTables);
+            setNumberOfTables(numberOfTables);
+          } else {
+            console.error("Documentul din Firestore nu există.");
+          }
+        } catch (error) {
+          console.error("Eroare la obținerea datelor din Firestore:", error);
+        }
+      };
 
     fetchNumberOfTables();
   }, []);
