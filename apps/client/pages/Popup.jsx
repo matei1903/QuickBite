@@ -17,7 +17,11 @@ const Popup = ({ onClose, onSelect }) => {
       const tablesRef = collection(firebase.firestore(), "tables");
       const snapshot = await getDoc(tablesRef);
       const data = snapshot.data();
-      setNumberOfTables(data.number);
+      if (data && data.number && data.number > 0) {
+        setNumberOfTables(data.number);
+      } else {
+        console.error("Numărul de mese din Firestore este incorect.");
+      }
     };
 
     fetchNumberOfTables();
@@ -37,20 +41,24 @@ const Popup = ({ onClose, onSelect }) => {
   // Generează butoanele radio pentru fiecare masă
   const renderTableButtons = () => {
     const buttons = [];
-    for (let i = 1; i <= numberOfTables; i++) {
-      buttons.push(
-        <div key={i}>
-          <input
-            type="radio"
-            id={`table-${i}`}
-            name="table"
-            value={i}
-            checked={selectedTable === i}
-            onChange={() => handleSelectTable(i)}
-          />
-          <label htmlFor={`table-${i}`}>Masă {i}</label>
-        </div>
-      );
+    if (numberOfTables > 0) {
+      for (let i = 1; i <= numberOfTables; i++) {
+        buttons.push(
+          <div key={i}>
+            <input
+              type="radio"
+              id={`table-${i}`}
+              name="table"
+              value={i}
+              checked={selectedTable === i}
+              onChange={() => handleSelectTable(i)}
+            />
+            <label htmlFor={`table-${i}`}>Masă {i}</label>
+          </div>
+        );
+      }
+    } else {
+      console.error("Numărul de mese din Firestore este zero sau inexistent.");
     }
     return buttons;
   };
