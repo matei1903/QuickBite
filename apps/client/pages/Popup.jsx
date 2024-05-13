@@ -10,12 +10,13 @@ const StyledPopup = styled.div`
 const Popup = ({ onClose, onSelect }) => {
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [selectedTable, setSelectedTable] = useState(null);
-
+  const { db } = useFirebase();
   useEffect(() => {
     // Obține numărul de mese din Firestore
     const fetchNumberOfTables = async () => {
+        const tablesRef = doc(db, "tables", "0Cf7CChhQEN1HlRcVO3P");
         try {
-          const tablesRef = doc(firebase.firestore(), "tables/0Cf7CChhQEN1HlRcVO3P"); 
+           
           const docSnapshot = await getDoc(tablesRef);
           if (docSnapshot.exists()) {
             const data = docSnapshot.data();
