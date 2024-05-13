@@ -161,14 +161,14 @@ export default () => {
     // Verifică dacă există o masă selectată în localStorage la încărcarea componentei
     const tableFromStorage = localStorage.getItem('selectedTable');
     if (tableFromStorage) {
-        setSelectedTable(parseInt(tableFromStorage));
+      setSelectedTable(parseInt(tableFromStorage));
     }
-}, []);
+  }, []);
 
-// Funcție pentru a seta masa selectată în componenta principală
-const handleTableSelect = (tableNumber) => {
+  // Funcție pentru a seta masa selectată în componenta principală
+  const handleTableSelect = (tableNumber) => {
     setSelectedTable(tableNumber);
-};
+  };
   const openPopup = () => {
     setIsPopupOpen(true);
   };
@@ -249,6 +249,7 @@ const handleTableSelect = (tableNumber) => {
       const userDocSnapshot = await getDoc(userDocRef);
       const existingComenzi = userDocSnapshot.data().comenzi || [];
       const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+
       console.log("selectedItems:", selectedItems);
 
       let sumaNoua = sumaTotala;
@@ -270,13 +271,11 @@ const handleTableSelect = (tableNumber) => {
         desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
         bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
       };
-
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", newComenzi);
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log();
-
       // Actualizează vectorul de comenzi existent
       const updatedComenzi = [...existingComenzi, newComenzi];
       console.log("updatecomenzi:", updatedComenzi);
@@ -293,6 +292,8 @@ const handleTableSelect = (tableNumber) => {
       localStorage.setItem('plata', plata.toString());
       const event = new Event('plataUpdated');
       window.dispatchEvent(event);
+
+
       await updateDoc(mesaRef, {
         comenzi: arrayUnion(newComenzi) // Adăugați noile comenzi într-un array existent de comenzi al mesei
       });
@@ -300,6 +301,7 @@ const handleTableSelect = (tableNumber) => {
         comenzi: updatedComenzi,
         plata: sumaNoua
       });
+
       // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
@@ -699,8 +701,8 @@ const handleTableSelect = (tableNumber) => {
           ))}
         </div>
         <Icon className="test" path="profile.svg" />
-        <button className="comanda" onClick={handleComanda}>Comanda</button>
-        <button className="plateste" onClick={handePlata}>Plateste</button>
+        <button className="comanda" onClick={handleComanda} disabled={selectedItems.length === 0}>Comanda</button>
+        <button className="plateste" onClick={handePlata} disabled={plata === 0}>Plateste</button>
       </StyledHome>
     </Layout>
   );
