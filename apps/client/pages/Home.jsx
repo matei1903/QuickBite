@@ -257,13 +257,13 @@ const handleTableSelect = (tableNumber) => {
 
       let sumaNoua = sumaTotala;
       const newComenzi = [];
+      
       selectedItems.forEach((id) => {
         const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
         sumaNoua += preparat.pret;
         newComenzi.push(preparat);
       });
-      setSumaTotala(sumaNoua);
-      setPlata(sumaTotala);
+      
       // Creează obiectul cu comenzile selectate
 
 
