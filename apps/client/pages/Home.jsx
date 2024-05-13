@@ -543,7 +543,7 @@ const handleTableSelect = (tableNumber) => {
           />
           <button onClick={openPopup}>Selectează masă</button>
           {isPopupOpen && <Popup onSelect={handleTableSelect} onClose={closePopup} />}
-          {selectedTable && <div className="masa">Numărul mesei: {selectedTable}</div>}
+          {selectedTable && <label className="masa">Numărul mesei: {selectedTable}</label>}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
