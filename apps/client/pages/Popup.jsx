@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
-import firebase from "firebase/app";
-import "firebase/firestore";
 
 const StyledPopup = styled.div`
   /* Stilizare pentru popup */
@@ -17,12 +14,10 @@ const Popup = ({ onClose, onSelect }) => {
   useEffect(() => {
     // Obține numărul de mese din Firestore
     const fetchNumberOfTables = async () => {
-      const tablesRef = firebase.firestore().collection("tables");
-      const snapshot = await tablesRef.get();
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        setNumberOfTables(data.number);
-      });
+      const tablesRef = collection(firebase.firestore(), "tables");
+      const snapshot = await getDoc(tablesRef);
+      const data = snapshot.data();
+      setNumberOfTables(data.number);
     };
 
     fetchNumberOfTables();
