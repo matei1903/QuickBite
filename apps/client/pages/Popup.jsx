@@ -17,6 +17,7 @@ const Popup = ({ onClose, onSelect }) => {
       const tablesRef = collection(firebase.firestore(), "tables");
       const snapshot = await getDoc(tablesRef);
       const data = snapshot.data();
+      console.log("numarul de mese:",data.number);
       if (data && data.number && data.number > 0) {
         setNumberOfTables(data.number);
       } else {
