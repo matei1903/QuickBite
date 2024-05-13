@@ -55,6 +55,10 @@ const StyledHome = styled.div`
     border: none;
     outline: 2px solid black;
   }
+  .comanda:disabled {
+    background-color: #786B7F;
+    color: #666;
+  }
   .plateste {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -70,6 +74,10 @@ const StyledHome = styled.div`
     font-size:18px;
     border: none;
     outline: 2px solid black;
+  }
+  .plateste:disabled {
+    background-color: #869182;
+    color: #666;
   }
   .ingrediente {
     text-align: left;
