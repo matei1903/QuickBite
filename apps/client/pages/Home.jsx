@@ -256,24 +256,16 @@ const handleTableSelect = (tableNumber) => {
       console.log("selectedItems:", selectedItems);
 
       let sumaNoua = sumaTotala;
+      const newComenzi = [];
       selectedItems.forEach((id) => {
         const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
         sumaNoua += preparat.pret;
+        newComenzi.push(preparat);
       });
       setSumaTotala(sumaNoua);
       setPlata(sumaTotala);
       // Creează obiectul cu comenzile selectate
-      const newComenzi = {
-        aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
-        fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
-        supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
-        paste: selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id)),
-        pizza: selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id)),
-        garnituri: selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id)),
-        salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
-        desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
-        bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
-      };
+
 
       console.log("docs_aper:", docs_aper);
       console.log("comenzi:", newComenzi);
@@ -283,7 +275,7 @@ const handleTableSelect = (tableNumber) => {
       console.log();
 
       // Actualizează vectorul de comenzi existent
-      const updatedComenzi = [...existingComenzi, newComenzi];
+      const updatedComenzi = [...existingComenzi, ...newComenzi];
       console.log("updatecomenzi:", updatedComenzi);
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
