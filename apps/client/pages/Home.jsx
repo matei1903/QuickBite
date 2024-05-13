@@ -134,12 +134,12 @@ const StyledDiv = styled.div`
 `;
 export default () => {
 
-  const [showPopup, setShowPopup] = useState(false);
-  const handleOpenPopup = () => {
-    setShowPopup(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const openPopup = () => {
+    setIsPopupOpen(true);
   };
-  const handleClosePopup = () => {
-    setShowPopup(false);
+  const closePopup = () => {
+    setIsPopupOpen(false);
   };
 
   const [user, setUser] = useState(null);
@@ -524,8 +524,8 @@ export default () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={handleOpenPopup}>Selectează masă</button>
-          {showPopup && <Popup onClose={handleClosePopup} />}
+          <button onClick={openPopup}>Selectează masă</button>
+          {isPopupOpen && <Popup onClose={closePopup} />}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
