@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Popup from "./Popup";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 const Icon = React.lazy(() =>
   import("@quick-bite/components/common/Icon.jsx")
@@ -132,6 +133,14 @@ const StyledDiv = styled.div`
   }
 `;
 export default () => {
+
+  const [showPopup, setShowPopup] = useState(false);
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
 
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -515,6 +524,8 @@ export default () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button onClick={handleOpenPopup}>Selectează masă</button>
+          {showPopup && <Popup onClose={handleClosePopup} />}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
