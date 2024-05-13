@@ -15,6 +15,7 @@ const StyledPopup = styled.div`
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(5px);
+    color: black;
 
 .popup {
     background-color: white;
@@ -63,6 +64,7 @@ const Popup = ({ onClose, onSelect }) => {
     // Funcție pentru a trimite masa selectată către componenta principală și a închide popup-ul
     const handleConfirm = () => {
         onSelect(selectedTable);
+        console.log("s-a confirmat masa",selectedTable);
         onClose();
     };
 
