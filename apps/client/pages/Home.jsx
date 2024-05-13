@@ -538,8 +538,7 @@ const handleTableSelect = (tableNumber) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button onClick={openPopup}>Selectează masă</button>
-          {isPopupOpen && <Popup onClose={closePopup} />}
-          <Popup onSelect={handleTableSelect} />
+          {isPopupOpen && <Popup onSelect={handleTableSelect} onClose={closePopup} />}
           {selectedTable && <div>Numărul mesei: {selectedTable}</div>}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (
