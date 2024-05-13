@@ -111,14 +111,17 @@ const StyledHome = styled.div`
     margin: 10px;
     color: black;
     border: 1px solid;
+    padding: 5px;
+    border-radius: 10em;
   }
   .select_masa {
-    background-color: #212121;
-    color: white;
+    background-color: #202b1b;
+    color: #dfc780;
     border-radius: 10em;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 600;
-    padding: 5px;
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    padding: 8px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     border: 1px solid black;
