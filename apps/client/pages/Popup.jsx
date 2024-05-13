@@ -60,11 +60,11 @@ const Popup = ({ onClose, onSelect }) => {
     const handleSelectTable = (tableNumber) => {
         setSelectedTable(tableNumber);
         onSelect(tableNumber);
+        
     };
 
     // Funcție pentru a trimite masa selectată către componenta principală și a închide popup-ul
     const handleConfirm = () => {
-        
         console.log("s-a confirmat masa",selectedTable);
         onClose();
     };

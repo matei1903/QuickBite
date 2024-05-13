@@ -135,6 +135,7 @@ const StyledDiv = styled.div`
 export default () => {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(null);
   const openPopup = () => {
     setIsPopupOpen(true);
   };
@@ -526,6 +527,7 @@ export default () => {
           />
           <button onClick={openPopup}>Selectează masă</button>
           {isPopupOpen && <Popup onClose={closePopup} />}
+          {selectedTable && <div>Numărul mesei: {selectedTable}</div>}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (
             <StyledDiv className="alimente" key={doc.id}>
