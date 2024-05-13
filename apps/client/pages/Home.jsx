@@ -136,6 +136,18 @@ export default () => {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState(null);
+  useEffect(() => {
+    // Verifică dacă există o masă selectată în localStorage la încărcarea componentei
+    const tableFromStorage = localStorage.getItem('selectedTable');
+    if (tableFromStorage) {
+        setSelectedTable(parseInt(tableFromStorage));
+    }
+}, []);
+
+// Funcție pentru a seta masa selectată în componenta principală
+const handleTableSelect = (tableNumber) => {
+    setSelectedTable(tableNumber);
+};
   const openPopup = () => {
     setIsPopupOpen(true);
   };
@@ -527,6 +539,7 @@ export default () => {
           />
           <button onClick={openPopup}>Selectează masă</button>
           {isPopupOpen && <Popup onClose={closePopup} />}
+          <Popup onSelect={handleTableSelect} />
           {selectedTable && <div>Numărul mesei: {selectedTable}</div>}
           <h2>Aperitive</h2>
           {filteredDocs_aper.map((doc) => (

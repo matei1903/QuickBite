@@ -59,6 +59,7 @@ const Popup = ({ onClose, onSelect }) => {
     // Funcție pentru a seta masa selectată
     const handleSelectTable = (tableNumber) => {
         setSelectedTable(tableNumber);
+        localStorage.setItem('selectedTable', tableNumber.toString());
         onSelect(tableNumber);
         
     };
