@@ -3,15 +3,18 @@ import styled from "styled-components";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
 const Coloana = styled.div`
-    float: left;
-    width: 50%;
-    padding: 10px;
-
+    
     .column_left {
         border-right: 2px solid black;
+        float: left;
+        width: 50%;
+        padding: 10px;
     }
     .column_right {
         border-left: 2px solid black;
+        float: left;
+        width: 50%;
+        padding: 10px;
     }
   
 `;
