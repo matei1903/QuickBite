@@ -21,14 +21,16 @@ const Coloana = styled.div`
 
 const comenzi = () => {
     return (
-        <Layout>
+        <div>
             <Coloana className="column_left">
                 <h2>Comenzile mele</h2>
             </Coloana>
             <Coloana className="column_right">
                 <h2>Comenzile mesei</h2>
             </Coloana>
-        </Layout>
+        </div>
+
+
     );
 };
 export default comenzi;
