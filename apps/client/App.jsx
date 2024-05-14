@@ -11,6 +11,7 @@ const router = createBrowserRouter([
   { path: "/", element: <Signup />},
   { path: "/login", element: <Login />},
   { path: "/home", element: <Home /> },
+  { path: "/comenzi", element: <Comenzi /> },
   { path: "/*", element: <NotFound /> },
 ]);
 const GlobalStypes = createGlobalStyle`

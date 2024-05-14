@@ -93,7 +93,9 @@ const ProfileButton = ({ children }) => {
     }
   };
 
-
+  const handleComenzileMele = () => {
+    navigate('/comenzi');
+  }
   // Funcție pentru gestionarea clicului butonului
   const handleButtonClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -158,7 +160,7 @@ const ProfileButton = ({ children }) => {
       </div>
       <Menu isOpen={isMenuOpen}>
         <MenuItem>
-          <button className="button">Comenzile mele</button>
+          <button className="button" onClick={handleComenzileMele}>Comenzile mele</button>
         </MenuItem>
         <MenuItem>
           <label htmlFor="search">Total de plata: {plata ? plata.toFixed(2) : "0.00"} RON</label>
