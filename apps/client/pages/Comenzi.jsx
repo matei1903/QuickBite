@@ -2,15 +2,27 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
-const Coloana = styled.div`
+const ColoanaS = styled.div`
     float: left;
-    width: 48%;
-    padding: 10px;
-    border-left: 1px solid black;
+    width: 45%;
+    padding: 12px;
     border-right: 1px solid black;
     
     h2 {
         text-align: center;
+        border-bottom: 1px solid black;
+    }
+    
+`;  
+const ColoanaD = styled.div`
+    float: right;
+    width: 45%;
+    padding: 12px;
+    border-left: 1px solid black;
+    
+    h2 {
+        text-align: center;
+        border-bottom: 1px solid black;
     }
     
 `;  
@@ -19,12 +31,12 @@ const Coloana = styled.div`
 const comenzi = () => {
     return (
         <Layout>
-            <Coloana>
+            <ColoanaS>
                 <h2>Comenzile mele</h2>
-            </Coloana>
-            <Coloana>
+            </ColoanaS>
+            <ColoanaD>
                 <h2>Comenzile mesei</h2>
-            </Coloana>
+            </ColoanaD>
         </Layout>
     );
 };
