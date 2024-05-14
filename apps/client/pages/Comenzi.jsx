@@ -5,7 +5,7 @@ const Layout = React.lazy(() => import("../Layout.jsx"));
 const ColoanaS = styled.div`
     float: left;
     width: 45%;
-    padding: 10px;
+    padding: 9px;
     border-right: 1px solid black;
     
     h2 {
@@ -18,7 +18,7 @@ const ColoanaS = styled.div`
 const ColoanaD = styled.div`
     float: right;
     width: 45%;
-    padding: 10px;
+    padding: 9px;
     border-left: 1px solid black;
     
     h2 {
