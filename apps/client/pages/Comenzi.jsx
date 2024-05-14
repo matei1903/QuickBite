@@ -6,15 +6,12 @@ const Coloana = styled.div`
     float: left;
     width: 48%;
     padding: 10px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     
     h2 {
-        justify-content: center;
+        text-align: center;
     }
-    .vl {
-        float: left;
-        border-left: 6px solid black;
-        height: 100%;
-      }
     
 `;  
 
@@ -25,7 +22,6 @@ const comenzi = () => {
             <Coloana>
                 <h2>Comenzile mele</h2>
             </Coloana>
-            <div class="vl"></div>
             <Coloana>
                 <h2>Comenzile mesei</h2>
             </Coloana>
