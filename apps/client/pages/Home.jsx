@@ -255,6 +255,7 @@ export default () => {
     try {
       // Obține ID-ul utilizatorului conectat
       const userDocSnapshot = await getDoc(userDocRef);
+      const userEmail = userDocSnapshot.data().email;
       const existingComenzi = userDocSnapshot.data().comenzi || [];
       const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
 
@@ -284,9 +285,14 @@ export default () => {
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log();
+      const newComandaWithUser = {
+        ...newComenzi,
+        user: userEmail // Adaugă emailul utilizatorului
+      };
       // Actualizează vectorul de comenzi existent
       const updatedComenzi = [...existingComenzi, newComenzi];
       console.log("updatecomenzi:", updatedComenzi);
+      
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
         plata: sumaNoua
@@ -303,8 +309,9 @@ export default () => {
 
 
       await updateDoc(mesaRef, {
-        comenzi: arrayUnion(newComenzi) // Adăugați noile comenzi într-un array existent de comenzi al mesei
+        comenzi: arrayUnion(newComandaWithUser) // Adăugați noile comenzi într-un array existent de comenzi al mesei
       });
+      
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
         plata: sumaNoua
