@@ -120,7 +120,7 @@ const Comenzi = () => {
                     setUserComenziMasa(comenzi_masa);
 
                     // Fetch details for each preparat from the correct collection
-                    const allCategories_masa = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi", "user"];
+                    const allCategories_masa = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                     const preparatePromises_masa = comenzi_masa.flatMap(comanda =>
                         allCategories_masa.flatMap(category =>
                             (comanda[category] || []).map(async id => {
