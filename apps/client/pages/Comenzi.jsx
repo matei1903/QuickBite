@@ -53,6 +53,7 @@ const Comenzi = () => {
     const [preparateDetails_masa, setPreparateDetailsMasa] = useState({});
     const userID = localStorage.getItem('userID');
     const [selectedPrep, setSelectedPrep] = useState([]);
+    const [selectedTable, setSelectedTable] = useState(null);
 
     const handleSelectPrep = (itemId) => {
         if (selectedPrep.includes(itemId)) {
@@ -63,6 +64,14 @@ const Comenzi = () => {
             setSelectedPrep([...selectedPrep, itemId]);
         }
     };
+
+    useEffect(() => {
+        // Verifică dacă există o masă selectată în localStorage la încărcarea componentei
+        const tableFromStorage = localStorage.getItem('selectedTable');
+        if (tableFromStorage) {
+          setSelectedTable(parseInt(tableFromStorage));
+        }
+      }, []);
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -104,7 +113,7 @@ const Comenzi = () => {
     useEffect(() => {
         const fetchComenzi_masa = async () => {
             try {
-                const userDocRef_masa = doc(db, "comenzi");
+                const userDocRef_masa = doc(db, "comenzi", `masa${selectedTable}`);
                 const userDocSnapshot_masa = await getDoc(userDocRef_masa);
                 if (userDocSnapshot_masa.exists()) {
                     const comenzi_masa = userDocSnapshot_masa.data().comenzi || [];
