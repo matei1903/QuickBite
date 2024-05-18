@@ -33,6 +33,17 @@ const Comenzi = () => {
     const [userComenzi, setUserComenzi] = useState(null);
     const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
+    const [selectedPrep, setSelectedPrep] = useState([]);
+
+    const handleSelectPrep = (itemId) => {
+        if (selectedPrep.includes(itemId)) {
+          // Deselect item
+          setSelectedPrep(selectedPrep.filter((id) => id !== itemId));
+        } else {
+          // Select item
+          setSelectedPrep([...selectedPrep, itemId]);
+        }
+      };
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -81,7 +92,11 @@ const Comenzi = () => {
                             {comenzi[categorie].map((id) => {
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
-                                    <li key={id}>
+                                    <li 
+                                    key={id} 
+                                    type="checkbox"
+                                    checked={selectedPrep.includes(id.id)}
+                                    onChange={() => handleSelectPrep(id.id)}>
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
                                 ) : (
