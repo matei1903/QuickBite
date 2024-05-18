@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
@@ -48,7 +48,9 @@ const ColoanaD = styled.div`
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState(null);
+    const [userComenzi_masa, setUserComenziMasa] = useState(null);
     const [preparateDetails, setPreparateDetails] = useState({});
+    const [preparateDetails_masa, setPreparateDetailsMasa] = useState({});
     const userID = localStorage.getItem('userID');
     const [selectedPrep, setSelectedPrep] = useState([]);
 
@@ -99,6 +101,43 @@ const Comenzi = () => {
         fetchComenzi();
     }, [db, userID]);
 
+    useEffect(() => {
+        const fetchComenzi_masa = async () => {
+            try {
+                const userDocRef_masa = doc(db, "comenzi");
+                const userDocSnapshot_masa = await getDoc(userDocRef_masa);
+                if (userDocSnapshot_masa.exists()) {
+                    const comenzi_masa = userDocSnapshot_masa.data().comenzi || [];
+                    setUserComenziMasa(comenzi_masa);
+
+                    // Fetch details for each preparat from the correct collection
+                    const allCategories_masa = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi", "user"];
+                    const preparatePromises_masa = comenzi_masa.flatMap(comanda =>
+                        allCategories_masa.flatMap(category =>
+                            (comanda[category] || []).map(async id => {
+                                const preparatDocRef_masa = doc(db, category, id);
+                                const preparatDocSnapshot_masa = await getDoc(preparatDocRef_masa);
+                                return { id, ...preparatDocSnapshot_masa.data() };
+                            })
+                        )
+                    );
+
+                    const preparate_masa = await Promise.all(preparatePromises_masa);
+                    const preparateMap_masa = preparate_masa.reduce((acc, preparat) => {
+                        acc[preparat.id] = preparat;
+                        return acc;
+                    }, {});
+
+                    setPreparateDetailsMasa(preparateMap_masa);
+                }
+            } catch (error) {
+                console.error("Eroare la încărcarea comenzilor:", error);
+            }
+        };
+
+        fetchComenzi_masa();
+    }, [db, userID]);
+
     const renderComenzi = (comenzi) => {
         return Object.keys(comenzi).map((categorie) => {
             if (comenzi[categorie].length > 0) {
@@ -128,6 +167,40 @@ const Comenzi = () => {
             return null;
         });
     };
+    const renderComenziMasa = (comenzi) => {
+        return Object.keys(comenzi).map((categorie) => {
+            if (comenzi[categorie].length > 0) {
+                return (
+                    <div key={categorie}>
+                        <h3>{categorie}</h3>
+                        <ul>
+                            {comenzi[categorie].map((id) => {
+                                const preparat_masa = preparateDetails_masa[id];
+                                return preparat_masa ? (
+                                    <li key={id}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrep.includes(id)}
+                                            onChange={() => handleSelectPrep(id)}
+                                        />
+                                        {preparat_masa.nume} - {preparat_masa.pret} RON
+                                        <br />
+                                    comandat de: {preparat_masa.user}
+                                    </li>
+                                ) : (
+                                    <li key={id}>Loading...</li>
+                                );
+                            
+                           })}
+                        </ul>
+                            
+                    </div>
+                    
+                );
+            }
+            return null;
+        });
+    };
 
     return (
         <Layout>
@@ -141,7 +214,11 @@ const Comenzi = () => {
             </ColoanaS>
             <ColoanaD>
                 <h2>Comenzile mesei</h2>
-                {/* Similar, afișează comenzile mesei aici */}
+                {userComenzi_masa && userComenzi_masa.map((comanda, index) => (
+                    <div key={index}>
+                        {renderComenziMasa(comanda)}
+                    </div>
+                    ))}
             </ColoanaD>
         </Layout>
     );
