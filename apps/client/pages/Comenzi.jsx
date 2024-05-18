@@ -14,6 +14,23 @@ const ColoanaS = styled.div`
         text-align: center;
         border-bottom: 2px solid black;
     }
+    input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #202b1b; /* Culoarea verde inchis pentru bordură */
+        outline: none;
+        cursor: pointer;
+        margin-right: 8px;
+
+        &:checked {
+        background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
+        border-color: #006400; /* Culoarea bordurii când este selectat */
+  }
+    }
 `;
 
 const ColoanaD = styled.div`
@@ -93,7 +110,7 @@ const Comenzi = () => {
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
                                     <li key={id}>
-                                        <input 
+                                        <input
                                             type="checkbox"
                                             checked={selectedPrep.includes(id)}
                                             onChange={() => handleSelectPrep(id)}
