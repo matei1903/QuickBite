@@ -80,30 +80,30 @@ const Comenzi = () => {
                 if (userDocSnapshot.exists()) {
                     const comenzi = userDocSnapshot.data().comenzi || [];
                     setUserComenzi(comenzi);
-
+    
                     const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
                     const mesaSnapshot = await getDoc(mesaRef);
                     if (mesaSnapshot.exists()) {
                         const mesaComenzi = mesaSnapshot.data().comenzi || [];
                         setMesaComenzi(mesaComenzi);
-
+    
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                         const preparatePromises = [...comenzi, ...mesaComenzi].flatMap(comanda =>
                             allCategories.flatMap(category =>
-                                (comanda[category] || []).map(async id => {
+                                (Array.isArray(comanda[category]) ? comanda[category] : []).map(async id => {
                                     const preparatDocRef = doc(db, category, id);
                                     const preparatDocSnapshot = await getDoc(preparatDocRef);
                                     return { id, ...preparatDocSnapshot.data() };
                                 })
                             )
                         );
-
+    
                         const preparate = await Promise.all(preparatePromises);
                         const preparateMap = preparate.reduce((acc, preparat) => {
                             acc[preparat.id] = preparat;
                             return acc;
                         }, {});
-
+    
                         setPreparateDetails(preparateMap);
                     }
                 }
@@ -111,7 +111,7 @@ const Comenzi = () => {
                 console.error("Eroare la încărcarea comenzilor:", error);
             }
         };
-
+    
         if (selectedTable !== null) {
             fetchComenzi();
         }
@@ -120,12 +120,13 @@ const Comenzi = () => {
 
     const renderComenzi = (comenzi) => {
         return Object.keys(comenzi).map((categorie) => {
-            if (comenzi[categorie].length > 0) {
+            const items = comenzi[categorie];
+            if (Array.isArray(items) && items.length > 0) {
                 return (
                     <div key={categorie}>
                         <h3>{categorie}</h3>
                         <ul>
-                            {comenzi[categorie].map((id) => {
+                            {items.map((id) => {
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
                                     <li key={id}>
