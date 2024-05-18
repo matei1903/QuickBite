@@ -43,6 +43,23 @@ const ColoanaD = styled.div`
         text-align: center;
         border-bottom: 2px solid black;
     }
+    input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #202b1b; /* Culoarea verde inchis pentru bordură */
+        outline: none;
+        cursor: pointer;
+        margin-right: 8px;
+
+        &:checked {
+        background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
+        border-color: #006400; /* Culoarea bordurii când este selectat */
+  }
+    }
 `;
 
 const Comenzi = () => {
@@ -54,13 +71,14 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    const handleSelectPrep = (itemId) => {
-        if (selectedPrep.includes(itemId)) {
+    const handleSelectPrep = (orderIndex, itemId) => {
+        const uniqueId = `${orderIndex}-${itemId}`;
+        if (selectedPrep.includes(uniqueId)) {
             // Deselect item
-            setSelectedPrep(selectedPrep.filter((id) => id !== itemId));
+            setSelectedPrep(selectedPrep.filter((id) => id !== uniqueId));
         } else {
             // Select item
-            setSelectedPrep([...selectedPrep, itemId]);
+            setSelectedPrep([...selectedPrep, uniqueId]);
         }
     };
 
@@ -118,8 +136,9 @@ const Comenzi = () => {
     }, [db, userID, selectedTable]);
 
 
-    const renderComenzi = (comenzi) => {
-        return Object.keys(comenzi).map((categorie) => {
+    const renderComenzi = (comenzi, orderIndex) => {
+        const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+        return allCategories.map((categorie) => {
             const items = comenzi[categorie];
             if (Array.isArray(items) && items.length > 0) {
                 return (
@@ -127,18 +146,19 @@ const Comenzi = () => {
                         <h3>{categorie}</h3>
                         <ul>
                             {items.map((id) => {
+                                const uniqueId = `${orderIndex}-${id}`;
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
-                                    <li key={id}>
+                                    <li key={uniqueId}>
                                         <input
                                             type="checkbox"
-                                            checked={selectedPrep.includes(id)}
-                                            onChange={() => handleSelectPrep(id)}
+                                            checked={selectedPrep.includes(uniqueId)}
+                                            onChange={() => handleSelectPrep(orderIndex, id)}
                                         />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
                                 ) : (
-                                    <li key={id}>Loading...</li>
+                                    <li key={uniqueId}>Loading...</li>
                                 );
                             })}
                         </ul>
