@@ -48,12 +48,11 @@ const ColoanaD = styled.div`
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState(null);
-    const [userComenzi_masa, setUserComenziMasa] = useState(null);
     const [preparateDetails, setPreparateDetails] = useState({});
-    const [preparateDetails_masa, setPreparateDetailsMasa] = useState({});
     const userID = localStorage.getItem('userID');
     const [selectedPrep, setSelectedPrep] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
+    const [mesaComenzi, setMesaComenzi] = useState([]);
 
     const handleSelectPrep = (itemId) => {
         if (selectedPrep.includes(itemId)) {
@@ -73,7 +72,7 @@ const Comenzi = () => {
         }
       }, []);
 
-    useEffect(() => {
+      useEffect(() => {
         const fetchComenzi = async () => {
             try {
                 const userDocRef = doc(db, "users", userID);
@@ -82,70 +81,42 @@ const Comenzi = () => {
                     const comenzi = userDocSnapshot.data().comenzi || [];
                     setUserComenzi(comenzi);
 
-                    // Fetch details for each preparat from the correct collection
-                    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                    const preparatePromises = comenzi.flatMap(comanda =>
-                        allCategories.flatMap(category =>
-                            (comanda[category] || []).map(async id => {
-                                const preparatDocRef = doc(db, category, id);
-                                const preparatDocSnapshot = await getDoc(preparatDocRef);
-                                return { id, ...preparatDocSnapshot.data() };
-                            })
-                        )
-                    );
+                    const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                    const mesaSnapshot = await getDoc(mesaRef);
+                    if (mesaSnapshot.exists()) {
+                        const mesaComenzi = mesaSnapshot.data().comenzi || [];
+                        setMesaComenzi(mesaComenzi);
 
-                    const preparate = await Promise.all(preparatePromises);
-                    const preparateMap = preparate.reduce((acc, preparat) => {
-                        acc[preparat.id] = preparat;
-                        return acc;
-                    }, {});
+                        const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                        const preparatePromises = [...comenzi, ...mesaComenzi].flatMap(comanda =>
+                            allCategories.flatMap(category =>
+                                (comanda[category] || []).map(async id => {
+                                    const preparatDocRef = doc(db, category, id);
+                                    const preparatDocSnapshot = await getDoc(preparatDocRef);
+                                    return { id, ...preparatDocSnapshot.data() };
+                                })
+                            )
+                        );
 
-                    setPreparateDetails(preparateMap);
+                        const preparate = await Promise.all(preparatePromises);
+                        const preparateMap = preparate.reduce((acc, preparat) => {
+                            acc[preparat.id] = preparat;
+                            return acc;
+                        }, {});
+
+                        setPreparateDetails(preparateMap);
+                    }
                 }
             } catch (error) {
                 console.error("Eroare la încărcarea comenzilor:", error);
             }
         };
 
-        fetchComenzi();
-    }, [db, userID]);
+        if (selectedTable !== null) {
+            fetchComenzi();
+        }
+    }, [db, userID, selectedTable]);
 
-    useEffect(() => {
-        const fetchComenzi_masa = async () => {
-            try {
-                const userDocRef_masa = doc(db, "comenzi", `masa${selectedTable}`);
-                const userDocSnapshot_masa = await getDoc(userDocRef_masa);
-                if (userDocSnapshot_masa.exists()) {
-                    const comenzi_masa = userDocSnapshot_masa.data().comenzi || [];
-                    setUserComenziMasa(comenzi_masa);
-
-                    // Fetch details for each preparat from the correct collection
-                    const allCategories_masa = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                    const preparatePromises_masa = comenzi_masa.flatMap(comanda =>
-                        allCategories_masa.flatMap(category =>
-                            (comanda[category] || []).map(async id => {
-                                const preparatDocRef_masa = doc(db, category, id);
-                                const preparatDocSnapshot_masa = await getDoc(preparatDocRef_masa);
-                                return { id, ...preparatDocSnapshot_masa.data() };
-                            })
-                        )
-                    );
-
-                    const preparate_masa = await Promise.all(preparatePromises_masa);
-                    const preparateMap_masa = preparate_masa.reduce((acc, preparat) => {
-                        acc[preparat.id] = preparat;
-                        return acc;
-                    }, {});
-
-                    setPreparateDetailsMasa(preparateMap_masa);
-                }
-            } catch (error) {
-                console.error("Eroare la încărcarea comenzilor:", error);
-            }
-        };
-
-        fetchComenzi_masa();
-    }, [db, userID]);
 
     const renderComenzi = (comenzi) => {
         return Object.keys(comenzi).map((categorie) => {
@@ -176,40 +147,6 @@ const Comenzi = () => {
             return null;
         });
     };
-    const renderComenziMasa = (comenzi) => {
-        return Object.keys(comenzi).map((categorie) => {
-            if (comenzi[categorie].length > 0) {
-                return (
-                    <div key={categorie}>
-                        <h3>{categorie}</h3>
-                        <ul>
-                            {comenzi[categorie].map((id) => {
-                                const preparat_masa = preparateDetails_masa[id];
-                                return preparat_masa ? (
-                                    <li key={id}>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedPrep.includes(id)}
-                                            onChange={() => handleSelectPrep(id)}
-                                        />
-                                        {preparat_masa.nume} - {preparat_masa.pret} RON
-                                        <br />
-                                    comandat de: {preparat_masa.user}
-                                    </li>
-                                ) : (
-                                    <li key={id}>Loading...</li>
-                                );
-                            
-                           })}
-                        </ul>
-                            
-                    </div>
-                    
-                );
-            }
-            return null;
-        });
-    };
 
     return (
         <Layout>
@@ -223,11 +160,11 @@ const Comenzi = () => {
             </ColoanaS>
             <ColoanaD>
                 <h2>Comenzile mesei</h2>
-                {userComenzi_masa && userComenzi_masa.map((comanda, index) => (
+                {mesaComenzi && mesaComenzi.map((comanda, index) => (
                     <div key={index}>
-                        {renderComenziMasa(comanda)}
+                        {renderComenzi(comanda)}
                     </div>
-                    ))}
+                ))}
             </ColoanaD>
         </Layout>
     );
