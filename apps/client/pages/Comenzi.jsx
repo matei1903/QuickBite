@@ -37,13 +37,13 @@ const Comenzi = () => {
 
     const handleSelectPrep = (itemId) => {
         if (selectedPrep.includes(itemId)) {
-          // Deselect item
-          setSelectedPrep(selectedPrep.filter((id) => id !== itemId));
+            // Deselect item
+            setSelectedPrep(selectedPrep.filter((id) => id !== itemId));
         } else {
-          // Select item
-          setSelectedPrep([...selectedPrep, itemId]);
+            // Select item
+            setSelectedPrep([...selectedPrep, itemId]);
         }
-      };
+    };
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -92,11 +92,12 @@ const Comenzi = () => {
                             {comenzi[categorie].map((id) => {
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
-                                    <li 
-                                    key={id} 
-                                    type="checkbox"
-                                    checked={selectedPrep.includes(id.id)}
-                                    onChange={() => handleSelectPrep(id.id)}>
+                                    <li key={id}>
+                                        <input 
+                                            type="checkbox"
+                                            checked={selectedPrep.includes(id)}
+                                            onChange={() => handleSelectPrep(id)}
+                                        />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
                                 ) : (
