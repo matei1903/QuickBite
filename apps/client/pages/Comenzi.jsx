@@ -4,7 +4,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
-
 const ColoanaS = styled.div`
     float: left;
     width: 45%;
@@ -14,10 +13,9 @@ const ColoanaS = styled.div`
     h2 {
         text-align: center;
         border-bottom: 2px solid black;
-        
     }
-    
-`;  
+`;
+
 const ColoanaD = styled.div`
     float: right;
     width: 45%;
@@ -28,21 +26,42 @@ const ColoanaD = styled.div`
         text-align: center;
         border-bottom: 2px solid black;
     }
-    
-`;  
+`;
 
-
-const comenzi = () => {
+const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState(null);
+    const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
+
     useEffect(() => {
         const fetchComenzi = async () => {
             try {
                 const userDocRef = doc(db, "users", userID);
                 const userDocSnapshot = await getDoc(userDocRef);
                 if (userDocSnapshot.exists()) {
-                    setUserComenzi(userDocSnapshot.data().comenzi || []);
+                    const comenzi = userDocSnapshot.data().comenzi || [];
+                    setUserComenzi(comenzi);
+
+                    // Fetch details for each preparat from the correct collection
+                    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                    const preparatePromises = comenzi.flatMap(comanda =>
+                        allCategories.flatMap(category =>
+                            (comanda[category] || []).map(async id => {
+                                const preparatDocRef = doc(db, category, id);
+                                const preparatDocSnapshot = await getDoc(preparatDocRef);
+                                return { id, ...preparatDocSnapshot.data() };
+                            })
+                        )
+                    );
+
+                    const preparate = await Promise.all(preparatePromises);
+                    const preparateMap = preparate.reduce((acc, preparat) => {
+                        acc[preparat.id] = preparat;
+                        return acc;
+                    }, {});
+
+                    setPreparateDetails(preparateMap);
                 }
             } catch (error) {
                 console.error("Eroare la încărcarea comenzilor:", error);
@@ -50,7 +69,8 @@ const comenzi = () => {
         };
 
         fetchComenzi();
-    }, [userID]);
+    }, [db, userID]);
+
     const renderComenzi = (comenzi) => {
         return Object.keys(comenzi).map((categorie) => {
             if (comenzi[categorie].length > 0) {
@@ -58,9 +78,16 @@ const comenzi = () => {
                     <div key={categorie}>
                         <h3>{categorie}</h3>
                         <ul>
-                            {comenzi[categorie].map((id) => (
-                                <li key={id}>{id}</li>
-                            ))}
+                            {comenzi[categorie].map((id) => {
+                                const preparat = preparateDetails[id];
+                                return preparat ? (
+                                    <li key={id}>
+                                        {preparat.nume} - {preparat.pret} RON
+                                    </li>
+                                ) : (
+                                    <li key={id}>Loading...</li>
+                                );
+                            })}
                         </ul>
                     </div>
                 );
@@ -87,4 +114,4 @@ const comenzi = () => {
     );
 };
 
-export default comenzi;
+export default Comenzi;
