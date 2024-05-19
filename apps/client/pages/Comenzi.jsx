@@ -71,8 +71,8 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    const handleSelectPrep = (orderIndex, itemId) => {
-        const uniqueId = `${orderIndex}-${itemId}`;
+    const handleSelectPrep = (orderIndex, itemIndex, itemId) => {
+        const uniqueId = `${orderIndex}-${itemIndex}-${itemId}`;
         const isSelected = selectedPrep.includes(uniqueId);
 
         const updatedSelectedPrep = isSelected
@@ -85,29 +85,33 @@ const Comenzi = () => {
         const equivalentIndices = orderIndex < userComenzi.length 
             ? mesaComenzi.map((comanda, index) => ({
                 comanda,
-                index: userComenzi.length + index,
+                orderIndex: userComenzi.length + index,
                 column: "mesa"
             }))
             : userComenzi.map((comanda, index) => ({
                 comanda,
-                index,
+                orderIndex: index,
                 column: "user"
             }));
 
-        equivalentIndices.forEach(({ comanda, index }) => {
-            Object.values(comanda).flat().forEach(id => {
-                if (id === itemId) {
-                    const equivalentUniqueId = `${index}-${itemId}`;
-                    if (isSelected) {
-                        setSelectedPrep(prevSelectedPrep =>
-                            prevSelectedPrep.filter(id => id !== equivalentUniqueId)
-                        );
-                    } else {
-                        setSelectedPrep(prevSelectedPrep => [
-                            ...prevSelectedPrep,
-                            equivalentUniqueId
-                        ]);
-                    }
+        equivalentIndices.forEach(({ comanda, orderIndex }) => {
+            Object.entries(comanda).forEach(([category, items]) => {
+                if (Array.isArray(items)) {
+                    items.forEach((id, idx) => {
+                        if (id === itemId && idx === itemIndex) {
+                            const equivalentUniqueId = `${orderIndex}-${idx}-${itemId}`;
+                            if (isSelected) {
+                                setSelectedPrep(prevSelectedPrep =>
+                                    prevSelectedPrep.filter(id => id !== equivalentUniqueId)
+                                );
+                            } else {
+                                setSelectedPrep(prevSelectedPrep => [
+                                    ...prevSelectedPrep,
+                                    equivalentUniqueId
+                                ]);
+                            }
+                        }
+                    });
                 }
             });
         });
@@ -175,15 +179,15 @@ const Comenzi = () => {
                     <div key={categorie}>
                         <h3>{categorie}</h3>
                         <ul>
-                            {items.map((id) => {
-                                const uniqueId = `${orderIndex}-${id}`;
+                            {items.map((id, itemIndex) => {
+                                const uniqueId = `${orderIndex}-${itemIndex}-${id}`;
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
                                     <li key={uniqueId}>
                                         <input
                                             type="checkbox"
                                             checked={selectedPrep.includes(uniqueId)}
-                                            onChange={() => handleSelectPrep(orderIndex, id)}
+                                            onChange={() => handleSelectPrep(orderIndex, itemIndex, id)}
                                         />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
