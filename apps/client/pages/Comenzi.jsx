@@ -85,9 +85,11 @@ const Comenzi = () => {
     
         // Verificăm dacă comanda este a utilizatorului sau a mesei
         const comanda = isUserOrder ? userComenzi[orderIndex] : mesaComenzi[orderIndex - userComenzi.length];
-        const otherComanda = isUserOrder ? mesaComenzi.find(comanda => comanda.id_comanda === comanda.id_comanda) : userComenzi.find(comanda => comanda.id_comanda === comanda.id_comanda);
     
-        if (!preparat) return;
+        // Găsim comanda echivalentă în funcție de id_comanda
+        const otherComanda = isUserOrder ? mesaComenzi.find(com => com.id_comanda === comanda.id_comanda) : userComenzi.find(com => com.id_comanda === comanda.id_comanda);
+    
+        if (!preparat || !otherComanda) return;
     
         // Verificăm dacă preparatul selectat este în comanda curentă și obținem echivalentul
         const equivalentPrepId = comanda && comanda[preparat.category] && comanda[preparat.category].find(otherId => otherId !== id);
@@ -113,6 +115,7 @@ const Comenzi = () => {
             });
         }
     };
+    
 
     useEffect(() => {
         const fetchComenzi = async () => {
