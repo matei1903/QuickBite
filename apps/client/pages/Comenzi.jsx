@@ -82,28 +82,29 @@ const Comenzi = () => {
     const handleSelectPrep = (orderIndex, itemIndex, id, isUserOrder) => {
         const uniqueId = `${orderIndex}-${itemIndex}-${id}`;
         const preparat = preparateDetails[id];
-    
+        
         // Verificăm dacă comanda este a utilizatorului sau a mesei
         const comanda = isUserOrder ? userComenzi[orderIndex] : mesaComenzi[orderIndex - userComenzi.length];
-    
+        
         // Găsim comanda echivalentă în funcție de id_comanda
         const otherComanda = isUserOrder ? mesaComenzi.find(com => com.id_comanda === comanda.id_comanda) : userComenzi.find(com => com.id_comanda === comanda.id_comanda);
-    
+        
         if (!preparat || !otherComanda) return;
     
         // Verificăm dacă preparatul selectat este în comanda curentă și obținem echivalentul
-        const equivalentPrepId = comanda && comanda[preparat.category] && comanda[preparat.category].find(otherId => otherId !== id);
+        const equivalentPrepId = comanda[preparat.category] && comanda[preparat.category].find(otherId => otherId !== id);
     
         // Dacă găsim un echivalent, actualizăm selecția
         if (equivalentPrepId) {
-            const otherPreparat = preparateDetails[equivalentPrepId];
             setSelectedPrep(prevSelectedPrep => {
+                const otherPrepIndex = otherComanda[preparat.category].indexOf(equivalentPrepId);
+                const otherUniqueId = `${orderIndex - (isUserOrder ? 0 : userComenzi.length)}-${otherPrepIndex}-${equivalentPrepId}`;
                 // Dacă preparatul echivalent este deja selectat, eliminăm selecția
-                if (prevSelectedPrep.includes(uniqueId) && prevSelectedPrep.includes(`${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`)) {
-                    return prevSelectedPrep.filter(item => item !== uniqueId && item !== `${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`);
+                if (prevSelectedPrep.includes(uniqueId) && prevSelectedPrep.includes(otherUniqueId)) {
+                    return prevSelectedPrep.filter(item => item !== uniqueId && item !== otherUniqueId);
                 }
                 // Altfel, adăugăm ambele selecții
-                return [...prevSelectedPrep, uniqueId, `${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`];
+                return [...prevSelectedPrep, uniqueId, otherUniqueId];
             });
         } else {
             // Dacă nu există un preparat echivalent în comanda curentă, doar actualizăm selecția pentru preparatul curent
@@ -115,6 +116,7 @@ const Comenzi = () => {
             });
         }
     };
+    
     
 
     useEffect(() => {
