@@ -178,6 +178,7 @@ export default () => {
   // Funcție pentru a seta masa selectată în componenta principală
   const handleTableSelect = (tableNumber) => {
     setSelectedTable(tableNumber);
+    localStorage.setItem('selectedTable', tableNumber.toString());
   };
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -187,6 +188,7 @@ export default () => {
   };
 
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -231,7 +233,12 @@ export default () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedItems, setSelectedItems] = useState([]);
-  const [plata, setPlata] = useState(0);
+  const [plata, setPlata] = useState(parseFloat(localStorage.getItem('plata')) || 0);
+
+  useEffect(() => {
+    localStorage.setItem('plata', plata.toString());
+  }, [plata]);
+
   const handleSelect = (itemId) => {
     if (selectedItems.includes(itemId)) {
       // Deselect item
@@ -245,92 +252,49 @@ export default () => {
 
   const handleComanda = async () => {
     const userID = localStorage.getItem('userID');
-    console.log(userID);
-    // Verifică dacă utilizatorul este autentificat
     if (!user) {
-      console.error("Utilizatorul nu este autentificat.");
       alert("Trebuie să fii autentificat pentru a plasa o comandă.");
       return;
     }
-    // Definirea variabilei userDocRef înainte de blocul try-catch
+
     const userDocRef = doc(db, "users", userID);
     try {
-      // Obține ID-ul utilizatorului conectat
       const userDocSnapshot = await getDoc(userDocRef);
       const userEmail = userDocSnapshot.data().email;
       const existingComenzi = userDocSnapshot.data().comenzi || [];
       const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-
       
-
-      console.log("selectedItems:", selectedItems);
-
-      let sumaNoua = sumaTotala;
+      let sumaNoua = plata;
       selectedItems.forEach((id) => {
-        const preparat = [...docs_aper, ...docs_fp, ...docs_sp, ...docs_pas, ...docs_piz, ...docs_gar, ...docs_sal, ...docs_des, ...docs_ba].find((doc) => doc.id === id);
+        const preparat = docs.find((doc) => doc.id === id);
         sumaNoua += preparat.pret;
       });
-      setSumaTotala(sumaNoua);
-      setPlata(sumaTotala);
+      setPlata(sumaNoua);
 
       const newComandaID = uuidv4();
-      // Creează obiectul cu comenzile selectate
       const newComenzi = {
         id_comanda: newComandaID,
-        aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
-        fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
-        supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
-        paste: selectedItems.filter((id) => docs_pas.map((doc) => doc.id).includes(id)),
-        pizza: selectedItems.filter((id) => docs_piz.map((doc) => doc.id).includes(id)),
-        garnituri: selectedItems.filter((id) => docs_gar.map((doc) => doc.id).includes(id)),
-        salate: selectedItems.filter((id) => docs_sal.map((doc) => doc.id).includes(id)),
-        desert: selectedItems.filter((id) => docs_des.map((doc) => doc.id).includes(id)),
-        bauturi: selectedItems.filter((id) => docs_ba.map((doc) => doc.id).includes(id)),
+        items: selectedItems,
+        user: userEmail
       };
-      console.log("docs_aper:", docs_aper);
-      console.log("comenzi:", newComenzi);
-      console.log("userID:", userID);
-      console.log("userDocRef:", userDocRef);
-      console.log();
-      
-      const newComandaWithUser = {
-        ...newComenzi,
-        user: userEmail // Adaugă emailul utilizatorului
-    };
-      // Actualizează vectorul de comenzi existent
+
       const updatedComenzi = [...existingComenzi, newComenzi];
-      console.log("updatecomenzi:", updatedComenzi);
-      
+
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
         plata: sumaNoua
       });
-      setPlata(sumaTotala);
-      console.log("update selected items:", setSelectedItems);
-      setSelectedItems([]);
-      console.log("update selected items:", setSelectedItems);
-      // Salvarea variabilei 'plata' în localStorage
-      console.log("Plata actualizată:", plata);
-      localStorage.setItem('plata', plata.toString());
-      const event = new Event('plataUpdated');
-      window.dispatchEvent(event);
-
 
       await updateDoc(mesaRef, {
-        comenzi: arrayUnion(newComandaWithUser) // Adăugați noile comenzi într-un array existent de comenzi al mesei
-      });
-      
-      await updateDoc(userDocRef, {
-        comenzi: updatedComenzi,
-        plata: sumaNoua
+        comenzi: arrayUnion(newComenzi)
       });
 
-      // Alertă pentru succes
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
       console.error("Eroare la plasarea comenzii:", error);
-      // Alertă pentru eroare
       alert("A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou mai târziu.");
+    } finally {
+      setSelectedItems([]);
     }
   };
 
