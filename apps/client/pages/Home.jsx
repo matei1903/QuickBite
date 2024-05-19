@@ -9,6 +9,7 @@ import { collection, onSnapshot, query, where, orderBy } from "firebase/firestor
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { v4 as uuidv4 } from 'uuid';
 const StyledHome = styled.div`
   h1 {
     color: #dfc780;
@@ -162,6 +163,7 @@ const StyledDiv = styled.div`
   }
 `;
 export default () => {
+  
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedTable, setSelectedTable] = useState(null);
@@ -259,6 +261,8 @@ export default () => {
       const existingComenzi = userDocSnapshot.data().comenzi || [];
       const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
 
+      
+
       console.log("selectedItems:", selectedItems);
 
       let sumaNoua = sumaTotala;
@@ -268,8 +272,11 @@ export default () => {
       });
       setSumaTotala(sumaNoua);
       setPlata(sumaTotala);
+
+      const newComandaID = uuidv4();
       // Creează obiectul cu comenzile selectate
       const newComenzi = {
+        id_comanda: newComandaID,
         aperitive: selectedItems.filter((id) => docs_aper.map((doc) => doc.id).includes(id)),
         fel_principal: selectedItems.filter((id) => docs_fp.map((doc) => doc.id).includes(id)),
         supe_ciorbe: selectedItems.filter((id) => docs_sp.map((doc) => doc.id).includes(id)),
@@ -285,10 +292,11 @@ export default () => {
       console.log("userID:", userID);
       console.log("userDocRef:", userDocRef);
       console.log();
+      
       const newComandaWithUser = {
         ...newComenzi,
         user: userEmail // Adaugă emailul utilizatorului
-      };
+    };
       // Actualizează vectorul de comenzi existent
       const updatedComenzi = [...existingComenzi, newComenzi];
       console.log("updatecomenzi:", updatedComenzi);
