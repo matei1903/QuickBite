@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
+import Plata from "./Plata";
+import { useNavigate } from 'react-router-dom';
+
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
 const ColoanaS = styled.div`
@@ -62,6 +65,28 @@ const ColoanaD = styled.div`
     }
 `;
 
+const Button = styled.button`
+    .plateste {
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    padding: 5px;
+    text-align: center;
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width:150px;
+    border-radius: 20px;
+    background-color: #53624d;
+    color: #ecebed;
+    font-size:18px;
+    border: none;
+    outline: 2px solid black;
+  }
+  .plateste:disabled {
+    background-color: #869182;
+    color: #323232;
+`;
+
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState([]);
@@ -70,6 +95,8 @@ const Comenzi = () => {
     const [selectedPrep, setSelectedPrep] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const tableFromStorage = localStorage.getItem('selectedTable');
@@ -155,6 +182,40 @@ const Comenzi = () => {
         });
     };
 
+    const handlePlata = () => {
+        setShowPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
+
+    const handlePaymentSubmit = (selectedOption, paymentMethod) => {
+        if (selectedOption === "comandaMea") {
+            // Selectează toate preparatele din coloanaS
+            setSelectedPrep(userComenzi.flatMap(comanda =>
+                Object.keys(comanda).flatMap(category =>
+                    (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
+                )
+            ));
+        } else if (selectedOption === "comandaMesei") {
+            // Selectează toate preparatele din coloanaD
+            setSelectedPrep(mesaComenzi.flatMap(comanda =>
+                Object.keys(comanda).flatMap(category =>
+                    (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
+                )
+            ));
+        }
+
+        if (paymentMethod === "custom") {
+            navigate('/comenzi');
+        } else {
+            alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
+        }
+
+        setShowPopup(false);
+    };
+
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
@@ -210,6 +271,8 @@ const Comenzi = () => {
                     </div>
                 ))}
             </ColoanaD>
+            <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
+            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
         </Layout>
     );
 };
