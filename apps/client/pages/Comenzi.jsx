@@ -79,24 +79,22 @@ const Comenzi = () => {
             ? selectedPrep.filter((id) => id !== uniqueId)
             : [...selectedPrep, uniqueId];
 
-        // Actualizează starea selecției pentru toate comenzile, inclusiv echivalentele din cealaltă coloană
         setSelectedPrep(updatedSelectedPrep);
 
         // Verifică echivalențele în cealaltă coloană și actualizează starea selecției
-        const equivalentIndices = [
-            ...userComenzi.map((comanda, index) => ({
-                comanda,
-                index,
-                column: "user"
-            })),
-            ...mesaComenzi.map((comanda, index) => ({
+        const equivalentIndices = orderIndex < userComenzi.length 
+            ? mesaComenzi.map((comanda, index) => ({
                 comanda,
                 index: userComenzi.length + index,
                 column: "mesa"
             }))
-        ];
+            : userComenzi.map((comanda, index) => ({
+                comanda,
+                index,
+                column: "user"
+            }));
 
-        equivalentIndices.forEach(({ comanda, index, column }) => {
+        equivalentIndices.forEach(({ comanda, index }) => {
             Object.values(comanda).flat().forEach(id => {
                 if (id === itemId) {
                     const equivalentUniqueId = `${index}-${itemId}`;
