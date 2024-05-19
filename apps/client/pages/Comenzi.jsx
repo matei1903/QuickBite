@@ -71,48 +71,48 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    const handleSelectPrep = (orderId, itemId) => {
-        const isSelected = selectedPrep.includes(itemId);
     
-        // Verificăm dacă elementul este deja selectat
-        if (isSelected) {
-            // Dacă este deja selectat, eliminăm ID-ul din starea selectedPrep
-            const updatedSelectedPrep = selectedPrep.filter((id) => id !== itemId);
-            setSelectedPrep(updatedSelectedPrep);
-        } else {
-            // Dacă nu este selectat, îl adăugăm în selectedPrep
-            setSelectedPrep((prevSelectedPrep) => [...prevSelectedPrep, itemId]);
-        }
-    
-        // Identificăm echivalentul în cealaltă coloană și actualizăm starea selecției
-        const equivalentComenzi = orderId < userComenzi.length ? mesaComenzi : userComenzi;
-        const equivalentOrderId = orderId < userComenzi.length ? orderId : orderId - userComenzi.length;
-    
-        if (equivalentComenzi[equivalentOrderId]) {
-            const equivalentItems = equivalentComenzi[equivalentOrderId];
-            const foundItem = Object.values(equivalentItems).flat().find(id => id === itemId);
-            if (foundItem) {
-                const equivalentItemId = foundItem; // IDs should be the same in both collections
-                // Verificăm dacă echivalentul este deja selectat
-                const isEquivalentSelected = selectedPrep.includes(equivalentItemId);
-                // Dacă echivalentul este deja selectat, eliminăm ID-ul din starea selectedPrep
-                if (isEquivalentSelected) {
-                    const updatedSelectedPrep = selectedPrep.filter((id) => id !== equivalentItemId);
-                    setSelectedPrep(updatedSelectedPrep);
-                } else {
-                    // Dacă nu este selectat, îl adăugăm în selectedPrep
-                    setSelectedPrep((prevSelectedPrep) => [...prevSelectedPrep, equivalentItemId]);
-                }
-            }
-        }
-    };
-
     useEffect(() => {
         const tableFromStorage = localStorage.getItem('selectedTable');
         if (tableFromStorage) {
             setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
+
+    const handleSelectPrep = (orderIndex, itemIndex, id, isUserOrder) => {
+        const uniqueId = `${orderIndex}-${itemIndex}-${id}`;
+        const preparat = preparateDetails[id];
+    
+        // Verificăm dacă comanda este a utilizatorului sau a mesei
+        const comanda = isUserOrder ? userComenzi[orderIndex] : mesaComenzi[orderIndex - userComenzi.length];
+        const otherComanda = isUserOrder ? mesaComenzi.find(comanda => comanda.id_comanda === comanda.id_comanda) : userComenzi.find(comanda => comanda.id_comanda === comanda.id_comanda);
+    
+        if (!preparat) return;
+    
+        // Verificăm dacă preparatul selectat este în comanda curentă și obținem echivalentul
+        const equivalentPrepId = comanda && comanda[preparat.category] && comanda[preparat.category].find(otherId => otherId !== id);
+    
+        // Dacă găsim un echivalent, actualizăm selecția
+        if (equivalentPrepId) {
+            const otherPreparat = preparateDetails[equivalentPrepId];
+            setSelectedPrep(prevSelectedPrep => {
+                // Dacă preparatul echivalent este deja selectat, eliminăm selecția
+                if (prevSelectedPrep.includes(uniqueId) && prevSelectedPrep.includes(`${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`)) {
+                    return prevSelectedPrep.filter(item => item !== uniqueId && item !== `${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`);
+                }
+                // Altfel, adăugăm ambele selecții
+                return [...prevSelectedPrep, uniqueId, `${orderIndex}-${otherComanda[preparat.category].indexOf(equivalentPrepId)}-${equivalentPrepId}`];
+            });
+        } else {
+            // Dacă nu există un preparat echivalent în comanda curentă, doar actualizăm selecția pentru preparatul curent
+            setSelectedPrep(prevSelectedPrep => {
+                if (prevSelectedPrep.includes(uniqueId)) {
+                    return prevSelectedPrep.filter(item => item !== uniqueId);
+                }
+                return [...prevSelectedPrep, uniqueId];
+            });
+        }
+    };
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -176,7 +176,7 @@ const Comenzi = () => {
                                         <input
                                             type="checkbox"
                                             checked={selectedPrep.includes(uniqueId)}
-                                            onChange={() => handleSelectPrep(orderIndex, itemIndex, id)}
+                                            onChange={() => handleSelectPrep(orderIndex, itemIndex, id, isUserOrder)}
                                         />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
