@@ -74,13 +74,17 @@ const Comenzi = () => {
     const handleSelectPrep = (orderId, itemId) => {
         const isSelected = selectedPrep.includes(itemId);
     
-        const updatedSelectedPrep = isSelected
-            ? selectedPrep.filter((id) => id !== itemId)
-            : [...selectedPrep, itemId];
+        // Verificăm dacă elementul este deja selectat
+        if (isSelected) {
+            // Dacă este deja selectat, eliminăm ID-ul din starea selectedPrep
+            const updatedSelectedPrep = selectedPrep.filter((id) => id !== itemId);
+            setSelectedPrep(updatedSelectedPrep);
+        } else {
+            // Dacă nu este selectat, îl adăugăm în selectedPrep
+            setSelectedPrep((prevSelectedPrep) => [...prevSelectedPrep, itemId]);
+        }
     
-        setSelectedPrep(updatedSelectedPrep);
-    
-        // Identifică echivalentul în cealaltă coloană și actualizează starea selecției
+        // Identificăm echivalentul în cealaltă coloană și actualizăm starea selecției
         const equivalentComenzi = orderId < userComenzi.length ? mesaComenzi : userComenzi;
         const equivalentOrderId = orderId < userComenzi.length ? orderId : orderId - userComenzi.length;
     
@@ -89,14 +93,16 @@ const Comenzi = () => {
             const foundItem = Object.values(equivalentItems).flat().find(id => id === itemId);
             if (foundItem) {
                 const equivalentItemId = foundItem; // IDs should be the same in both collections
-                setSelectedPrep((prevSelectedPrep) => {
-                    const equivalentUniqueIds = equivalentItemId;
-                    if (isSelected) {
-                        return prevSelectedPrep.filter((id) => id !== equivalentUniqueIds);
-                    } else {
-                        return [...prevSelectedPrep, equivalentUniqueIds];
-                    }
-                });
+                // Verificăm dacă echivalentul este deja selectat
+                const isEquivalentSelected = selectedPrep.includes(equivalentItemId);
+                // Dacă echivalentul este deja selectat, eliminăm ID-ul din starea selectedPrep
+                if (isEquivalentSelected) {
+                    const updatedSelectedPrep = selectedPrep.filter((id) => id !== equivalentItemId);
+                    setSelectedPrep(updatedSelectedPrep);
+                } else {
+                    // Dacă nu este selectat, îl adăugăm în selectedPrep
+                    setSelectedPrep((prevSelectedPrep) => [...prevSelectedPrep, equivalentItemId]);
+                }
             }
         }
     };
