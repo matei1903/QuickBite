@@ -82,39 +82,38 @@ const Comenzi = () => {
         setSelectedPrep(updatedSelectedPrep);
 
         // Verifică echivalențele în cealaltă coloană și actualizează starea selecției
-        const equivalentIndices = orderIndex < userComenzi.length 
-            ? mesaComenzi.map((comanda, index) => ({
-                comanda,
-                orderIndex: userComenzi.length + index,
-                column: "mesa"
-            }))
-            : userComenzi.map((comanda, index) => ({
-                comanda,
-                orderIndex: index,
-                column: "user"
-            }));
+        const equivalentComenzi = orderIndex < userComenzi.length 
+            ? mesaComenzi
+            : userComenzi;
+        
+        const equivalentOrderIndex = orderIndex < userComenzi.length 
+            ? userComenzi.length + equivalentComenzi.findIndex((_, idx) => idx === orderIndex - userComenzi.length)
+            : equivalentComenzi.findIndex((_, idx) => idx === orderIndex);
 
-        equivalentIndices.forEach(({ comanda, orderIndex }) => {
-            Object.entries(comanda).forEach(([category, items]) => {
-                if (Array.isArray(items)) {
-                    items.forEach((id, idx) => {
-                        if (id === itemId && idx === itemIndex) {
-                            const equivalentUniqueId = `${orderIndex}-${idx}-${itemId}`;
-                            if (isSelected) {
-                                setSelectedPrep(prevSelectedPrep =>
-                                    prevSelectedPrep.filter(id => id !== equivalentUniqueId)
-                                );
-                            } else {
-                                setSelectedPrep(prevSelectedPrep => [
-                                    ...prevSelectedPrep,
-                                    equivalentUniqueId
-                                ]);
+        if (equivalentOrderIndex >= 0) {
+            const equivalentComanda = equivalentComenzi[equivalentOrderIndex];
+            const equivalentUniqueId = `${equivalentOrderIndex}-${itemIndex}-${itemId}`;
+            if (equivalentComanda) {
+                Object.entries(equivalentComanda).forEach(([category, items]) => {
+                    if (Array.isArray(items)) {
+                        items.forEach((id, idx) => {
+                            if (id === itemId && idx === itemIndex) {
+                                if (isSelected) {
+                                    setSelectedPrep(prevSelectedPrep =>
+                                        prevSelectedPrep.filter(id => id !== equivalentUniqueId)
+                                    );
+                                } else {
+                                    setSelectedPrep(prevSelectedPrep => [
+                                        ...prevSelectedPrep,
+                                        equivalentUniqueId
+                                    ]);
+                                }
                             }
-                        }
-                    });
-                }
-            });
-        });
+                        });
+                    }
+                });
+            }
+        }
     };
 
     useEffect(() => {
@@ -200,7 +199,11 @@ const Comenzi = () => {
                 );
             }
             return null;
-        });
+        }).concat(
+            <div key={`user-${orderIndex}`}>
+                <p>Comandat de: {comenzi.user}</p>
+            </div>
+        );
     };
 
     return (
