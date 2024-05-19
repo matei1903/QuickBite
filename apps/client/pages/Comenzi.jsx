@@ -21,14 +21,14 @@ const ColoanaS = styled.div`
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        border: 2px solid #202b1b; /* Culoarea verde inchis pentru bordură */
+        border: 2px solid #202b1b;
         outline: none;
         cursor: pointer;
         margin-right: 8px;
 
         &:checked {
-        background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
-        border-color: #006400; /* Culoarea bordurii când este selectat */
+        background-color: #202b1b;
+        border-color: #006400;
       }
     }
 `;
@@ -50,14 +50,14 @@ const ColoanaD = styled.div`
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        border: 2px solid #202b1b; /* Culoarea verde inchis pentru bordură */
+        border: 2px solid #202b1b;
         outline: none;
         cursor: pointer;
         margin-right: 8px;
 
         &:checked {
-        background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
-        border-color: #006400; /* Culoarea bordurii când este selectat */
+        background-color: #202b1b;
+        border-color: #006400;
       }
     }
 `;
@@ -71,53 +71,12 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    
     useEffect(() => {
         const tableFromStorage = localStorage.getItem('selectedTable');
         if (tableFromStorage) {
             setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
-
-    const handleSelectPrep = (orderIndex, itemIndex, id, isUserOrder) => {
-        const uniqueId = `${orderIndex}-${itemIndex}-${id}`;
-        const preparat = preparateDetails[id];
-        
-        // Verificăm dacă comanda este a utilizatorului sau a mesei
-        const comanda = isUserOrder ? userComenzi[orderIndex] : mesaComenzi[orderIndex - userComenzi.length];
-        
-        // Găsim comanda echivalentă în funcție de id_comanda
-        const otherComanda = isUserOrder ? mesaComenzi.find(com => com.id_comanda === comanda.id_comanda) : userComenzi.find(com => com.id_comanda === comanda.id_comanda);
-        
-        if (!preparat || !otherComanda) return;
-    
-        // Verificăm dacă preparatul selectat este în comanda curentă și obținem echivalentul
-        const equivalentPrepId = comanda[preparat.category] && comanda[preparat.category].find(otherId => otherId !== id);
-    
-        // Dacă găsim un echivalent, actualizăm selecția
-        if (equivalentPrepId) {
-            setSelectedPrep(prevSelectedPrep => {
-                const otherPrepIndex = otherComanda[preparat.category].indexOf(equivalentPrepId);
-                const otherUniqueId = `${orderIndex - (isUserOrder ? 0 : userComenzi.length)}-${otherPrepIndex}-${equivalentPrepId}`;
-                // Dacă preparatul echivalent este deja selectat, eliminăm selecția
-                if (prevSelectedPrep.includes(uniqueId) && prevSelectedPrep.includes(otherUniqueId)) {
-                    return prevSelectedPrep.filter(item => item !== uniqueId && item !== otherUniqueId);
-                }
-                // Altfel, adăugăm ambele selecții
-                return [...prevSelectedPrep, uniqueId, otherUniqueId];
-            });
-        } else {
-            // Dacă nu există un preparat echivalent în comanda curentă, doar actualizăm selecția pentru preparatul curent
-            setSelectedPrep(prevSelectedPrep => {
-                if (prevSelectedPrep.includes(uniqueId)) {
-                    return prevSelectedPrep.filter(item => item !== uniqueId);
-                }
-                return [...prevSelectedPrep, uniqueId];
-            });
-        }
-    };
-    
-    
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -164,6 +123,38 @@ const Comenzi = () => {
         }
     }, [db, userID, selectedTable]);
 
+    const handleSelectPrep = (uniqueId, id, idComanda) => {
+        setSelectedPrep((prevSelectedPrep) => {
+            const isSelected = prevSelectedPrep.includes(uniqueId);
+            let newSelectedPrep = isSelected
+                ? prevSelectedPrep.filter((id) => id !== uniqueId)
+                : [...prevSelectedPrep, uniqueId];
+
+            if (!isSelected) {
+                const correspondingComanda = mesaComenzi.find(comanda => comanda.id_comanda === idComanda) ||
+                    userComenzi.find(comanda => comanda.id_comanda === idComanda);
+
+                if (correspondingComanda) {
+                    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                    allCategories.forEach(category => {
+                        if (Array.isArray(correspondingComanda[category])) {
+                            correspondingComanda[category].forEach(prepId => {
+                                if (prepId === id) {
+                                    const corrUniqueId = `${idComanda}-${category}-${prepId}`;
+                                    if (!newSelectedPrep.includes(corrUniqueId)) {
+                                        newSelectedPrep.push(corrUniqueId);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            return newSelectedPrep;
+        });
+    };
+
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
@@ -174,14 +165,14 @@ const Comenzi = () => {
                         <h3>{categorie}</h3>
                         <ul>
                             {items.map((id, itemIndex) => {
-                                const uniqueId = `${orderIndex}-${itemIndex}-${id}`;
+                                const uniqueId = `${comenzi.id_comanda}-${categorie}-${id}`;
                                 const preparat = preparateDetails[id];
                                 return preparat ? (
                                     <li key={uniqueId}>
                                         <input
                                             type="checkbox"
                                             checked={selectedPrep.includes(uniqueId)}
-                                            onChange={() => handleSelectPrep(orderIndex, itemIndex, id, isUserOrder)}
+                                            onChange={() => handleSelectPrep(uniqueId, id, comenzi.id_comanda)}
                                         />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
