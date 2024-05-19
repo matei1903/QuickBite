@@ -81,43 +81,34 @@ const Comenzi = () => {
 
         setSelectedPrep(updatedSelectedPrep);
 
-        // Verifică echivalențele în cealaltă coloană și actualizează starea selecției
-        const equivalentComenzi = orderIndex < userComenzi.length 
-            ? mesaComenzi
-            : userComenzi;
-        
-        const equivalentOrderIndex = orderIndex < userComenzi.length 
-            ? userComenzi.length + equivalentComenzi.findIndex((_, idx) => idx === orderIndex - userComenzi.length)
-            : equivalentComenzi.findIndex((_, idx) => idx === orderIndex);
+        // Identifică echivalentul în cealaltă coloană și actualizează starea selecției
+        const isUserOrder = orderIndex < userComenzi.length;
+        const equivalentOrderIndex = isUserOrder ? orderIndex : orderIndex - userComenzi.length;
 
-        if (equivalentOrderIndex >= 0) {
-            const equivalentComanda = equivalentComenzi[equivalentOrderIndex];
-            const equivalentUniqueId = `${equivalentOrderIndex}-${itemIndex}-${itemId}`;
-            if (equivalentComanda) {
-                Object.entries(equivalentComanda).forEach(([category, items]) => {
-                    if (Array.isArray(items)) {
-                        items.forEach((id, idx) => {
-                            if (id === itemId && idx === itemIndex) {
+        const equivalentComenzi = isUserOrder ? mesaComenzi : userComenzi;
+        const equivalentUniqueId = `${equivalentOrderIndex}-${itemIndex}-${itemId}`;
+
+        if (equivalentComenzi[equivalentOrderIndex]) {
+            const equivalentItems = equivalentComenzi[equivalentOrderIndex];
+            Object.entries(equivalentItems).forEach(([category, items]) => {
+                if (Array.isArray(items)) {
+                    items.forEach((id, idx) => {
+                        if (id === itemId && idx === itemIndex) {
+                            setSelectedPrep((prevSelectedPrep) => {
                                 if (isSelected) {
-                                    setSelectedPrep(prevSelectedPrep =>
-                                        prevSelectedPrep.filter(id => id !== equivalentUniqueId)
-                                    );
+                                    return prevSelectedPrep.filter((id) => id !== equivalentUniqueId);
                                 } else {
-                                    setSelectedPrep(prevSelectedPrep => [
-                                        ...prevSelectedPrep,
-                                        equivalentUniqueId
-                                    ]);
+                                    return [...prevSelectedPrep, equivalentUniqueId];
                                 }
-                            }
-                        });
-                    }
-                });
-            }
+                            });
+                        }
+                    });
+                }
+            });
         }
     };
 
     useEffect(() => {
-        // Verifică dacă există o masă selectată în localStorage la încărcarea componentei
         const tableFromStorage = localStorage.getItem('selectedTable');
         if (tableFromStorage) {
             setSelectedTable(parseInt(tableFromStorage));
@@ -169,7 +160,7 @@ const Comenzi = () => {
         }
     }, [db, userID, selectedTable]);
 
-    const renderComenzi = (comenzi, orderIndex) => {
+    const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
             const items = comenzi[categorie];
@@ -212,7 +203,7 @@ const Comenzi = () => {
                 <h2>Comenzile mele</h2>
                 {userComenzi && userComenzi.map((comanda, index) => (
                     <div key={index}>
-                        {renderComenzi(comanda, index)}
+                        {renderComenzi(comanda, index, true)}
                     </div>
                 ))}
             </ColoanaS>
@@ -220,7 +211,7 @@ const Comenzi = () => {
                 <h2>Comenzile mesei</h2>
                 {mesaComenzi && mesaComenzi.map((comanda, index) => (
                     <div key={index}>
-                        {renderComenzi(comanda, userComenzi.length + index)} {/* Offset the index to ensure unique keys */}
+                        {renderComenzi(comanda, userComenzi.length + index, false)}
                     </div>
                 ))}
             </ColoanaD>
