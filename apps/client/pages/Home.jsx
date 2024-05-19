@@ -256,39 +256,43 @@ export default () => {
       alert("Trebuie să fii autentificat pentru a plasa o comandă.");
       return;
     }
-
+  
     const userDocRef = doc(db, "users", userID);
     try {
       const userDocSnapshot = await getDoc(userDocRef);
+      if (!userDocSnapshot.exists()) {
+        throw new Error("Documentul utilizatorului nu a fost găsit.");
+      }
+  
       const userEmail = userDocSnapshot.data().email;
       const existingComenzi = userDocSnapshot.data().comenzi || [];
       const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-      
+  
       let sumaNoua = plata;
       selectedItems.forEach((id) => {
         const preparat = docs.find((doc) => doc.id === id);
         sumaNoua += preparat.pret;
       });
       setPlata(sumaNoua);
-
+  
       const newComandaID = uuidv4();
       const newComenzi = {
         id_comanda: newComandaID,
         items: selectedItems,
         user: userEmail
       };
-
+  
       const updatedComenzi = [...existingComenzi, newComenzi];
-
+  
       await updateDoc(userDocRef, {
         comenzi: updatedComenzi,
         plata: sumaNoua
       });
-
+  
       await updateDoc(mesaRef, {
         comenzi: arrayUnion(newComenzi)
       });
-
+  
       alert("Comanda a fost plasată cu succes!");
     } catch (error) {
       console.error("Eroare la plasarea comenzii:", error);
@@ -297,6 +301,7 @@ export default () => {
       setSelectedItems([]);
     }
   };
+  
 
 
   const handePlata = () => {
