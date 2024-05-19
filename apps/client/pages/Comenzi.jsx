@@ -71,40 +71,33 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    const handleSelectPrep = (orderIndex, itemIndex, itemId) => {
-        const uniqueId = `${orderIndex}-${itemIndex}-${itemId}`;
-        const isSelected = selectedPrep.includes(uniqueId);
-
+    const handleSelectPrep = (orderId, itemId) => {
+        const isSelected = selectedPrep.includes(itemId);
+    
         const updatedSelectedPrep = isSelected
-            ? selectedPrep.filter((id) => id !== uniqueId)
-            : [...selectedPrep, uniqueId];
-
+            ? selectedPrep.filter((id) => id !== itemId)
+            : [...selectedPrep, itemId];
+    
         setSelectedPrep(updatedSelectedPrep);
-
+    
         // Identifică echivalentul în cealaltă coloană și actualizează starea selecției
-        const isUserOrder = orderIndex < userComenzi.length;
-        const equivalentOrderIndex = isUserOrder ? orderIndex : orderIndex - userComenzi.length;
-
-        const equivalentComenzi = isUserOrder ? mesaComenzi : userComenzi;
-        const equivalentUniqueId = `${equivalentOrderIndex}-${itemIndex}-${itemId}`;
-
-        if (equivalentComenzi[equivalentOrderIndex]) {
-            const equivalentItems = equivalentComenzi[equivalentOrderIndex];
-            Object.entries(equivalentItems).forEach(([category, items]) => {
-                if (Array.isArray(items)) {
-                    items.forEach((id, idx) => {
-                        if (id === itemId && idx === itemIndex) {
-                            setSelectedPrep((prevSelectedPrep) => {
-                                if (isSelected) {
-                                    return prevSelectedPrep.filter((id) => id !== equivalentUniqueId);
-                                } else {
-                                    return [...prevSelectedPrep, equivalentUniqueId];
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+        const equivalentComenzi = orderId < userComenzi.length ? mesaComenzi : userComenzi;
+        const equivalentOrderId = orderId < userComenzi.length ? orderId : orderId - userComenzi.length;
+    
+        if (equivalentComenzi[equivalentOrderId]) {
+            const equivalentItems = equivalentComenzi[equivalentOrderId];
+            const foundItem = Object.values(equivalentItems).flat().find(id => id === itemId);
+            if (foundItem) {
+                const equivalentItemId = foundItem; // IDs should be the same in both collections
+                setSelectedPrep((prevSelectedPrep) => {
+                    const equivalentUniqueIds = equivalentItemId;
+                    if (isSelected) {
+                        return prevSelectedPrep.filter((id) => id !== equivalentUniqueIds);
+                    } else {
+                        return [...prevSelectedPrep, equivalentUniqueIds];
+                    }
+                });
+            }
         }
     };
 
