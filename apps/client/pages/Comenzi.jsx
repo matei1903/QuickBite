@@ -66,7 +66,6 @@ const ColoanaD = styled.div`
 `;
 
 const Button = styled.button`
-    .plateste {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
     text-align: center;
@@ -81,10 +80,11 @@ const Button = styled.button`
     font-size:18px;
     border: none;
     outline: 2px solid black;
-  }
-  .plateste:disabled {
-    background-color: #869182;
-    color: #323232;
+
+    &:disabled {
+        background-color: #869182;
+        color: #323232;
+}
 `;
 
 const Comenzi = () => {
