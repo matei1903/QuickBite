@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import Plata from "./Plata";
+import PaymentPopup from "./Plata";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
