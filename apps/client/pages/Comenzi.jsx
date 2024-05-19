@@ -29,7 +29,7 @@ const ColoanaS = styled.div`
         &:checked {
         background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
         border-color: #006400; /* Culoarea bordurii când este selectat */
-  }
+      }
     }
 `;
 
@@ -58,7 +58,7 @@ const ColoanaD = styled.div`
         &:checked {
         background-color: #202b1b; /* Culoarea de fundal verde inchis când este selectat */
         border-color: #006400; /* Culoarea bordurii când este selectat */
-  }
+      }
     }
 `;
 
@@ -71,42 +71,55 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
 
-    const handleSelectPrep = (orderIndex, itemId, comenzi, setComenzi) => {
+    const handleSelectPrep = (orderIndex, itemId) => {
         const uniqueId = `${orderIndex}-${itemId}`;
         const isSelected = selectedPrep.includes(uniqueId);
 
         const updatedSelectedPrep = isSelected
             ? selectedPrep.filter((id) => id !== uniqueId)
             : [...selectedPrep, uniqueId];
-        
+
         // Actualizează starea selecției pentru toate comenzile, inclusiv echivalentele din cealaltă coloană
         setSelectedPrep(updatedSelectedPrep);
 
-        // Găsește și actualizează echivalentele din cealaltă coloană
-        const equivalentOrderIndex = comenzi.findIndex(comanda =>
-            Object.values(comanda).flat().includes(itemId)
-        );
+        // Verifică echivalențele în cealaltă coloană și actualizează starea selecției
+        const equivalentIndices = [
+            ...userComenzi.map((comanda, index) => ({
+                comanda,
+                index,
+                column: "user"
+            })),
+            ...mesaComenzi.map((comanda, index) => ({
+                comanda,
+                index: userComenzi.length + index,
+                column: "mesa"
+            }))
+        ];
 
-        if (equivalentOrderIndex !== -1) {
-            const equivalentUniqueId = `${equivalentOrderIndex}-${itemId}`;
-            if (isSelected) {
-                setSelectedPrep(prevSelectedPrep =>
-                    prevSelectedPrep.filter(id => id !== equivalentUniqueId)
-                );
-            } else {
-                setSelectedPrep(prevSelectedPrep => [
-                    ...prevSelectedPrep,
-                    equivalentUniqueId
-                ]);
-            }
-        }
+        equivalentIndices.forEach(({ comanda, index, column }) => {
+            Object.values(comanda).flat().forEach(id => {
+                if (id === itemId) {
+                    const equivalentUniqueId = `${index}-${itemId}`;
+                    if (isSelected) {
+                        setSelectedPrep(prevSelectedPrep =>
+                            prevSelectedPrep.filter(id => id !== equivalentUniqueId)
+                        );
+                    } else {
+                        setSelectedPrep(prevSelectedPrep => [
+                            ...prevSelectedPrep,
+                            equivalentUniqueId
+                        ]);
+                    }
+                }
+            });
+        });
     };
 
     useEffect(() => {
         // Verifică dacă există o masă selectată în localStorage la încărcarea componentei
         const tableFromStorage = localStorage.getItem('selectedTable');
         if (tableFromStorage) {
-          setSelectedTable(parseInt(tableFromStorage));
+            setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
 
@@ -155,7 +168,7 @@ const Comenzi = () => {
         }
     }, [db, userID, selectedTable]);
 
-    const renderComenzi = (comenzi, orderIndex, setComenzi) => {
+    const renderComenzi = (comenzi, orderIndex) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
             const items = comenzi[categorie];
@@ -172,7 +185,7 @@ const Comenzi = () => {
                                         <input
                                             type="checkbox"
                                             checked={selectedPrep.includes(uniqueId)}
-                                            onChange={() => handleSelectPrep(orderIndex, id, comenzi, setComenzi)}
+                                            onChange={() => handleSelectPrep(orderIndex, id)}
                                         />
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
@@ -194,7 +207,7 @@ const Comenzi = () => {
                 <h2>Comenzile mele</h2>
                 {userComenzi && userComenzi.map((comanda, index) => (
                     <div key={index}>
-                        {renderComenzi(comanda, index, setUserComenzi)}
+                        {renderComenzi(comanda, index)}
                     </div>
                 ))}
             </ColoanaS>
@@ -202,7 +215,7 @@ const Comenzi = () => {
                 <h2>Comenzile mesei</h2>
                 {mesaComenzi && mesaComenzi.map((comanda, index) => (
                     <div key={index}>
-                        {renderComenzi(comanda, userComenzi.length + index, setMesaComenzi)} {/* Offset the index to ensure unique keys */}
+                        {renderComenzi(comanda, userComenzi.length + index)} {/* Offset the index to ensure unique keys */}
                     </div>
                 ))}
             </ColoanaD>
