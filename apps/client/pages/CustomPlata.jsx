@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { DndProvider, useDrag, useDrop } from 'react-beautiful-dnd';
+import { DndContext, useDrag, useDrop } from '@dnd-kit/core';
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -66,7 +66,7 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
       <Overlay onClick={onClose} />
       <PopupContainer>
         <CloseButton onClick={onClose}>X</CloseButton>
-        <DndProvider backend={HTML5Backend}>
+        <DndContext backend={HTML5Backend}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Column>
               <h2>Cash</h2>
@@ -77,7 +77,7 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
               <DroppableColumn items={cardItems} setItems={setCardItems} />
             </Column>
           </div>
-        </DndProvider>
+        </DndContext>
       </PopupContainer>
     </>
   );
