@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, useDrag, useDrop } from 'react-beautiful-dnd';
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -51,44 +49,17 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   const [cashItems, setCashItems] = useState([]);
   const [cardItems, setCardItems] = useState([]);
 
-  const [{ isOverCash }, dropCash] = useDrop({
-    accept: 'item',
-    drop: (item) => setCashItems([...cashItems, item]),
-    collect: (monitor) => ({
-      isOverCash: monitor.isOver()
-    })
-  });
+  const onDragEnd = (result, targetItemsSetter) => {
+    if (!result.destination) {
+      return;
+    }
 
-  const [{ isOverCard }, dropCard] = useDrop({
-    accept: 'item',
-    drop: (item) => setCardItems([...cardItems, item]),
-    collect: (monitor) => ({
-      isOverCard: monitor.isOver()
-    })
-  });
+    const newItems = Array.from(targetItemsSetter);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
 
-  const renderComenzi = (comenzi) => {
-    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-    return allCategories.flatMap((categorie) => {
-      const items = comenzi[categorie];
-      if (Array.isArray(items) && items.length > 0) {
-        return items.map((id) => {
-          const uniqueId = `${comenzi.id_comanda}-${categorie}-${id}`;
-          const preparat = preparateDetails[id];
-          return preparat ? (
-            <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }}>
-              {preparat.nume} - {preparat.pret} RON
-            </DraggableItem>
-          ) : (
-            <div key={uniqueId}>Loading...</div>
-          );
-        });
-      }
-      return [];
-    });
+    targetItemsSetter(newItems);
   };
-
-  const calculateTotal = (items) => items.reduce((total, item) => total += item.price, 0);
 
   return (
     <>
@@ -97,19 +68,13 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
         <CloseButton onClick={onClose}>X</CloseButton>
         <DndProvider backend={HTML5Backend}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Column ref={dropCash} style={{ backgroundColor: isOverCash ? '#f0f8ff' : 'white' }}>
+            <Column>
               <h2>Cash</h2>
-              {cashItems.map((item, index) => (
-                <Item key={index}>{item.name} - {item.price} RON</Item>
-              ))}
-              <p>Total: {calculateTotal(cashItems)} RON</p>
+              <DroppableColumn items={cashItems} setItems={setCashItems} />
             </Column>
-            <Column ref={dropCard} style={{ backgroundColor: isOverCard ? '#f0f8ff' : 'white' }}>
+            <Column>
               <h2>Card</h2>
-              {cardItems.map((item, index) => (
-                <Item key={index}>{item.name} - {item.price} RON</Item>
-              ))}
-              <p>Total: {calculateTotal(cardItems)} RON</p>
+              <DroppableColumn items={cardItems} setItems={setCardItems} />
             </Column>
           </div>
         </DndProvider>
@@ -118,19 +83,43 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   );
 };
 
-const DraggableItem = ({ item, children }) => {
+const DroppableColumn = ({ items, setItems }) => {
+  const onDragEnd = (result) => {
+    onDragEnd(result, setItems);
+  };
+
+  return (
+    <Droppable droppableId="droppable">
+      {(provided) => (
+        <div
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+        >
+          {items.map((item, index) => (
+            <DraggableItem key={item.id} item={item} index={index}>
+              {item.name} - {item.price} RON
+            </DraggableItem>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  );
+};
+
+const DraggableItem = ({ item, index, children }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'item',
-    item,
+    item: { ...item, index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     })
   });
 
   return (
-    <Item ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       {children}
-    </Item>
+    </div>
   );
 };
 
