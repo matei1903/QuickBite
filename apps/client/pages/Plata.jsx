@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-
 const PopupContainer = styled.div`
   position: fixed;
   top: 0;
@@ -16,7 +15,6 @@ const PopupContainer = styled.div`
   backdrop-filter: blur(5px);
   color: black;
 `;
-
 const PopupContent = styled.div`
   background: white;
   padding: 20px;
@@ -24,29 +22,23 @@ const PopupContent = styled.div`
   width: 400px;
   max-width: 100%;
 `;
-
 const RadioGroup = styled.div`
   margin-bottom: 15px;
 `;
 
-const PaymentPopup = ({ onClose, onSubmit, onCustomPayment }) => {
+const PaymentPopup = ({ onClose, onSubmit }) => {
     const [selectedOption, setSelectedOption] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("");
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
     };
-
     const handlePaymentMethodChange = (event) => {
         setPaymentMethod(event.target.value);
     };
 
     const handleSubmit = () => {
-        if (selectedOption === "custom") {
-          onCustomPayment();
-        } else {
-          onSubmit(selectedOption, paymentMethod);
-        }
+        onSubmit(selectedOption, paymentMethod);
     };
 
     return (
@@ -154,5 +146,4 @@ const PaymentPopup = ({ onClose, onSubmit, onCustomPayment }) => {
         </PopupContainer>
     );
 };
-
 export default PaymentPopup;

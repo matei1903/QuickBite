@@ -3,11 +3,9 @@ import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
-import CustomPaymentPopup from "./CustomPlata.jsx";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
-
 const ColoanaS = styled.div`
     float: left;
     width: 45%;
@@ -29,14 +27,12 @@ const ColoanaS = styled.div`
         outline: none;
         cursor: pointer;
         margin-right: 8px;
-
         &:checked {
         background-color: #202b1b;
         border-color: #006400;
       }
     }
 `;
-
 const ColoanaD = styled.div`
     float: right;
     width: 45%;
@@ -58,14 +54,12 @@ const ColoanaD = styled.div`
         outline: none;
         cursor: pointer;
         margin-right: 8px;
-
         &:checked {
         background-color: #202b1b;
         border-color: #006400;
       }
     }
 `;
-
 const Button = styled.button`
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -81,13 +75,11 @@ const Button = styled.button`
     font-size:18px;
     border: none;
     outline: 2px solid black;
-
     &:disabled {
         background-color: #869182;
         color: #323232;
 }
 `;
-
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState([]);
@@ -97,8 +89,6 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
-    const [showCustomPopup, setShowCustomPopup] = useState(false); // Adăugăm un nou state
-    const [customPopupData, setCustomPopupData] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -107,7 +97,6 @@ const Comenzi = () => {
             setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
-
     useEffect(() => {
         const fetchComenzi = async () => {
             try {
@@ -116,13 +105,11 @@ const Comenzi = () => {
                 if (userDocSnapshot.exists()) {
                     const comenzi = userDocSnapshot.data().comenzi || [];
                     setUserComenzi(comenzi);
-
                     const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
                     const mesaSnapshot = await getDoc(mesaRef);
                     if (mesaSnapshot.exists()) {
                         const mesaComenzi = mesaSnapshot.data().comenzi || [];
                         setMesaComenzi(mesaComenzi);
-
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                         const preparatePromises = [...comenzi, ...mesaComenzi].flatMap(comanda =>
                             allCategories.flatMap(category =>
@@ -133,13 +120,11 @@ const Comenzi = () => {
                                 })
                             )
                         );
-
                         const preparate = await Promise.all(preparatePromises);
                         const preparateMap = preparate.reduce((acc, preparat) => {
                             acc[preparat.id] = preparat;
                             return acc;
                         }, {});
-
                         setPreparateDetails(preparateMap);
                     }
                 }
@@ -147,13 +132,10 @@ const Comenzi = () => {
                 console.error("Eroare la încărcarea comenzilor:", error);
             }
         };
-
         if (selectedTable !== null) {
             fetchComenzi();
         }
     }, [db, userID, selectedTable]);
-
-
 
     const handleSelectPrep = (uniqueId, id, idComanda) => {
         setSelectedPrep((prevSelectedPrep) => {
@@ -161,11 +143,9 @@ const Comenzi = () => {
             let newSelectedPrep = isSelected
                 ? prevSelectedPrep.filter((id) => id !== uniqueId)
                 : [...prevSelectedPrep, uniqueId];
-
             if (!isSelected) {
                 const correspondingComanda = mesaComenzi.find(comanda => comanda.id_comanda === idComanda) ||
                     userComenzi.find(comanda => comanda.id_comanda === idComanda);
-
                 if (correspondingComanda) {
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                     allCategories.forEach(category => {
@@ -182,30 +162,15 @@ const Comenzi = () => {
                     });
                 }
             }
-
             return newSelectedPrep;
         });
     };
-
     const handlePlata = () => {
         setShowPopup(true);
     };
-
     const handleClosePopup = () => {
         setShowPopup(false);
     };
-
-    const handlePaymentClick = () => {
-        setShowPopup(true);
-      };
-    
-      const handlePopupClose = () => {
-        setShowPopup(false);
-      };
-    
-      const handleCustomPopupClose = () => {
-        setShowCustomPopup(false);
-      };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod) => {
         if (selectedOption === "comandaMea") {
@@ -223,23 +188,13 @@ const Comenzi = () => {
                 )
             ));
         }
-
         if (paymentMethod === "custom") {
             navigate('/comenzi');
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
-
         setShowPopup(false);
     };
-
-    const handleCustomPayment = () => {
-        const selectedPrepDetails = selectedPrep.map(index => mesaComenzi[index] || userComenzi[index]);
-        setCustomPopupData(selectedPrepDetails);
-        setShowPopup(false);
-        setShowCustomPopup(true);
-      };
-
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
@@ -276,7 +231,6 @@ const Comenzi = () => {
             </div>
         );
     };
-
     return (
         <Layout>
             <ColoanaS>
@@ -286,12 +240,6 @@ const Comenzi = () => {
                         {renderComenzi(comanda, index, true)}
                     </div>
                 ))}
-                <Button onClick={handlePlata}>
-                        Plătește
-                </Button>
-                <Button onClick={handleCustomPayment}>
-                        Plată Personalizată
-                </Button>
             </ColoanaS>
             <ColoanaD>
                 <h2>Comenzile mesei</h2>
@@ -302,10 +250,8 @@ const Comenzi = () => {
                 ))}
             </ColoanaD>
             <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
-            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} onCustomPayment={handleCustomPayment} />}
-            {showCustomPopup && <CustomPaymentPopup comenzi={customPopupData} preparateDetails={preparateDetails} data={customPopupData} onClose={handleCustomPopupClose} />}
+            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
         </Layout>
     );
 };
-
 export default Comenzi;
