@@ -45,6 +45,8 @@ const Item = styled.div`
   cursor: pointer;
 `;
 
+const calculateTotal = (items) => items.reduce((total, item) => total += item.price, 0);
+
 const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   const [cashItems, setCashItems] = useState([]);
   const [cardItems, setCardItems] = useState([]);
@@ -69,8 +71,6 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
       return [];
     });
   };
-
-  const calculateTotal = (items) => items.reduce((total, item) => total += item.price, 0);
 
   return (
     <>
@@ -110,7 +110,6 @@ const CashDropZone = ({ setCashItems, cashItems }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: 'cash',
     data: { type: 'cash' },
-    // Update cash items when an item is dropped onto this drop zone
     onDrop: (result) => {
       setCashItems((items) => [...items, result.data]);
     },
@@ -130,7 +129,6 @@ const CardDropZone = ({ setCardItems, cardItems }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: 'card',
     data: { type: 'card' },
-    // Update card items when an item is dropped onto this drop zone
     onDrop: (result) => {
       setCardItems((items) => [...items, result.data]);
     },
