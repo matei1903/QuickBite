@@ -5,13 +5,13 @@ import {
   closestCenter,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
+  useDroppable
 } from '@dnd-kit/core';
 import {
   SortableContext,
   rectSortingStrategy,
-  useSortable,
-  useDroppable,
+  useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
