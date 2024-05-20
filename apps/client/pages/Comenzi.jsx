@@ -3,11 +3,9 @@ import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
-import CustomPaymentPopup from "./CustomPlata"; // import nou
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
-
 const ColoanaS = styled.div`
     float: left;
     width: 45%;
@@ -35,7 +33,6 @@ const ColoanaS = styled.div`
       }
     }
 `;
-
 const ColoanaD = styled.div`
     float: right;
     width: 45%;
@@ -63,7 +60,6 @@ const ColoanaD = styled.div`
       }
     }
 `;
-
 const Button = styled.button`
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -82,9 +78,8 @@ const Button = styled.button`
     &:disabled {
         background-color: #869182;
         color: #323232;
-    }
+}
 `;
-
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState([]);
@@ -94,7 +89,6 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
-    const [showCustomPopup, setShowCustomPopup] = useState(false); // nou
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -103,7 +97,6 @@ const Comenzi = () => {
             setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
-
     useEffect(() => {
         const fetchComenzi = async () => {
             try {
@@ -179,18 +172,16 @@ const Comenzi = () => {
         setShowPopup(false);
     };
 
-    const handleCustomPaymentSubmit = (cardItems, cashItems) => {
-        alert(`Plată personalizată: Card - ${cardItems.length} articole, Cash - ${cashItems.length} articole`);
-    };
-
     const handlePaymentSubmit = (selectedOption, paymentMethod) => {
         if (selectedOption === "comandaMea") {
+            // Selectează toate preparatele din coloanaS
             setSelectedPrep(userComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
                 )
             ));
         } else if (selectedOption === "comandaMesei") {
+            // Selectează toate preparatele din coloanaD
             setSelectedPrep(mesaComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
@@ -198,13 +189,12 @@ const Comenzi = () => {
             ));
         }
         if (paymentMethod === "custom") {
-            setShowCustomPopup(true);
+            navigate('/comenzi');
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
         setShowPopup(false);
     };
-
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
@@ -227,14 +217,7 @@ const Comenzi = () => {
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
                                 ) : (
-                                    <li key={uniqueId}>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedPrep.includes(uniqueId)}
-                                            onChange={() => handleSelectPrep(uniqueId, id, comenzi.id_comanda)}
-                                        />
-                                        Preparat necunoscut - ID: {id}
-                                    </li>
+                                    <li key={uniqueId}>Loading...</li>
                                 );
                             })}
                         </ul>
@@ -242,55 +225,33 @@ const Comenzi = () => {
                 );
             }
             return null;
-        });
+        }).concat(
+            <div key={`user-${orderIndex}`}>
+                <p>Comandat de: {comenzi.user}</p>
+            </div>
+        );
     };
-
     return (
-        <React.Suspense fallback={<div>Loading...</div>}>
-            <Layout>
-                <h1>Comenzile mele și ale mesei {selectedTable}</h1>
-                <ColoanaS>
-                    <h2>Comanda mea</h2>
-                    {userComenzi.map((comanda, index) => (
-                        <div key={comanda.id_comanda}>
-                            {renderComenzi(comanda, index, true)}
-                        </div>
-                    ))}
-                </ColoanaS>
-                <ColoanaD>
-                    <h2>Comanda mesei</h2>
-                    {mesaComenzi.map((comanda, index) => (
-                        <div key={comanda.id_comanda}>
-                            {renderComenzi(comanda, index, false)}
-                        </div>
-                    ))}
-                </ColoanaD>
-                <Button
-                    disabled={selectedPrep.length === 0}
-                    onClick={handlePlata}
-                >
-                    Plata
-                </Button>
-                {showPopup && (
-                    <PaymentPopup
-                        onClose={handleClosePopup}
-                        onSubmit={handlePaymentSubmit}
-                    />
-                )}
-                {showCustomPopup && (
-                    <CustomPaymentPopup
-                        orders={selectedPrep.map((uniqueId) => {
-                            const [idComanda, category, id] = uniqueId.split("-");
-                            return { id, nume: preparateDetails[id]?.nume || "Necunoscut", pret: preparateDetails[id]?.pret || 0 };
-                        })}
-                        onClose={() => setShowCustomPopup(false)}
-                        onSubmit={handleCustomPaymentSubmit}
-                    />
-                )}
-            </Layout>
-        </React.Suspense>
+        <Layout>
+            <ColoanaS>
+                <h2>Comenzile mele</h2>
+                {userComenzi && userComenzi.map((comanda, index) => (
+                    <div key={index}>
+                        {renderComenzi(comanda, index, true)}
+                    </div>
+                ))}
+            </ColoanaS>
+            <ColoanaD>
+                <h2>Comenzile mesei</h2>
+                {mesaComenzi && mesaComenzi.map((comanda, index) => (
+                    <div key={index}>
+                        {renderComenzi(comanda, userComenzi.length + index, false)}
+                    </div>
+                ))}
+            </ColoanaD>
+            <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
+            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
+        </Layout>
     );
 };
-
 export default Comenzi;
-
