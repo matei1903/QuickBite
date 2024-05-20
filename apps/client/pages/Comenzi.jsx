@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
-import CustomPaymentPopup from "./CustomPaymentPopup"; // import nou
+import CustomPaymentPopup from "./CustomPlata"; // import nou
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
