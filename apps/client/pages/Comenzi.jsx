@@ -286,7 +286,7 @@ const Comenzi = () => {
                         {renderComenzi(comanda, index, true)}
                     </div>
                 ))}
-                <Button onClick={handleFinalizeClick}>
+                <Button onClick={handlePlata}>
                         Plătește
                 </Button>
                 <Button onClick={handleCustomPayment}>
