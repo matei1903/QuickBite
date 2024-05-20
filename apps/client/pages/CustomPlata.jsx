@@ -68,9 +68,9 @@ const DroppableZone = ({ id, items, setItems }) => {
 
   return (
     <DropZone ref={setNodeRef}>
-      {items.map((item, index) => (
+      {items.map((item) => (
         <DraggableItem key={item.id} id={item.id}>
-          {item.name} - {item.price} RON
+          {item.nume} - {item.pret} RON
         </DraggableItem>
       ))}
     </DropZone>
@@ -78,10 +78,8 @@ const DroppableZone = ({ id, items, setItems }) => {
 };
 
 const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
-  const [items, setItems] = useState(orders);
   const [cardItems, setCardItems] = useState([]);
   const [cashItems, setCashItems] = useState([]);
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -93,7 +91,7 @@ const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over.id) {
-      setItems((items) => {
+      setCardItems((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
         return arrayMove(items, oldIndex, newIndex);
@@ -110,8 +108,8 @@ const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
     <PopupContainer>
       <h3>Distribuie plățile</h3>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={items} strategy={rectSortingStrategy}>
-          <DroppableZone id="items" items={items} setItems={setItems} />
+        <SortableContext items={orders} strategy={rectSortingStrategy}>
+          <DroppableZone id="orders" items={orders} setItems={setCardItems} />
         </SortableContext>
         <SortableContext items={cardItems} strategy={rectSortingStrategy}>
           <h4>Plată cu cardul</h4>
