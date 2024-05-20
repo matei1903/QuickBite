@@ -195,17 +195,17 @@ const Comenzi = () => {
         setShowPopup(false);
     };
 
-    const handleFinalizeClick = () => {
+    const handlePaymentClick = () => {
         setShowPopup(true);
-    };
-
-    const handleCustomPayment = () => {
-        setCustomPopupData(mesaComenzi);
-        setShowCustomPopup(true);
-    };
-    const handleCloseCustomPopup = () => {
+      };
+    
+      const handlePopupClose = () => {
+        setShowPopup(false);
+      };
+    
+      const handleCustomPopupClose = () => {
         setShowCustomPopup(false);
-    };
+      };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod) => {
         if (selectedOption === "comandaMea") {
@@ -232,6 +232,13 @@ const Comenzi = () => {
 
         setShowPopup(false);
     };
+
+    const handleCustomPayment = () => {
+        const selectedPrepDetails = selectedPrep.map(index => mesaComenzi[index] || userComenzi[index]);
+        setCustomPopupData(selectedPrepDetails);
+        setShowPopup(false);
+        setShowCustomPopup(true);
+      };
 
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -295,8 +302,8 @@ const Comenzi = () => {
                 ))}
             </ColoanaD>
             <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
-            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
-            {showCustomPopup && <CustomPaymentPopup comenzi={customPopupData} preparateDetails={preparateDetails} onClose={handleCloseCustomPopup} />}
+            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} onCustomPayment={handleCustomPayment} />}
+            {showCustomPopup && <CustomPaymentPopup comenzi={customPopupData} preparateDetails={preparateDetails} data={customPopupData} onClose={handleCustomPopupClose} />}
         </Layout>
     );
 };

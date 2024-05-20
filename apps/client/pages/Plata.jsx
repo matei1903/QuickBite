@@ -29,7 +29,7 @@ const RadioGroup = styled.div`
   margin-bottom: 15px;
 `;
 
-const PaymentPopup = ({ onClose, onSubmit }) => {
+const PaymentPopup = ({ onClose, onSubmit, onCustomPayment }) => {
     const [selectedOption, setSelectedOption] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("");
 
@@ -42,7 +42,11 @@ const PaymentPopup = ({ onClose, onSubmit }) => {
     };
 
     const handleSubmit = () => {
-        onSubmit(selectedOption, paymentMethod);
+        if (selectedOption === "custom") {
+          onCustomPayment();
+        } else {
+          onSubmit(selectedOption, paymentMethod);
+        }
     };
 
     return (

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -36,6 +37,7 @@ const Column = styled.div`
   border: 1px solid black;
   min-height: 300px;
   margin: 0 10px;
+  background-color: ${({ isOver }) => (isOver ? '#f0f8ff' : 'white')};
 `;
 
 const Item = styled.div`
@@ -51,6 +53,26 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   const [cashItems, setCashItems] = useState([]);
   const [cardItems, setCardItems] = useState([]);
 
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeItem = active.data.current.item;
+    const sourceList = active.data.current.source === 'cash' ? cashItems : cardItems;
+    const destinationList = over.id === 'cash' ? cashItems : cardItems;
+
+    if (active.data.current.source === over.id) return;
+
+    setCashItems(cashItems.filter(item => item.uniqueId !== activeItem.uniqueId));
+    setCardItems(cardItems.filter(item => item.uniqueId !== activeItem.uniqueId));
+
+    if (over.id === 'cash') {
+      setCashItems([...cashItems, activeItem]);
+    } else {
+      setCardItems([...cardItems, activeItem]);
+    }
+  };
+
   const renderComenzi = (comenzi) => {
     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
     return allCategories.flatMap((categorie) => {
@@ -61,7 +83,7 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
             const uniqueId = `${comanda.id_comanda}-${categorie}-${id}`;
             const preparat = preparateDetails[id];
             return preparat ? (
-              <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }}>
+              <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }} source="preparate">
                 {preparat.nume} - {preparat.pret} RON
               </DraggableItem>
             ) : (
@@ -79,7 +101,7 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
       <Overlay onClick={onClose} />
       <PopupContainer>
         <CloseButton onClick={onClose}>X</CloseButton>
-        <DndContext>
+        <DndContext onDragEnd={handleDragEnd}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Column>
               <h2>Cash</h2>
@@ -102,10 +124,11 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
 const DraggableItem = ({ item, children }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: item.uniqueId,
+    data: { item, source: 'preparate' },
   });
 
   return (
-    <Item ref={setNodeRef} style={{ opacity: isDragging ? 0.5 : 1, transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '' }} {...listeners} {...attributes}>
+    <Item ref={setNodeRef} style={{ opacity: isDragging ? 0.5 : 1, transform: CSS.Transform.toString(transform) }} {...listeners} {...attributes}>
       {children}
     </Item>
   );
@@ -117,12 +140,12 @@ const CashDropZone = ({ setCashItems, cashItems }) => {
   });
 
   return (
-    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white', minHeight: '300px' }}>
+    <Column ref={setNodeRef} isOver={isOver}>
       {cashItems.map((item, index) => (
         <Item key={index}>{item.name} - {item.price} RON</Item>
       ))}
       <p>Total: {calculateTotal(cashItems)} RON</p>
-    </div>
+    </Column>
   );
 };
 
@@ -132,12 +155,12 @@ const CardDropZone = ({ setCardItems, cardItems }) => {
   });
 
   return (
-    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white', minHeight: '300px' }}>
+    <Column ref={setNodeRef} isOver={isOver}>
       {cardItems.map((item, index) => (
         <Item key={index}>{item.name} - {item.price} RON</Item>
       ))}
       <p>Total: {calculateTotal(cardItems)} RON</p>
-    </div>
+    </Column>
   );
 };
 
