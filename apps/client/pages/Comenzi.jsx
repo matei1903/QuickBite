@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
+import CustomPaymentPopup from "./CustomPlata.jsx";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
@@ -96,6 +97,8 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [showCustomPopup, setShowCustomPopup] = useState(false); // Adăugăm un nou state
+    const [customPopupData, setCustomPopupData] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -150,6 +153,8 @@ const Comenzi = () => {
         }
     }, [db, userID, selectedTable]);
 
+
+
     const handleSelectPrep = (uniqueId, id, idComanda) => {
         setSelectedPrep((prevSelectedPrep) => {
             const isSelected = prevSelectedPrep.includes(uniqueId);
@@ -188,6 +193,18 @@ const Comenzi = () => {
 
     const handleClosePopup = () => {
         setShowPopup(false);
+    };
+
+    const handleFinalizeClick = () => {
+        setShowPopup(true);
+    };
+
+    const handleCustomPayment = () => {
+        setCustomPopupData(mesaComenzi);
+        setShowCustomPopup(true);
+    };
+    const handleCloseCustomPopup = () => {
+        setShowCustomPopup(false);
     };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod) => {
@@ -262,6 +279,12 @@ const Comenzi = () => {
                         {renderComenzi(comanda, index, true)}
                     </div>
                 ))}
+                <Button onClick={handleFinalizeClick}>
+                        Plătește
+                </Button>
+                <Button onClick={handleCustomPayment}>
+                        Plată Personalizată
+                </Button>
             </ColoanaS>
             <ColoanaD>
                 <h2>Comenzile mesei</h2>
@@ -273,6 +296,7 @@ const Comenzi = () => {
             </ColoanaD>
             <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
             {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
+            {showCustomPopup && <CustomPaymentPopup comenzi={customPopupData} preparateDetails={preparateDetails} onClose={handleCloseCustomPopup} />}
         </Layout>
     );
 };
