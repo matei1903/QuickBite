@@ -54,21 +54,23 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   const renderComenzi = (comenzi) => {
     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
     return allCategories.flatMap((categorie) => {
-      const items = comenzi[categorie];
-      if (Array.isArray(items) && items.length > 0) {
-        return items.map((id) => {
-          const uniqueId = `${comenzi.id_comanda}-${categorie}-${id}`;
-          const preparat = preparateDetails[id];
-          return preparat ? (
-            <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }}>
-              {preparat.nume} - {preparat.pret} RON
-            </DraggableItem>
-          ) : (
-            <div key={uniqueId}>Loading...</div>
-          );
-        });
-      }
-      return [];
+      return comenzi.flatMap((comanda) => {
+        const items = comanda[categorie];
+        if (Array.isArray(items) && items.length > 0) {
+          return items.map((id) => {
+            const uniqueId = `${comanda.id_comanda}-${categorie}-${id}`;
+            const preparat = preparateDetails[id];
+            return preparat ? (
+              <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }}>
+                {preparat.nume} - {preparat.pret} RON
+              </DraggableItem>
+            ) : (
+              <div key={uniqueId}>Loading...</div>
+            );
+          });
+        }
+        return [];
+      });
     });
   };
 
@@ -103,7 +105,7 @@ const DraggableItem = ({ item, children }) => {
   });
 
   return (
-    <Item ref={setNodeRef} style={{ opacity: isDragging ? 0.5 : 1, transform }} {...listeners} {...attributes}>
+    <Item ref={setNodeRef} style={{ opacity: isDragging ? 0.5 : 1, transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : '' }} {...listeners} {...attributes}>
       {children}
     </Item>
   );
@@ -112,14 +114,10 @@ const DraggableItem = ({ item, children }) => {
 const CashDropZone = ({ setCashItems, cashItems }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: 'cash',
-    data: { type: 'cash' },
-    onDrop: (result) => {
-      setCashItems((items) => [...items, result.data]);
-    },
   });
 
   return (
-    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white' }}>
+    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white', minHeight: '300px' }}>
       {cashItems.map((item, index) => (
         <Item key={index}>{item.name} - {item.price} RON</Item>
       ))}
@@ -131,14 +129,10 @@ const CashDropZone = ({ setCashItems, cashItems }) => {
 const CardDropZone = ({ setCardItems, cardItems }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: 'card',
-    data: { type: 'card' },
-    onDrop: (result) => {
-      setCardItems((items) => [...items, result.data]);
-    },
   });
 
   return (
-    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white' }}>
+    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white', minHeight: '300px' }}>
       {cardItems.map((item, index) => (
         <Item key={index}>{item.name} - {item.price} RON</Item>
       ))}
