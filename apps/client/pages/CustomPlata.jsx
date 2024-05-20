@@ -5,13 +5,13 @@ import {
   closestCenter,
   PointerSensor,
   useSensor,
-  useSensors,
-  useDroppable
+  useSensors
 } from '@dnd-kit/core';
 import {
   SortableContext,
   rectSortingStrategy,
   useSortable,
+  useDroppable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -86,17 +86,28 @@ const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (active.id !== over.id && over) {
+    if (active.id !== over?.id) {
       const from = active.data.current.sortable.containerId;
       const to = over.data.current.sortable.containerId;
       const activeIndex = active.data.current.sortable.index;
       const overIndex = over.data.current.sortable.index;
 
       if (from !== to) {
-        if (from === 'orders' && to === 'card') {
-          setCardItems((items) => [...items, orders[activeIndex]]);
-        } else if (from === 'orders' && to === 'cash') {
-          setCashItems((items) => [...items, orders[activeIndex]]);
+        let activeItem;
+        if (from === 'orders') {
+          activeItem = orders[activeIndex];
+        } else if (from === 'card') {
+          activeItem = cardItems[activeIndex];
+          setCardItems(items => items.filter((_, index) => index !== activeIndex));
+        } else if (from === 'cash') {
+          activeItem = cashItems[activeIndex];
+          setCashItems(items => items.filter((_, index) => index !== activeIndex));
+        }
+
+        if (to === 'card') {
+          setCardItems(items => [...items, activeItem]);
+        } else if (to === 'cash') {
+          setCashItems(items => [...items, activeItem]);
         }
       }
     }

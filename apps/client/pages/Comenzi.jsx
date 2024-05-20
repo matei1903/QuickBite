@@ -227,7 +227,14 @@ const Comenzi = () => {
                                         {preparat.nume} - {preparat.pret} RON
                                     </li>
                                 ) : (
-                                    <li key={uniqueId}>Loading...</li>
+                                    <li key={uniqueId}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPrep.includes(uniqueId)}
+                                            onChange={() => handleSelectPrep(uniqueId, id, comenzi.id_comanda)}
+                                        />
+                                        Preparat necunoscut - ID: {id}
+                                    </li>
                                 );
                             })}
                         </ul>
@@ -235,42 +242,55 @@ const Comenzi = () => {
                 );
             }
             return null;
-        }).concat(
-            <div key={`user-${orderIndex}`}>
-                <p>Comandat de: {comenzi.user}</p>
-            </div>
-        );
+        });
     };
 
     return (
-        <Layout>
-            <ColoanaS>
-                <h2>Comenzile mele</h2>
-                {userComenzi && userComenzi.map((comanda, index) => (
-                    <div key={index}>
-                        {renderComenzi(comanda, index, true)}
-                    </div>
-                ))}
-            </ColoanaS>
-            <ColoanaD>
-                <h2>Comenzile mesei</h2>
-                {mesaComenzi && mesaComenzi.map((comanda, index) => (
-                    <div key={index}>
-                        {renderComenzi(comanda, userComenzi.length + index, false)}
-                    </div>
-                ))}
-            </ColoanaD>
-            <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
-            {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
-            {showCustomPopup && (
-                <CustomPaymentPopup
-                    orders={selectedPrep.map(id => preparateDetails[id.split('-')[2]])}
-                    onClose={() => setShowCustomPopup(false)}
-                    onSubmit={handleCustomPaymentSubmit}
-                />
-            )}
-        </Layout>
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <Layout>
+                <h1>Comenzile mele și ale mesei {selectedTable}</h1>
+                <ColoanaS>
+                    <h2>Comanda mea</h2>
+                    {userComenzi.map((comanda, index) => (
+                        <div key={comanda.id_comanda}>
+                            {renderComenzi(comanda, index, true)}
+                        </div>
+                    ))}
+                </ColoanaS>
+                <ColoanaD>
+                    <h2>Comanda mesei</h2>
+                    {mesaComenzi.map((comanda, index) => (
+                        <div key={comanda.id_comanda}>
+                            {renderComenzi(comanda, index, false)}
+                        </div>
+                    ))}
+                </ColoanaD>
+                <Button
+                    disabled={selectedPrep.length === 0}
+                    onClick={handlePlata}
+                >
+                    Plata
+                </Button>
+                {showPopup && (
+                    <PaymentPopup
+                        onClose={handleClosePopup}
+                        onSubmit={handlePaymentSubmit}
+                    />
+                )}
+                {showCustomPopup && (
+                    <CustomPaymentPopup
+                        orders={selectedPrep.map((uniqueId) => {
+                            const [idComanda, category, id] = uniqueId.split("-");
+                            return { id, nume: preparateDetails[id]?.nume || "Necunoscut", pret: preparateDetails[id]?.pret || 0 };
+                        })}
+                        onClose={() => setShowCustomPopup(false)}
+                        onSubmit={handleCustomPaymentSubmit}
+                    />
+                )}
+            </Layout>
+        </React.Suspense>
     );
 };
 
 export default Comenzi;
+
