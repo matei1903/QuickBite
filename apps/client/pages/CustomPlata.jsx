@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { DndContext, useDrag, useDrop } from '@dnd-kit/core';
+import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -49,32 +49,43 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   const [cashItems, setCashItems] = useState([]);
   const [cardItems, setCardItems] = useState([]);
 
-  const onDragEnd = (result, targetItemsSetter) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const newItems = Array.from(targetItemsSetter);
-    const [reorderedItem] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, reorderedItem);
-
-    targetItemsSetter(newItems);
+  const renderComenzi = (comenzi) => {
+    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+    return allCategories.flatMap((categorie) => {
+      const items = comenzi[categorie];
+      if (Array.isArray(items) && items.length > 0) {
+        return items.map((id) => {
+          const uniqueId = `${comenzi.id_comanda}-${categorie}-${id}`;
+          const preparat = preparateDetails[id];
+          return preparat ? (
+            <DraggableItem key={uniqueId} item={{ uniqueId, name: preparat.nume, price: preparat.pret }}>
+              {preparat.nume} - {preparat.pret} RON
+            </DraggableItem>
+          ) : (
+            <div key={uniqueId}>Loading...</div>
+          );
+        });
+      }
+      return [];
+    });
   };
+
+  const calculateTotal = (items) => items.reduce((total, item) => total += item.price, 0);
 
   return (
     <>
       <Overlay onClick={onClose} />
       <PopupContainer>
         <CloseButton onClick={onClose}>X</CloseButton>
-        <DndContext backend={HTML5Backend}>
+        <DndContext>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Column>
               <h2>Cash</h2>
-              <DroppableColumn items={cashItems} setItems={setCashItems} />
+              <CashDropZone setCashItems={setCashItems} cashItems={cashItems} />
             </Column>
             <Column>
               <h2>Card</h2>
-              <DroppableColumn items={cardItems} setItems={setCardItems} />
+              <CardDropZone setCardItems={setCardItems} cardItems={cardItems} />
             </Column>
           </div>
         </DndContext>
@@ -83,42 +94,54 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
   );
 };
 
-const DroppableColumn = ({ items, setItems }) => {
-  const onDragEnd = (result) => {
-    onDragEnd(result, setItems);
-  };
-
-  return (
-    <Droppable droppableId="droppable">
-      {(provided) => (
-        <div
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-        >
-          {items.map((item, index) => (
-            <DraggableItem key={item.id} item={item} index={index}>
-              {item.name} - {item.price} RON
-            </DraggableItem>
-          ))}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
-  );
-};
-
-const DraggableItem = ({ item, index, children }) => {
-  const [{ isDragging }, drag] = useDrag({
-    type: 'item',
-    item: { ...item, index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    })
+const DraggableItem = ({ item, children }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: item.uniqueId,
   });
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <Item ref={setNodeRef} style={{ opacity: isDragging ? 0.5 : 1, transform }} {...listeners} {...attributes}>
       {children}
+    </Item>
+  );
+};
+
+const CashDropZone = ({ setCashItems, cashItems }) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'cash',
+    data: { type: 'cash' },
+    // Update cash items when an item is dropped onto this drop zone
+    onDrop: (result) => {
+      setCashItems((items) => [...items, result.data]);
+    },
+  });
+
+  return (
+    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white' }}>
+      {cashItems.map((item, index) => (
+        <Item key={index}>{item.name} - {item.price} RON</Item>
+      ))}
+      <p>Total: {calculateTotal(cashItems)} RON</p>
+    </div>
+  );
+};
+
+const CardDropZone = ({ setCardItems, cardItems }) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'card',
+    data: { type: 'card' },
+    // Update card items when an item is dropped onto this drop zone
+    onDrop: (result) => {
+      setCardItems((items) => [...items, result.data]);
+    },
+  });
+
+  return (
+    <div ref={setNodeRef} style={{ backgroundColor: isOver ? '#f0f8ff' : 'white' }}>
+      {cardItems.map((item, index) => (
+        <Item key={index}>{item.name} - {item.price} RON</Item>
+      ))}
+      <p>Total: {calculateTotal(cardItems)} RON</p>
     </div>
   );
 };
