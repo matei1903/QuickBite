@@ -88,6 +88,9 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
               <CardDropZone setCardItems={setCardItems} cardItems={cardItems} />
             </Column>
           </div>
+          <div>
+            {renderComenzi(comenzi)}
+          </div>
         </DndContext>
       </PopupContainer>
     </>
