@@ -5,7 +5,8 @@ import {
   closestCenter,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
+  useDroppable
 } from '@dnd-kit/core';
 import {
   SortableContext,
