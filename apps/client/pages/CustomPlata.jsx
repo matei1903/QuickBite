@@ -47,9 +47,18 @@ const Item = styled.div`
   cursor: pointer;
 `;
 
+const FinalizeButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+`;
+
 const calculateTotal = (items) => items.reduce((total, item) => total += item.price, 0);
 
-const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
+const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose, onFinalize }) => {
   const [cashItems, setCashItems] = useState([]);
   const [cardItems, setCardItems] = useState([]);
 
@@ -63,14 +72,17 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
 
     if (active.data.current.source === over.id) return;
 
-    setCashItems(cashItems.filter(item => item.uniqueId !== activeItem.uniqueId));
-    setCardItems(cardItems.filter(item => item.uniqueId !== activeItem.uniqueId));
-
     if (over.id === 'cash') {
       setCashItems([...cashItems, activeItem]);
+      setCardItems(cardItems.filter(item => item.uniqueId !== activeItem.uniqueId));
     } else {
       setCardItems([...cardItems, activeItem]);
+      setCashItems(cashItems.filter(item => item.uniqueId !== activeItem.uniqueId));
     }
+  };
+
+  const handleFinalizeClick = () => {
+    onFinalize({ cashItems, cardItems });
   };
 
   const renderComenzi = (comenzi) => {
@@ -115,6 +127,7 @@ const CustomPaymentPopup = ({ comenzi, preparateDetails, onClose }) => {
           <div>
             {renderComenzi(comenzi)}
           </div>
+          <FinalizeButton onClick={handleFinalizeClick}>Finalize Order</FinalizeButton>
         </DndContext>
       </PopupContainer>
     </>
