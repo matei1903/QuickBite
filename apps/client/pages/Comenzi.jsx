@@ -189,6 +189,7 @@ const Comenzi = () => {
             ));
         }
         if (paymentMethod === "custom") {
+            alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
             navigate('/comenzi');
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
