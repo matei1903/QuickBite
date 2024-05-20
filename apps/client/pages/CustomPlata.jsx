@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   DndContext,
-  useDraggable,
-  useDroppable,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   rectSortingStrategy,
   useSortable,
 } from '@dnd-kit/sortable';
@@ -44,6 +40,7 @@ const Item = styled.div`
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
+  cursor: grab;
 `;
 
 const DraggableItem = ({ id, children }) => {
@@ -61,10 +58,8 @@ const DraggableItem = ({ id, children }) => {
   );
 };
 
-const DroppableZone = ({ id, items, setItems }) => {
-  const { setNodeRef } = useDroppable({
-    id,
-  });
+const DroppableZone = ({ id, items }) => {
+  const { setNodeRef } = useDroppable({ id });
 
   return (
     <DropZone ref={setNodeRef}>
@@ -90,12 +85,19 @@ const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      setCardItems((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
+    if (active.id !== over.id && over) {
+      const from = active.data.current.sortable.containerId;
+      const to = over.data.current.sortable.containerId;
+      const activeIndex = active.data.current.sortable.index;
+      const overIndex = over.data.current.sortable.index;
+
+      if (from !== to) {
+        if (from === 'orders' && to === 'card') {
+          setCardItems((items) => [...items, orders[activeIndex]]);
+        } else if (from === 'orders' && to === 'cash') {
+          setCashItems((items) => [...items, orders[activeIndex]]);
+        }
+      }
     }
   };
 
@@ -108,20 +110,29 @@ const CustomPaymentPopup = ({ orders, onClose, onSubmit }) => {
     <PopupContainer>
       <h3>Distribuie plățile</h3>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={orders} strategy={rectSortingStrategy}>
-          <DroppableZone id="orders" items={orders} setItems={setCardItems} />
-        </SortableContext>
-        <SortableContext items={cardItems} strategy={rectSortingStrategy}>
-          <h4>Plată cu cardul</h4>
-          <DroppableZone id="card" items={cardItems} setItems={setCardItems} />
-        </SortableContext>
-        <SortableContext items={cashItems} strategy={rectSortingStrategy}>
-          <h4>Plată cu cash</h4>
-          <DroppableZone id="cash" items={cashItems} setItems={setCashItems} />
-        </SortableContext>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div>
+            <h4>Comenzi</h4>
+            <SortableContext id="orders" items={orders} strategy={rectSortingStrategy}>
+              <DroppableZone id="orders" items={orders} />
+            </SortableContext>
+          </div>
+          <div>
+            <h4>Card</h4>
+            <SortableContext id="card" items={cardItems} strategy={rectSortingStrategy}>
+              <DroppableZone id="card" items={cardItems} />
+            </SortableContext>
+          </div>
+          <div>
+            <h4>Cash</h4>
+            <SortableContext id="cash" items={cashItems} strategy={rectSortingStrategy}>
+              <DroppableZone id="cash" items={cashItems} />
+            </SortableContext>
+          </div>
+        </div>
+        <button onClick={handleSubmit}>Trimite</button>
+        <button onClick={onClose}>Închide</button>
       </DndContext>
-      <button onClick={handleSubmit}>Trimite</button>
-      <button onClick={onClose}>Închide</button>
     </PopupContainer>
   );
 };
