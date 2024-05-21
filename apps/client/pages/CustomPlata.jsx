@@ -8,6 +8,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [userComenzi, setUserComenzi] = useState([]);
     const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchComenzi = async () => {
