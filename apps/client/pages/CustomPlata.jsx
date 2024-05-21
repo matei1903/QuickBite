@@ -24,7 +24,7 @@ const PopupContent = styled.div`
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 300px;
   max-width: 100%;
   height: 100px;
   overflow: auto;
@@ -36,7 +36,8 @@ const DropArea = styled.div`
   padding: 20px;
   margin-top: 20px;
   text-align: center;
-  background: white;
+  background: black;
+  color: white;
   width: 40%;
   height: 200px;
   overflow: auto;
@@ -137,12 +138,22 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     return (
         <PopupContainer>
             <div>
-                <h2>Comenzile mele</h2>
                 {userComenzi.length > 0 ? (
                     renderComenzi(userComenzi)
                 ) : (
                     <p>Nu există comenzi de afișat.</p>
                 )}
+                <DropArea onDrop={handleOnDrop} onDragOver={handleDragOver}>
+                    {widgets.length === 0 ? (
+                        <p>Trageți și plasați widgeturi aici</p>
+                    ) : (
+                        widgets.map((widget, index) => (
+                            <div className="dropped-widget" key={index}>
+                                {widget}
+                            </div>
+                        ))
+                    )}
+                </DropArea>
                 <DropArea onDrop={handleOnDrop} onDragOver={handleDragOver}>
                     {widgets.length === 0 ? (
                         <p>Trageți și plasați widgeturi aici</p>
