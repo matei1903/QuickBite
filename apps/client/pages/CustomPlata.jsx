@@ -8,8 +8,8 @@ const PopupContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%%;
-  height: 100%px;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
-  overflow: auto;
+  
 `;
 
 const PopupContent = styled.div`
@@ -27,6 +27,7 @@ const PopupContent = styled.div`
   width: 400px;
   max-width: 100%;
   height: 100px;
+  overflow: auto;
 `;
 
 const DropArea = styled.div`
