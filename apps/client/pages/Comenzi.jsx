@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
+import CustomPlata from ".CustomPlata";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
@@ -89,6 +90,7 @@ const Comenzi = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [mesaComenzi, setMesaComenzi] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [showCustomPopup, setCustomShowPopup] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -171,6 +173,9 @@ const Comenzi = () => {
     const handleClosePopup = () => {
         setShowPopup(false);
     };
+    const handleCloseCustomPopup = () => {
+        setCustomShowPopup(false);
+    };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod) => {
         if (selectedOption === "comandaMea") {
@@ -189,7 +194,8 @@ const Comenzi = () => {
             ));
         }
         if (paymentMethod === "custom") {
-            navigate('/comenzi');
+            setCustomShowPopup(true);
+            // navigate('/comenzi');
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
@@ -251,6 +257,7 @@ const Comenzi = () => {
             </ColoanaD>
             <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
             {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
+            {showCustomPopup && <CustomPlata onClose={handleCloseCustomPopup} onSubmit={handlePaymentSubmit} />}
         </Layout>
     );
 };
