@@ -8,8 +8,8 @@ const PopupContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 200px;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -26,7 +26,6 @@ const PopupContent = styled.div`
   border-radius: 10px;
   width: 400px;
   max-width: 100%;
-  overflow: auto;
   height: 200px;
 `;
 
