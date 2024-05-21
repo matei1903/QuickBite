@@ -32,6 +32,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
     const navigate = useNavigate();
+    const [widgets, setWidgets] = useState([]);
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -67,6 +68,23 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         fetchComenzi();
     }, [db, userID]);
 
+    const handleOnDrag = (e, widgetType) => {
+        e.dataTransfer.setData("widgetType", widgetType);
+    };
+
+    const handleOnDrop = (e) => {
+        e.preventDefault();
+        const widgetType = e.dataTransfer.getData("WidgetType");
+        console.log("WidgetType", widgetType);
+        setWidgets((prevWidgets) => [...prevWidgets, widgetType]);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+
+
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, index) => (
@@ -82,14 +100,23 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
                                         return preparat ? (
-                                            <li key={itemIndex}>
+                                            <li key={itemIndex} draggable>
+                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e,"`${preparat.nume}`")}>
                                                 {preparat.nume} - {preparat.pret} RON
+                                                </div>
                                             </li>
                                         ) : (
                                             <li key={itemIndex}>Loading...</li>
                                         );
                                     })}
                                 </ul>
+                                <div className="page" onDrop={handleOnDrop} onDragOver={handleDragOver}>
+                                    {widgets.map((widget, index) =>  (
+                                        <div className="dropped-widget" key ={index}>
+                                            {widget}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         );
                     }
