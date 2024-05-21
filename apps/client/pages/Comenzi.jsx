@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
+
 const ColoanaS = styled.div`
     float: left;
     width: 45%;
@@ -34,6 +35,7 @@ const ColoanaS = styled.div`
       }
     }
 `;
+
 const ColoanaD = styled.div`
     float: right;
     width: 45%;
@@ -61,6 +63,7 @@ const ColoanaD = styled.div`
       }
     }
 `;
+
 const Button = styled.button`
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -81,6 +84,7 @@ const Button = styled.button`
         color: #323232;
 }
 `;
+
 const Comenzi = () => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState([]);
@@ -99,6 +103,7 @@ const Comenzi = () => {
             setSelectedTable(parseInt(tableFromStorage));
         }
     }, []);
+
     useEffect(() => {
         const fetchComenzi = async () => {
             try {
@@ -167,29 +172,83 @@ const Comenzi = () => {
             return newSelectedPrep;
         });
     };
+
     const handlePlata = () => {
         setShowPopup(true);
     };
+
     const handleClosePopup = () => {
         setShowPopup(false);
     };
+
     const handleCloseCustomPopup = () => {
         setCustomShowPopup(false);
     };
 
+    const handlePaymentUpdate = async (selectedComenzi) => {
+        try {
+            const updatedUserComenzi = [...userComenzi];
+            const updatedMesaComenzi = [...mesaComenzi];
+
+            const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+            let totalAmount = 0;
+
+            for (const uniqueId of selectedComenzi) {
+                const [idComanda, category, id] = uniqueId.split("-");
+                const preparat = preparateDetails[id];
+                if (preparat) {
+                    totalAmount += preparat.pret;
+                }
+
+                const comandaIndex = updatedUserComenzi.findIndex(comanda => comanda.id_comanda === idComanda);
+                if (comandaIndex !== -1) {
+                    const categoryArray = updatedUserComenzi[comandaIndex][category];
+                    if (Array.isArray(categoryArray)) {
+                        updatedUserComenzi[comandaIndex][category] = categoryArray.filter(prepId => prepId !== id);
+                        await updateDoc(doc(db, "users", userID), {
+                            [`comenzi.${comandaIndex}.${category}`]: arrayRemove(id),
+                        });
+                    }
+                } else {
+                    const mesaComandaIndex = updatedMesaComenzi.findIndex(comanda => comanda.id_comanda === idComanda);
+                    if (mesaComandaIndex !== -1) {
+                        const categoryArray = updatedMesaComenzi[mesaComandaIndex][category];
+                        if (Array.isArray(categoryArray)) {
+                            updatedMesaComenzi[mesaComandaIndex][category] = categoryArray.filter(prepId => prepId !== id);
+                            await updateDoc(doc(db, "comenzi", `masa${selectedTable}`), {
+                                [`comenzi.${mesaComandaIndex}.${category}`]: arrayRemove(id),
+                            });
+                        }
+                    }
+                }
+            }
+
+            await updateDoc(doc(db, "users", userID), {
+                plata: totalAmount,
+            });
+
+            setUserComenzi(updatedUserComenzi);
+            setMesaComenzi(updatedMesaComenzi);
+        } catch (error) {
+            console.error("Eroare la actualizarea comenzilor:", error);
+        }
+    };
+
     const handlePaymentSubmit = (selectedOption, paymentMethod, updatedComenzi) => {
         if (selectedOption === "comandaMea") {
-            setSelectedPrep(userComenzi.flatMap(comanda =>
+            const selectedComenzi = userComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
                 )
-            ));
+            );
+            handlePaymentUpdate(selectedComenzi);
         } else if (selectedOption === "comandaMesei") {
-            setSelectedPrep(mesaComenzi.flatMap(comanda =>
+            const selectedComenzi = mesaComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
                 )
-            ));
+            );
+            handlePaymentUpdate(selectedComenzi);
         }
         if (paymentMethod === "custom") {
             setCustomShowPopup(true);
@@ -197,11 +256,12 @@ const Comenzi = () => {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
         setShowPopup(false);
-    
+
         if (updatedComenzi) {
             setUserComenzi(updatedComenzi);
         }
     };
+
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return allCategories.map((categorie) => {
@@ -238,6 +298,7 @@ const Comenzi = () => {
             </div>
         );
     };
+
     return (
         <Layout>
             <ColoanaS>
@@ -262,4 +323,5 @@ const Comenzi = () => {
         </Layout>
     );
 };
+
 export default Comenzi;
