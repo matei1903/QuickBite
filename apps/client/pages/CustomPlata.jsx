@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
-import styled from "styled-components";
 
 const CustomPlata = ({ onClose, onSubmit }) => {
     const { db } = useFirebase();
     const [userComenzi, setUserComenzi] = useState([]);
     const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchComenzi = async () => {
