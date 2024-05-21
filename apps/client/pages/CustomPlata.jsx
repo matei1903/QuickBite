@@ -32,14 +32,18 @@ const PopupContent = styled.div`
 const DropArea = styled.div`
   border: 2px dashed #ccc;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   margin-top: 20px;
   text-align: center;
   background: black;
   color: white;
-  width: 40%;
+  width: 35%;
   height: 200px;
   overflow: auto;
+`;
+
+const StrikethroughItem = styled.div`
+  text-decoration: line-through;
 `;
 
 const CustomPlata = ({ onClose, onSubmit }) => {
@@ -50,7 +54,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const navigate = useNavigate();
     const [cardWidgets, setCardWidgets] = useState([]);
     const [cashWidgets, setCashWidgets] = useState([]);
-    const [availableItems, setAvailableItems] = useState([]);
+    const [movedItems, setMovedItems] = useState(new Set());
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -67,7 +71,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                             (Array.isArray(comanda[category]) ? comanda[category] : []).map(async id => {
                                 const preparatDocRef = doc(db, category, id);
                                 const preparatDocSnapshot = await getDoc(preparatDocRef);
-                                return { id, ...preparatDocSnapshot.data() };
+                                return { id: id + '-' + Math.random(), ...preparatDocSnapshot.data() }; // Generate unique id
                             })
                         )
                     );
@@ -77,7 +81,6 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                         return acc;
                     }, {});
                     setPreparateDetails(preparateMap);
-                    setAvailableItems(preparate); // Set the initial available items
                 }
             } catch (error) {
                 console.error("Eroare la încărcarea comenzilor:", error);
@@ -94,7 +97,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const handleOnDrop = (e, paymentType) => {
         e.preventDefault();
         const itemId = e.dataTransfer.getData("itemId");
-        const item = availableItems.find((item) => item.id === itemId);
+        const item = preparateDetails[itemId];
 
         if (item) {
             if (paymentType === "card") {
@@ -103,8 +106,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 setCashWidgets((prevWidgets) => [...prevWidgets, item]);
             }
 
-            // Remove the item from the available items list
-            setAvailableItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+            setMovedItems((prevItems) => new Set(prevItems).add(itemId));
         }
     };
 
@@ -126,14 +128,15 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                 <ul>
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
+                                        const isMoved = movedItems.has(id);
                                         return preparat ? (
-                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, id)}>
-                                                <div className="widget">
-                                                    {preparat.nume} - {preparat.pret} RON
+                                            <li key={id} draggable onDragStart={(e) => handleOnDrag(e, id)}>
+                                                <div className={isMoved ? 'widget strikethrough' : 'widget'}>
+                                                    {isMoved ? <StrikethroughItem>{preparat.nume} - {preparat.pret} RON</StrikethroughItem> : `${preparat.nume} - ${preparat.pret} RON`}
                                                 </div>
                                             </li>
                                         ) : (
-                                            <li key={itemIndex}>Loading...</li>
+                                            <li key={id}>Loading...</li>
                                         );
                                     })}
                                 </ul>
