@@ -17,6 +17,27 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
+
+  button {
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    padding: 5px;
+    text-align: center;
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    border-radius: 20px;
+    background-color: #53624d;
+    color: #ecebed;
+    font-size: 18px;
+    border: none;
+    outline: 2px solid black;
+    &:disabled {
+        background-color: #869182;
+        color: #323232;
+    }
+  }
 `;
 
 const PopupContent = styled.div`
@@ -47,6 +68,14 @@ const DropArea = styled.div`
   max-width: 100%;
   height: 200px;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TotalAmount = styled.div`
+  margin-top: auto;
+  padding: 10px 0;
+  color: white;
 `;
 
 const StrikethroughItem = styled.div`
@@ -197,6 +226,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                 </div>
                             ))
                         )}
+                        <TotalAmount>Card: {totalCard} RON</TotalAmount>
                     </DropArea>
                     <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
                         {cashWidgets.length === 0 ? (
@@ -208,14 +238,10 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                 </div>
                             ))
                         )}
+                        <TotalAmount>Cash: {totalCash} RON</TotalAmount>
                     </DropArea>
                 </DropAreaContainer>
-                <div>
-                    <h3>Total de plată:</h3>
-                    <p>Card: {totalCard} RON</p>
-                    <p>Cash: {totalCash} RON</p>
-                </div>
-                <button onClick={handleButtonClick} disabled={!isButtonEnabled}>Înapoi</button>
+                <button onClick={handleButtonClick} disabled={!isButtonEnabled}>Plateste</button>
             </div>
         </PopupContainer>
     );
