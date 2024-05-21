@@ -165,10 +165,36 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         e.preventDefault();
     };
 
-    const handleButtonClick = () => {
-        alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
-        onClose();
+    const handleButtonClick = async () => {
+        try {
+            const userDocRef = doc(db, "users", userID);
+            const userDocSnapshot = await getDoc(userDocRef);
+            if (userDocSnapshot.exists()) {
+                const userData = userDocSnapshot.data();
+                const updatedComenzi = userData.comenzi.filter(comanda => {
+                    return !Object.keys(comanda).some(category => 
+                        (Array.isArray(comanda[category]) ? comanda[category] : []).some(id => 
+                            movedItems.has(`${comanda.id_comanda}-${category}-${id}`)
+                        )
+                    );
+                });
+    
+                const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
+    
+                await updateDoc(userDocRef, {
+                    comenzi: updatedComenzi,
+                    plata: newTotalPlata
+                });
+    
+                onSubmit(updatedComenzi);
+                alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+                onClose();
+            }
+        } catch (error) {
+            console.error("Eroare la actualizarea datelor:", error);
+        }
     };
+    
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];

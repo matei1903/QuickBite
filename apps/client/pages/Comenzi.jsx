@@ -177,16 +177,14 @@ const Comenzi = () => {
         setCustomShowPopup(false);
     };
 
-    const handlePaymentSubmit = (selectedOption, paymentMethod) => {
+    const handlePaymentSubmit = (selectedOption, paymentMethod, updatedComenzi) => {
         if (selectedOption === "comandaMea") {
-            // Selectează toate preparatele din coloanaS
             setSelectedPrep(userComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
                 )
             ));
         } else if (selectedOption === "comandaMesei") {
-            // Selectează toate preparatele din coloanaD
             setSelectedPrep(mesaComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
@@ -195,11 +193,14 @@ const Comenzi = () => {
         }
         if (paymentMethod === "custom") {
             setCustomShowPopup(true);
-            // navigate('/comenzi');
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
         setShowPopup(false);
+    
+        if (updatedComenzi) {
+            setUserComenzi(updatedComenzi);
+        }
     };
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
