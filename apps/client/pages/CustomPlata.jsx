@@ -95,6 +95,40 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [totalCard, setTotalCard] = useState(0);
     const [totalCash, setTotalCash] = useState(0);
 
+    const handleDeletePaidPrep = async (updatedComenzi) => {
+        try {
+            const userDocRef = doc(db, "users", userID);
+            const userDocSnapshot = await getDoc(userDocRef);
+            if (userDocSnapshot.exists()) {
+                const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+
+                // Actualizare comenzi - ștergerea preparatelor plătite
+                const updatedComenzi = userDocSnapshot.data().comenzi.map(comanda => {
+                    allCategories.forEach(category => {
+                        if (Array.isArray(comanda[category])) {
+                            comanda[category] = comanda[category].filter(id => !movedItems.has(`${comanda.id_comanda}-${category}-${id}`));
+                        }
+                    });
+                    return comanda;
+                }).filter(comanda => {
+                    // Filtrare comenzi goale
+                    return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
+                });
+
+                const newTotalPlata = (userDocSnapshot.data().plata || 0) - (totalCard + totalCash);
+
+                await updateDoc(userDocRef, {
+                    comenzi: updatedComenzi,
+                    plata: newTotalPlata
+                });
+
+                setUserComenzi(updatedComenzi);
+            }
+        } catch (error) {
+            console.error("Eroare la ștergerea preparatelor plătite:", error);
+        }
+    };
+
     useEffect(() => {
         const fetchComenzi = async () => {
             try {
@@ -184,12 +218,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
                 });
 
-                const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
+                
 
-                await updateDoc(userDocRef, {
-                    comenzi: updatedComenzi,
-                    plata: newTotalPlata
-                });
+                await handleDeletePaidPrep(updatedComenzi);
 
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
