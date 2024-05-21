@@ -17,14 +17,13 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
-  
 `;
 
 const PopupContent = styled.div`
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 300px;
+  width: 350px;
   max-width: 100%;
   height: 100px;
   overflow: auto;
@@ -49,7 +48,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [preparateDetails, setPreparateDetails] = useState({});
     const userID = localStorage.getItem('userID');
     const navigate = useNavigate();
-    const [widgets, setWidgets] = useState([]);
+    const [cardWidgets, setCardWidgets] = useState([]);
+    const [cashWidgets, setCashWidgets] = useState([]);
+    const [availableItems, setAvailableItems] = useState([]);
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -76,6 +77,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                         return acc;
                     }, {});
                     setPreparateDetails(preparateMap);
+                    setAvailableItems(preparate); // Set the initial available items
                 }
             } catch (error) {
                 console.error("Eroare la încărcarea comenzilor:", error);
@@ -85,15 +87,25 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         fetchComenzi();
     }, [db, userID]);
 
-    const handleOnDrag = (e, widgetType) => {
-        e.dataTransfer.setData("widgetType", widgetType);
+    const handleOnDrag = (e, itemId) => {
+        e.dataTransfer.setData("itemId", itemId);
     };
 
-    const handleOnDrop = (e) => {
+    const handleOnDrop = (e, paymentType) => {
         e.preventDefault();
-        const widgetType = e.dataTransfer.getData("widgetType");
-        console.log("WidgetType", widgetType);
-        setWidgets((prevWidgets) => [...prevWidgets, widgetType]);
+        const itemId = e.dataTransfer.getData("itemId");
+        const item = availableItems.find((item) => item.id === itemId);
+
+        if (item) {
+            if (paymentType === "card") {
+                setCardWidgets((prevWidgets) => [...prevWidgets, item]);
+            } else if (paymentType === "cash") {
+                setCashWidgets((prevWidgets) => [...prevWidgets, item]);
+            }
+
+            // Remove the item from the available items list
+            setAvailableItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+        }
     };
 
     const handleDragOver = (e) => {
@@ -115,8 +127,8 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
                                         return preparat ? (
-                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, preparat.nume)}>
-                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e, preparat.nume)}>
+                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, id)}>
+                                                <div className="widget">
                                                     {preparat.nume} - {preparat.pret} RON
                                                 </div>
                                             </li>
@@ -143,24 +155,24 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 ) : (
                     <p>Nu există comenzi de afișat.</p>
                 )}
-                <DropArea onDrop={handleOnDrop} onDragOver={handleDragOver}>
-                    {widgets.length === 0 ? (
-                        <p>Trageți și plasați widgeturi aici</p>
+                <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
+                    {cardWidgets.length === 0 ? (
+                        <p>Plata cu cardul: Trageți și plasați widgeturi aici</p>
                     ) : (
-                        widgets.map((widget, index) => (
+                        cardWidgets.map((widget, index) => (
                             <div className="dropped-widget" key={index}>
-                                {widget}
+                                {widget.nume} - {widget.pret} RON
                             </div>
                         ))
                     )}
                 </DropArea>
-                <DropArea onDrop={handleOnDrop} onDragOver={handleDragOver}>
-                    {widgets.length === 0 ? (
-                        <p>Trageți și plasați widgeturi aici</p>
+                <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
+                    {cashWidgets.length === 0 ? (
+                        <p>Plata cash: Trageți și plasați widgeturi aici</p>
                     ) : (
-                        widgets.map((widget, index) => (
+                        cashWidgets.map((widget, index) => (
                             <div className="dropped-widget" key={index}>
-                                {widget}
+                                {widget.nume} - {widget.pret} RON
                             </div>
                         ))
                     )}
