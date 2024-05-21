@@ -43,7 +43,7 @@ const DropArea = styled.div`
   text-align: center;
   background: black;
   color: white;
-  width: 48%; /* Adjusted width for flex layout */
+  width: 50%; /* Adjusted width for flex layout */
   height: 200px;
   overflow: auto;
 `;
