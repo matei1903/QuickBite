@@ -100,7 +100,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
                                         return preparat ? (
-                                            <li key={itemIndex} draggable>
+                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e,"`${preparat.nume}`")}>
                                                 <div className="widget" draggable onDragStart={(e) => handleOnDrag(e,"`${preparat.nume}`")}>
                                                 {preparat.nume} - {preparat.pret} RON
                                                 </div>
