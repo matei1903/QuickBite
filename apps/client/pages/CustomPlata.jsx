@@ -17,6 +17,7 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
+  overflow: auto;
 `;
 
 const PopupContent = styled.div`
@@ -25,6 +26,8 @@ const PopupContent = styled.div`
   border-radius: 10px;
   width: 400px;
   max-width: 100%;
+  overflow: auto;
+  height: 200px;
 `;
 
 const DropArea = styled.div`
@@ -33,6 +36,10 @@ const DropArea = styled.div`
   padding: 20px;
   margin-top: 20px;
   text-align: center;
+  background: white;
+  width: 40%;
+  height: 200px;
+  overflow: auto;
 `;
 
 const CustomPlata = ({ onClose, onSubmit }) => {
