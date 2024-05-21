@@ -100,9 +100,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
                                         return preparat ? (
-                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e,"`${preparat.nume}`")}>
-                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e,"`${preparat.nume}`")}>
-                                                {preparat.nume} - {preparat.pret} RON
+                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, "`${preparat.nume}`")}>
+                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e, "`${preparat.nume}`")}>
+                                                    {preparat.nume} - {preparat.pret} RON
                                                 </div>
                                             </li>
                                         ) : (
@@ -110,20 +110,22 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                         );
                                     })}
                                 </ul>
-                                <div className="page" onDrop={handleOnDrop} onDragOver={handleDragOver}>
-                                    {widgets.map((widget, index) =>  (
-                                        <div className="dropped-widget" key ={index}>
-                                            {widget}
-                                        </div>
-                                    ))}
-                                </div>
+
                             </div>
                         );
                     }
                     return null;
                 })}
                 <p>Comandat de: {comanda.user}</p>
+                <div className="page" onDrop={handleOnDrop} onDragOver={handleDragOver}>
+                    {widgets.map((widget, index) => (
+                        <div className="dropped-widget" key={index}>
+                            {widget}
+                        </div>
+                    ))}
+                </div>
             </PopupContent>
+
         ));
     };
 
