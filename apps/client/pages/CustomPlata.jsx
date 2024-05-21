@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
