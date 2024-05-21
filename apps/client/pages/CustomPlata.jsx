@@ -37,9 +37,16 @@ const DropArea = styled.div`
   text-align: center;
   background: black;
   color: white;
-  width: 35%;
+  width: 45%; /* Adjusted width for flex layout */
   height: 200px;
   overflow: auto;
+`;
+
+const DropAreaContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
 `;
 
 const StrikethroughItem = styled.div`
@@ -68,10 +75,10 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                     const preparatePromises = comenzi.flatMap(comanda =>
                         allCategories.flatMap(category =>
-                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async id => {
+                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async (id, index) => {
                                 const preparatDocRef = doc(db, category, id);
                                 const preparatDocSnapshot = await getDoc(preparatDocRef);
-                                return { id: id + '-' + Math.random(), ...preparatDocSnapshot.data() }; // Generate unique id
+                                return { id: `${id}-${index}`, ...preparatDocSnapshot.data() }; // Generate unique id
                             })
                         )
                     );
@@ -127,16 +134,17 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                 <h4>{categorie}</h4>
                                 <ul>
                                     {items.map((id, itemIndex) => {
-                                        const preparat = preparateDetails[id];
-                                        const isMoved = movedItems.has(id);
+                                        const uniqueId = `${id}-${itemIndex}`;
+                                        const preparat = preparateDetails[uniqueId];
+                                        const isMoved = movedItems.has(uniqueId);
                                         return preparat ? (
-                                            <li key={id} draggable onDragStart={(e) => handleOnDrag(e, id)}>
+                                            <li key={uniqueId} draggable onDragStart={(e) => handleOnDrag(e, uniqueId)}>
                                                 <div className={isMoved ? 'widget strikethrough' : 'widget'}>
                                                     {isMoved ? <StrikethroughItem>{preparat.nume} - {preparat.pret} RON</StrikethroughItem> : `${preparat.nume} - ${preparat.pret} RON`}
                                                 </div>
                                             </li>
                                         ) : (
-                                            <li key={id}>Loading...</li>
+                                            <li key={uniqueId}>Loading...</li>
                                         );
                                     })}
                                 </ul>
@@ -158,28 +166,30 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 ) : (
                     <p>Nu există comenzi de afișat.</p>
                 )}
-                <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
-                    {cardWidgets.length === 0 ? (
-                        <p>Plata cu cardul: Trageți și plasați widgeturi aici</p>
-                    ) : (
-                        cardWidgets.map((widget, index) => (
-                            <div className="dropped-widget" key={index}>
-                                {widget.nume} - {widget.pret} RON
-                            </div>
-                        ))
-                    )}
-                </DropArea>
-                <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
-                    {cashWidgets.length === 0 ? (
-                        <p>Plata cash: Trageți și plasați widgeturi aici</p>
-                    ) : (
-                        cashWidgets.map((widget, index) => (
-                            <div className="dropped-widget" key={index}>
-                                {widget.nume} - {widget.pret} RON
-                            </div>
-                        ))
-                    )}
-                </DropArea>
+                <DropAreaContainer>
+                    <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
+                        {cardWidgets.length === 0 ? (
+                            <p>Plata cu cardul: Trageți și plasați widgeturi aici</p>
+                        ) : (
+                            cardWidgets.map((widget, index) => (
+                                <div className="dropped-widget" key={index}>
+                                    {widget.nume} - {widget.pret} RON
+                                </div>
+                            ))
+                        )}
+                    </DropArea>
+                    <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
+                        {cashWidgets.length === 0 ? (
+                            <p>Plata cash: Trageți și plasați widgeturi aici</p>
+                        ) : (
+                            cashWidgets.map((widget, index) => (
+                                <div className="dropped-widget" key={index}>
+                                    {widget.nume} - {widget.pret} RON
+                                </div>
+                            ))
+                        )}
+                    </DropArea>
+                </DropAreaContainer>
                 <button onClick={onClose}>Înapoi</button>
             </div>
         </PopupContainer>
