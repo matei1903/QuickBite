@@ -29,24 +29,23 @@ const PopupContent = styled.div`
   overflow: auto;
 `;
 
+const DropAreaContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 350px; /* Same width as PopupContent */
+  margin-top: 20px;
+`;
+
 const DropArea = styled.div`
   border: 2px dashed #ccc;
   border-radius: 10px;
   padding: 10px;
-  margin-top: 20px;
   text-align: center;
   background: black;
   color: white;
-  width: 45%; /* Adjusted width for flex layout */
+  width: 48%; /* Adjusted width for flex layout */
   height: 200px;
   overflow: auto;
-`;
-
-const DropAreaContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
 `;
 
 const StrikethroughItem = styled.div`
@@ -73,12 +72,12 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     setUserComenzi(comenzi);
 
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                    const preparatePromises = comenzi.flatMap(comanda =>
+                    const preparatePromises = comenzi.flatMap((comanda, comandaIndex) =>
                         allCategories.flatMap(category =>
-                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async (id, index) => {
+                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async (id, itemIndex) => {
                                 const preparatDocRef = doc(db, category, id);
                                 const preparatDocSnapshot = await getDoc(preparatDocRef);
-                                return { id: `${id}-${index}`, ...preparatDocSnapshot.data() }; // Generate unique id
+                                return { id: `${comandaIndex}-${category}-${id}-${itemIndex}`, ...preparatDocSnapshot.data() }; // Unique ID per item
                             })
                         )
                     );
@@ -123,9 +122,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-        return comenzi.map((comanda, index) => (
-            <PopupContent key={index} className="order">
-                <h3>Comanda {index + 1}</h3>
+        return comenzi.map((comanda, comandaIndex) => (
+            <PopupContent key={comandaIndex} className="order">
+                <h3>Comanda {comandaIndex + 1}</h3>
                 {allCategories.map((categorie) => {
                     const items = comanda[categorie];
                     if (Array.isArray(items) && items.length > 0) {
@@ -134,11 +133,11 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                 <h4>{categorie}</h4>
                                 <ul>
                                     {items.map((id, itemIndex) => {
-                                        const uniqueId = `${id}-${itemIndex}`;
+                                        const uniqueId = `${comandaIndex}-${categorie}-${id}-${itemIndex}`;
                                         const preparat = preparateDetails[uniqueId];
                                         const isMoved = movedItems.has(uniqueId);
                                         return preparat ? (
-                                            <li key={uniqueId} draggable onDragStart={(e) => handleOnDrag(e, uniqueId)}>
+                                            <li key={uniqueId} draggable={!isMoved} onDragStart={(e) => handleOnDrag(e, uniqueId)}>
                                                 <div className={isMoved ? 'widget strikethrough' : 'widget'}>
                                                     {isMoved ? <StrikethroughItem>{preparat.nume} - {preparat.pret} RON</StrikethroughItem> : `${preparat.nume} - ${preparat.pret} RON`}
                                                 </div>
