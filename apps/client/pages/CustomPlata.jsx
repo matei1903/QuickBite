@@ -18,12 +18,21 @@ const PopupContainer = styled.div`
   backdrop-filter: blur(5px);
   color: black;
 `;
+
 const PopupContent = styled.div`
   background: white;
   padding: 20px;
   border-radius: 10px;
   width: 400px;
   max-width: 100%;
+`;
+
+const DropArea = styled.div`
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
 `;
 
 const CustomPlata = ({ onClose, onSubmit }) => {
@@ -74,7 +83,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
 
     const handleOnDrop = (e) => {
         e.preventDefault();
-        const widgetType = e.dataTransfer.getData("WidgetType");
+        const widgetType = e.dataTransfer.getData("widgetType");
         console.log("WidgetType", widgetType);
         setWidgets((prevWidgets) => [...prevWidgets, widgetType]);
     };
@@ -82,8 +91,6 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const handleDragOver = (e) => {
         e.preventDefault();
     };
-
-
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -100,8 +107,8 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     {items.map((id, itemIndex) => {
                                         const preparat = preparateDetails[id];
                                         return preparat ? (
-                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, "`${preparat.nume}`")}>
-                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e, "`${preparat.nume}`")}>
+                                            <li key={itemIndex} draggable onDragStart={(e) => handleOnDrag(e, preparat.nume)}>
+                                                <div className="widget" draggable onDragStart={(e) => handleOnDrag(e, preparat.nume)}>
                                                     {preparat.nume} - {preparat.pret} RON
                                                 </div>
                                             </li>
@@ -110,34 +117,38 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                         );
                                     })}
                                 </ul>
-
                             </div>
                         );
                     }
                     return null;
                 })}
                 <p>Comandat de: {comanda.user}</p>
-                <div className="page" onDrop={handleOnDrop} onDragOver={handleDragOver}>
-                    {widgets.map((widget, index) => (
-                        <div className="dropped-widget" key={index}>
-                            {widget}
-                        </div>
-                    ))}
-                </div>
             </PopupContent>
-
         ));
     };
 
     return (
         <PopupContainer>
-            <h2>Comenzile mele</h2>
-            {userComenzi.length > 0 ? (
-                renderComenzi(userComenzi)
-            ) : (
-                <p>Nu există comenzi de afișat.</p>
-            )}
-            <button onClick={onClose}>Înapoi</button>
+            <div>
+                <h2>Comenzile mele</h2>
+                {userComenzi.length > 0 ? (
+                    renderComenzi(userComenzi)
+                ) : (
+                    <p>Nu există comenzi de afișat.</p>
+                )}
+                <DropArea onDrop={handleOnDrop} onDragOver={handleDragOver}>
+                    {widgets.length === 0 ? (
+                        <p>Trageți și plasați widgeturi aici</p>
+                    ) : (
+                        widgets.map((widget, index) => (
+                            <div className="dropped-widget" key={index}>
+                                {widget}
+                            </div>
+                        ))
+                    )}
+                </DropArea>
+                <button onClick={onClose}>Înapoi</button>
+            </div>
         </PopupContainer>
     );
 };
