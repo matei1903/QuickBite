@@ -44,6 +44,7 @@ const DropArea = styled.div`
   background: black;
   color: white;
   width: 175px; /* Adjusted width for flex layout */
+  max-width: 100%;
   height: 200px;
   overflow: auto;
 `;
@@ -61,6 +62,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [cardWidgets, setCardWidgets] = useState([]);
     const [cashWidgets, setCashWidgets] = useState([]);
     const [movedItems, setMovedItems] = useState(new Set());
+    const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+    const [totalCard, setTotalCard] = useState(0);
+    const [totalCash, setTotalCash] = useState(0);
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -96,6 +100,16 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         fetchComenzi();
     }, [db, userID]);
 
+    useEffect(() => {
+        // Check if all items are moved
+        const totalItems = Object.keys(preparateDetails).length;
+        if (movedItems.size === totalItems && totalItems > 0) {
+            setIsButtonEnabled(true);
+        } else {
+            setIsButtonEnabled(false);
+        }
+    }, [movedItems, preparateDetails]);
+
     const handleOnDrag = (e, itemId) => {
         e.dataTransfer.setData("itemId", itemId);
     };
@@ -108,8 +122,10 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         if (item) {
             if (paymentType === "card") {
                 setCardWidgets((prevWidgets) => [...prevWidgets, item]);
+                setTotalCard((prevTotal) => prevTotal + item.pret);
             } else if (paymentType === "cash") {
                 setCashWidgets((prevWidgets) => [...prevWidgets, item]);
+                setTotalCash((prevTotal) => prevTotal + item.pret);
             }
 
             setMovedItems((prevItems) => new Set(prevItems).add(itemId));
@@ -118,6 +134,11 @@ const CustomPlata = ({ onClose, onSubmit }) => {
 
     const handleDragOver = (e) => {
         e.preventDefault();
+    };
+
+    const handleButtonClick = () => {
+        alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+        onClose();
     };
 
     const renderComenzi = (comenzi) => {
@@ -189,7 +210,12 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                         )}
                     </DropArea>
                 </DropAreaContainer>
-                <button onClick={onClose}>Înapoi</button>
+                <div>
+                    <h3>Total de plată:</h3>
+                    <p>Card: {totalCard} RON</p>
+                    <p>Cash: {totalCash} RON</p>
+                </div>
+                <button onClick={handleButtonClick} disabled={!isButtonEnabled}>Înapoi</button>
             </div>
         </PopupContainer>
     );
