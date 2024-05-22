@@ -209,15 +209,15 @@ const handleButtonClick = async () => {
 
                 const userQuerySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", userEmail)));
                 userQuerySnapshot.forEach(async (userDoc) => {
+                    const userDocRef = userDoc.ref; // referința la documentul utilizatorului
                     const userComenzi = userDoc.data().comenzi || [];
                     
                     const updatedUserComenzi = userComenzi.filter(userComanda => {
                         return userComanda.id_comanda !== comanda.id_comanda;
                     });
 
-                    await updateDoc(userDoc.ref, {
+                    await updateDoc(userDocRef, {
                         comenzi: updatedUserComenzi,
-                        plata: 0,
                     });
                 });
             }
@@ -232,6 +232,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
     const renderComenzi = (comenzi, orderIndex) => {
