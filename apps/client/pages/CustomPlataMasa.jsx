@@ -172,6 +172,7 @@ const CustomPlataMasa = ({ onClose, onSubmit }) => {
     };
     const handleButtonClick = async () => {
         try {
+            const userDocRef = doc(db, "users", userID);
             const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
             const mesaSnapshot = await getDoc(mesaRef);
             if (mesaSnapshot.exists()) {
@@ -193,9 +194,13 @@ const CustomPlataMasa = ({ onClose, onSubmit }) => {
                 //const newTotalPlata = (mesaComenzi.plata || 0) - (totalCard + totalCash);
 
                 await updateDoc(mesaRef, {
-                    comenzi: [],
+                    comenzi: deleteField(),
                 });
-                //localStorage.removeItem("plata");
+                await updateDoc(userDocRef, {
+                    comenzi: [],
+                    plata: 0
+                });
+                localStorage.removeItem("plata");
 
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
