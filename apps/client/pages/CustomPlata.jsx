@@ -98,6 +98,14 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     const [isButtonEnabled, setIsButtonEnabled] = useState(false);
     const [totalCard, setTotalCard] = useState(0);
     const [totalCash, setTotalCash] = useState(0);
+    const [selectedTable, setSelectedTable] = useState(null);
+
+    useEffect(() => {
+        const tableFromStorage = localStorage.getItem('selectedTable');
+        if (tableFromStorage) {
+            setSelectedTable(parseInt(tableFromStorage));
+        }
+    }, []);
 
     useEffect(() => {
         const fetchComenzi = async () => {
@@ -166,6 +174,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             if (userDocSnapshot.exists()) {
                 const userData = userDocSnapshot.data();
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                
                 // Actualizare comenzi - ștergerea comenzilor plătite
                 const updatedComenzi = userData.comenzi.map(comanda => {
                     allCategories.forEach(category => {
@@ -178,15 +187,29 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     // Filtrare comenzi goale
                     return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
                 });
-
+    
                 const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
-
+    
                 await updateDoc(userDocRef, {
                     comenzi: [],
                     plata: 0
                 });
                 localStorage.removeItem("plata");
-
+    
+                // Ștergerea comenzilor plătite din documentul mesei
+                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                const mesaSnapshot = await getDoc(mesaRef);
+                if (mesaSnapshot.exists()) {
+                    const mesaData = mesaSnapshot.data();
+                    const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
+                        return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
+                    });
+    
+                    await updateDoc(mesaRef, {
+                        comenzi: updatedMesaComenzi
+                    });
+                }
+    
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
@@ -195,6 +218,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, comandaIndex) => (
