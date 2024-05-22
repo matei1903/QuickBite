@@ -170,7 +170,6 @@ const CustomPlataMasa = ({ onClose, onSubmit }) => {
     const handleDragOver = (e) => {
         e.preventDefault();
     };
-    const [selectedTable, setSelectedTable] = useState(null);
 
 useEffect(() => {
     const tableFromStorage = localStorage.getItem('selectedTable');
