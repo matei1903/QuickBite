@@ -199,24 +199,29 @@ const handleButtonClick = async () => {
             }).filter(comanda => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
+            
             // Șterge comenzile din documentul "comenzi" al mesei
             await updateDoc(mesaRef, {
-                comenzi: deleteField(),
+                comenzi: updatedComenzi,
             });
-            // Obține documentul utilizatorului
-            const userSnapshot = await getDoc(userDocRef);
-            if (userSnapshot.exists()) {
-                const userComenzi = userSnapshot.data().comenzi || [];
-                // Filtrează comenzile utilizatorului pentru a elimina comanda plătită
+
+            // Obține documentele utilizatorilor
+            const usersSnapshot = await getDocs(collection(db, "users"));
+            const batch = writeBatch(db);
+            usersSnapshot.forEach(userDoc => {
+                const userData = userDoc.data();
+                const userComenzi = userData.comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-                // Actualizează documentul utilizatorului
-                await updateDoc(userDocRef, {
+                batch.update(userDoc.ref, {
                     comenzi: updatedUserComenzi,
-                    plata: 0,
+                    plata: 0, // Resetarea plății pentru toți utilizatorii
                 });
-            }
+            });
+            // Execută operațiile într-o tranzacție atomică
+            await batch.commit();
+
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
@@ -226,6 +231,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
     const renderComenzi = (comenzi, orderIndex) => {
