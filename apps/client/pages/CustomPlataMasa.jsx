@@ -116,12 +116,12 @@ const CustomPlataMasa = ({ onClose, onSubmit }) => {
                     const mesaComenzi = mesaSnapshot.data().comenzi || [];
                     setMesaComenzi(mesaComenzi);
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                    const preparatePromises = mesaComenzi.flatMap(comanda =>
+                    const preparatePromises = mesaComenzi.flatMap((comanda, comandaIndex) =>
                         allCategories.flatMap(category =>
-                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async id => {
+                            (Array.isArray(comanda[category]) ? comanda[category] : []).map(async (id, itemIndex) => {
                                 const preparatDocRef = doc(db, category, id);
                                 const preparatDocSnapshot = await getDoc(preparatDocRef);
-                                return { id, ...preparatDocSnapshot.data() };
+                                return { id: `${comandaIndex}-${category}-${id}-${itemIndex}`, ...preparatDocSnapshot.data() };
                             })
                         )
                     );
