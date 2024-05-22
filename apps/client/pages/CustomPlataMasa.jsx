@@ -180,7 +180,6 @@ useEffect(() => {
 
 const handleButtonClick = async () => {
     try {
-        const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
         if (mesaSnapshot.exists()) {
@@ -207,6 +206,8 @@ const handleButtonClick = async () => {
                 )
             );
 
+            console.log("Comenzi plătite:", comenziPlatite);
+
             for (let comanda of comenziPlatite) {
                 const userEmail = comanda.user;
                 const userQuery = query(collection(db, "users"), where("email", "==", userEmail));
@@ -217,9 +218,10 @@ const handleButtonClick = async () => {
                     const userComenzi = userData.comenzi || [];
                     const updatedUserComenzi = userComenzi.filter(userComandaId => userComandaId !== comanda.id_comanda);
                     
+                    console.log(`Actualizare utilizator: ${userEmail}, comenzi:`, updatedUserComenzi);
+
                     await updateDoc(userDoc.ref, {
                         comenzi: updatedUserComenzi,
-                        plata: 0,
                     });
                 });
             }
@@ -234,11 +236,14 @@ const handleButtonClick = async () => {
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
+        } else {
+            console.log("Documentul comenzii nu există.");
         }
     } catch (error) {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
 
