@@ -16,6 +16,7 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
+  flex-direction: column;
 
   button {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
