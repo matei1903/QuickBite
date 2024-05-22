@@ -173,6 +173,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     comenzi: [],
                     plata: 0
                 });
+                localStorage.removeItem("plata");
 
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
