@@ -188,17 +188,6 @@ const handleButtonClick = async () => {
             const mesaComenzi = mesaSnapshot.data();
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
-            const updatedComenzi = mesaComenzi.comenzi.map(comanda => {
-                allCategories.forEach(category => {
-                    if (Array.isArray(comanda[category])) {
-                        comanda[category] = comanda[category].filter(id => !movedItems.has(`${comanda.id_comanda}-${category}-${id}`));
-                    }
-                });
-                return comanda;
-            }).filter(comanda => {
-                return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
-            });
-
             // Șterge comenzile din documentul "comenzi" al mesei
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
@@ -209,9 +198,9 @@ const handleButtonClick = async () => {
             const usersPromises = usersSnapshot.docs.map(async userDoc => {
                 const userComenzi = userDoc.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
-                    return mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                    return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-                console.log("utiliz: ",userDoc.ref);
+
                 // Actualizează documentul utilizatorului
                 await updateDoc(userDoc.ref, {
                     comenzi: updatedUserComenzi,
@@ -222,7 +211,6 @@ const handleButtonClick = async () => {
             await Promise.all(usersPromises);
 
             localStorage.removeItem("plata");
-            onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
         }
@@ -230,6 +218,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
     const renderComenzi = (comenzi, orderIndex) => {
