@@ -180,9 +180,9 @@ useEffect(() => {
 
 const handleButtonClick = async () => {
     try {
+        const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
-
         if (mesaSnapshot.exists()) {
             const mesaComenzi = mesaSnapshot.data();
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -200,27 +200,35 @@ const handleButtonClick = async () => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
-            // Actualizează colecția `comenzi`
-            await updateDoc(mesaRef, {
-                comenzi: updatedComenzi,
-            });
+            // Obține email-urile utilizatorilor și id-urile comenzilor plătite
+            const comenziPlatite = mesaComenzi.comenzi.filter(comanda => 
+                allCategories.every(category => 
+                    !Array.isArray(comanda[category]) || comanda[category].every(id => movedItems.has(`${comanda.id_comanda}-${category}-${id}`))
+                )
+            );
 
-            // Actualizează colecția `users`
-            const usersSnapshot = await getDocs(collection(db, "users"));
-            for (const userDoc of usersSnapshot.docs) {
-                const userData = userDoc.data();
-                if (Array.isArray(userData.comenzi)) {
-                    const updatedUserComenzi = userData.comenzi.filter(comanda => {
-                        return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === comanda.id_comanda);
-                    });
+            for (let comanda of comenziPlatite) {
+                const userEmail = comanda.user;
+                const userQuery = query(collection(db, "users"), where("email", "==", userEmail));
+                const userSnapshot = await getDocs(userQuery);
 
-                    await updateDoc(doc(db, "users", userDoc.id), {
+                userSnapshot.forEach(async (userDoc) => {
+                    const userData = userDoc.data();
+                    const userComenzi = userData.comenzi || [];
+                    const updatedUserComenzi = userComenzi.filter(userComandaId => userComandaId !== comanda.id_comanda);
+                    
+                    await updateDoc(userDoc.ref, {
                         comenzi: updatedUserComenzi,
+                        plata: 0,
                     });
-                }
+                });
             }
 
-            // Actualizează interfața utilizatorului și alte acțiuni necesare
+            // Actualizează documentul `comenzi` pentru a șterge comenzile plătite
+            await updateDoc(mesaRef, {
+                comenzi: updatedComenzi.length > 0 ? updatedComenzi : deleteField(),
+            });
+
             localStorage.removeItem("plata");
 
             onSubmit(updatedComenzi);
@@ -231,7 +239,6 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
-
 
 
 
