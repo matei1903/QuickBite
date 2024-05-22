@@ -209,7 +209,7 @@ const handleButtonClick = async () => {
             const usersPromises = usersSnapshot.docs.map(async userDoc => {
                 const userComenzi = userDoc.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
-                    return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                    return mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
                 console.log("utiliz: ",userDoc.ref);
                 // Actualizează documentul utilizatorului
