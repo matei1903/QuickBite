@@ -180,18 +180,15 @@ useEffect(() => {
 
 const handleButtonClick = async () => {
     try {
+        const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
         
         if (mesaSnapshot.exists()) {
-            console.log("Mesa snapshot exists");
             const mesaComenzi = mesaSnapshot.data();
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-
-            // Obține id-urile comenzilor care urmează să fie șterse
-            const idsComenziDeSters = mesaComenzi.comenzi.map(comanda => comanda.id_comanda);
-
-            // Actualizează comenzile mesei, eliminând comenzile plătite
+            
+            // Actualizare comenzi - ștergerea comenzilor plătite
             const updatedComenzi = mesaComenzi.comenzi.map(comanda => {
                 allCategories.forEach(category => {
                     if (Array.isArray(comanda[category])) {
@@ -200,60 +197,41 @@ const handleButtonClick = async () => {
                 });
                 return comanda;
             }).filter(comanda => {
+                // Filtrare comenzi goale
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
-            // Log the updatedComenzi to verify
-            console.log("Updated comenzi:", updatedComenzi);
-
-            // Șterge comenzile din documentul "comenzi" al mesei
+            // Actualizează colecția `comenzi`
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
-            console.log("Comenzi șterse din mesaRef");
 
-            // Obține toate documentele utilizatorilor
-            const userCollectionRef = collection(db, "users");
-            const userQuerySnapshot = await getDocs(userCollectionRef);
-
-// Actualizează comenzile utilizatorilor
-            const updatePromises = userQuerySnapshot.docs.map(async (userDoc) => {
-                const userID = userDoc.id; // Obținem ID-ul documentului utilizatorului
-                const userDocRef = doc(db, "users", userID); // Referința la documentul utilizatorului
-
-                const userComenzi = userDoc.data().comenzi || [];
-
-                const updatedUserComenzi = userComenzi.filter(userComanda => {
-                    return !idsComenziDeSters.includes(userComanda.id_comanda);
-                });
-
-                // Dacă nu există comenzi de actualizat, nu face update
-                if (updatedUserComenzi.length !== userComenzi.length) {
-                    await updateDoc(userDocRef, {
-                        comenzi: updatedUserComenzi,
+            // Actualizează colecția `users`
+            const usersSnapshot = await getDocs(collection(db, "users"));
+            usersSnapshot.forEach(async (userDoc) => {
+                const userData = userDoc.data();
+                if (Array.isArray(userData.comenzi)) {
+                    const updatedUserComenzi = userData.comenzi.filter(comanda => {
+                        return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === comanda.id_comanda);
                     });
-                    console.log(`Comenzi actualizate pentru utilizatorul: ${userID}`);
+                    await updateDoc(doc(db, "users", userDoc.id), {
+                        comenzi: updatedUserComenzi,
+                        plata: 0,
+                    });
                 }
             });
 
-            await Promise.all(updatePromises);
-
+            // Actualizează interfața utilizatorului și alte acțiuni necesare
             localStorage.removeItem("plata");
-            console.log("Plata ștearsă din localStorage");
 
-            // Transmite comenzile actualizate pentru masă
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
-        } else {
-            console.log("Mesa snapshot does not exist");
         }
     } catch (error) {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
-
-
 
 
     const renderComenzi = (comenzi, orderIndex) => {
