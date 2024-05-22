@@ -16,6 +16,7 @@ const PopupContainer = styled.div`
   z-index: 1000;
   backdrop-filter: blur(5px);
   color: black;
+
   button {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -35,6 +36,16 @@ const PopupContainer = styled.div`
         background-color: #869182;
         color: #323232;
     }
+  }
+
+  .comenzi {
+    height: 45%;
+    overflow: auto;
+  }
+
+  .drop {
+    height: 45%;
+    overflow: auto;
   }
 `;
 const PopupContent = styled.div`
@@ -221,12 +232,14 @@ const CustomPlata = ({ onClose, onSubmit }) => {
     };
     return (
         <PopupContainer>
-            <div>
+            <div className="comenzi">
                 {userComenzi.length > 0 ? (
                     renderComenzi(userComenzi)
                 ) : (
                     <p>Nu există comenzi de afișat.</p>
                 )}
+            </div>
+            <div className="drop">
                 <DropAreaContainer>
                     <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
                         {cardWidgets.length === 0 ? (
