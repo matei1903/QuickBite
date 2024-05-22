@@ -178,14 +178,6 @@ useEffect(() => {
     }
 }, []);
 
-const [selectedTable, setSelectedTable] = useState(null);
-
-useEffect(() => {
-    const tableFromStorage = localStorage.getItem('selectedTable');
-    if (tableFromStorage) {
-        setSelectedTable(parseInt(tableFromStorage));
-    }
-}, []);
 
 const handleButtonClick = async () => {
     try {
