@@ -183,11 +183,11 @@ const handleButtonClick = async () => {
         const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
-        
+
         if (mesaSnapshot.exists()) {
             const mesaComenzi = mesaSnapshot.data();
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-            
+
             // Actualizare comenzi - ștergerea comenzilor plătite
             const updatedComenzi = mesaComenzi.comenzi.map(comanda => {
                 allCategories.forEach(category => {
@@ -203,23 +203,24 @@ const handleButtonClick = async () => {
 
             // Actualizează colecția `comenzi`
             await updateDoc(mesaRef, {
-                comenzi: deleteField(),
+                comenzi: updatedComenzi,
             });
 
             // Actualizează colecția `users`
             const usersSnapshot = await getDocs(collection(db, "users"));
-            usersSnapshot.forEach(async (userDoc) => {
+            for (const userDoc of usersSnapshot.docs) {
                 const userData = userDoc.data();
                 if (Array.isArray(userData.comenzi)) {
                     const updatedUserComenzi = userData.comenzi.filter(comanda => {
                         return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === comanda.id_comanda);
                     });
-                    await updateDoc(doc(db, "users", userDoc.id), {
+
+                    await updateDoc(doc(db, "users", userID), {
                         comenzi: updatedUserComenzi,
                         plata: 0,
                     });
                 }
-            });
+            }
 
             // Actualizează interfața utilizatorului și alte acțiuni necesare
             localStorage.removeItem("plata");
@@ -232,6 +233,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
     const renderComenzi = (comenzi, orderIndex) => {
