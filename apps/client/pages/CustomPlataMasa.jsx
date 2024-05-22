@@ -178,72 +178,65 @@ useEffect(() => {
     }
 }, []);
 
+const [selectedTable, setSelectedTable] = useState(null);
+
+useEffect(() => {
+    const tableFromStorage = localStorage.getItem('selectedTable');
+    if (tableFromStorage) {
+        setSelectedTable(parseInt(tableFromStorage));
+    }
+}, []);
+
 const handleButtonClick = async () => {
     try {
+        // Referință la documentul mesei selectate
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
+        
         if (mesaSnapshot.exists()) {
-            const mesaComenzi = mesaSnapshot.data();
+            const mesaData = mesaSnapshot.data();
+            const paidOrderIds = mesaData.comenzi.map(mesaComanda => mesaComanda.id_comanda);
+
+            // Șterge comenzile plătite din documentul mesei
+            await updateDoc(mesaRef, {
+                comenzi: mesaData.comenzi.filter(mesaComanda => !paidOrderIds.includes(mesaComanda.id_comanda))
+            });
+
+            // Preia toți utilizatorii și actualizează comenzile acestora
+            const usersCollectionRef = collection(db, "users");
+            const usersSnapshot = await getDocs(usersCollectionRef);
+
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
-            // Actualizare comenzi - ștergerea comenzilor plătite
-            const updatedComenzi = mesaComenzi.comenzi.map(comanda => {
-                allCategories.forEach(category => {
-                    if (Array.isArray(comanda[category])) {
-                        comanda[category] = comanda[category].filter(id => !movedItems.has(`${comanda.id_comanda}-${category}-${id}`));
-                    }
-                });
-                return comanda;
-            }).filter(comanda => {
-                // Filtrare comenzi goale
-                return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
-            });
+            const batch = writeBatch(db);
 
-            // Obține email-urile utilizatorilor și id-urile comenzilor plătite
-            const comenziPlatite = mesaComenzi.comenzi.filter(comanda => 
-                allCategories.every(category => 
-                    !Array.isArray(comanda[category]) || comanda[category].every(id => movedItems.has(`${comanda.id_comanda}-${category}-${id}`))
-                )
-            );
+            usersSnapshot.forEach(userDoc => {
+                const userData = userDoc.data();
+                let updatedComenzi = userData.comenzi;
 
-            console.log("Comenzi plătite:", comenziPlatite);
-
-            for (let comanda of comenziPlatite) {
-                const userEmail = comanda.user;
-                const userQuery = query(collection(db, "users"), where("email", "==", userEmail));
-                const userSnapshot = await getDocs(userQuery);
-
-                userSnapshot.forEach(async (userDoc) => {
-                    const userData = userDoc.data();
-                    const userComenzi = userData.comenzi || [];
-                    const updatedUserComenzi = userComenzi.filter(userComandaId => userComandaId !== comanda.id_comanda);
-                    
-                    console.log(`Actualizare utilizator: ${userEmail}, comenzi:`, updatedUserComenzi);
-
-                    await updateDoc(userDoc.ref, {
-                        comenzi: updatedUserComenzi,
+                updatedComenzi = updatedComenzi.map(comanda => {
+                    allCategories.forEach(category => {
+                        if (Array.isArray(comanda[category])) {
+                            comanda[category] = comanda[category].filter(id => !paidOrderIds.includes(comanda.id_comanda));
+                        }
                     });
+                    return comanda;
+                }).filter(comanda => {
+                    return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
                 });
-            }
 
-            // Actualizează documentul `comenzi` pentru a șterge comenzile plătite
-            await updateDoc(mesaRef, {
-                comenzi: updatedComenzi.length > 0 ? updatedComenzi : deleteField(),
+                batch.update(userDoc.ref, { comenzi: updatedComenzi });
             });
 
-            localStorage.removeItem("plata");
+            await batch.commit();
 
-            onSubmit(updatedComenzi);
-            alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+            alert('Comenzile plătite au fost șterse cu succes.');
             onClose();
-        } else {
-            console.log("Documentul comenzii nu există.");
         }
     } catch (error) {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
-
 
 
 
