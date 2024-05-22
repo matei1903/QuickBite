@@ -180,7 +180,6 @@ useEffect(() => {
 
 const handleButtonClick = async () => {
     try {
-        const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
 
@@ -215,9 +214,8 @@ const handleButtonClick = async () => {
                         return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === comanda.id_comanda);
                     });
 
-                    await updateDoc(doc(db, "users", userID), {
+                    await updateDoc(doc(db, "users", userDoc.id), {
                         comenzi: updatedUserComenzi,
-                        plata: 0,
                     });
                 }
             }
@@ -233,6 +231,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
 
