@@ -181,7 +181,6 @@ useEffect(() => {
 
 const handleButtonClick = async () => {
     try {
-        const userDocRef = doc(db, "users", userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
 
@@ -199,24 +198,29 @@ const handleButtonClick = async () => {
             }).filter(comanda => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
+
             // Șterge comenzile din documentul "comenzi" al mesei
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
-            // Obține documentul utilizatorului
-            const userSnapshot = await getDoc(userDocRef);
-            if (userSnapshot.exists()) {
-                const userComenzi = userSnapshot.data().comenzi || [];
-                // Filtrează comenzile utilizatorului pentru a elimina comanda plătită
+
+            // Obține toți utilizatorii
+            const usersSnapshot = await getDocs(collection(db, "users"));
+            const usersPromises = usersSnapshot.docs.map(async userDoc => {
+                const userComenzi = userDoc.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
+                console.log("utiliz: ",userDoc.ref);
                 // Actualizează documentul utilizatorului
-                await updateDoc(userDocRef, {
+                await updateDoc(userDoc.ref, {
                     comenzi: updatedUserComenzi,
                     plata: 0,
                 });
-            }
+            });
+
+            await Promise.all(usersPromises);
+
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
@@ -226,6 +230,8 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
+
     const renderComenzi = (comenzi, orderIndex) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, comandaIndex) => (
