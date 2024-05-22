@@ -205,15 +205,17 @@ const handleButtonClick = async () => {
                 comenzi: updatedComenzi,
             });
 
-            // Obține documentele utilizatorilor
+            // Obține documentele utilizatorilor și iterează prin fiecare
             const usersSnapshot = await getDocs(collection(db, "users"));
             const batch = writeBatch(db);
-            usersSnapshot.forEach(userDoc => {
+            usersSnapshot.forEach(async userDoc => {
                 const userData = userDoc.data();
                 const userComenzi = userData.comenzi || [];
+                // Verifică dacă comanda cu ID-ul respectiv a fost plătită și ștearsă din colecția "comenzi"
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
+                // Actualizează documentul utilizatorului cu comenzile actualizate
                 batch.update(userDoc.ref, {
                     comenzi: updatedUserComenzi,
                     plata: 0, // Resetarea plății pentru toți utilizatorii
@@ -231,6 +233,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
 
