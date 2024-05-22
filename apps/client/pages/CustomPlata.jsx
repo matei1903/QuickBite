@@ -171,7 +171,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
 
                 await updateDoc(userDocRef, {
                     comenzi: [],
-                    plata: newTotalPlata
+                    plata: 0
                 });
 
                 onSubmit(updatedComenzi);

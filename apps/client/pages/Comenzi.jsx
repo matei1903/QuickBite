@@ -189,7 +189,7 @@ const Comenzi = () => {
                 )
             ));
         }
-        if (paymentMethod === "custom") {
+        if (paymentMethod === "custom" && selectedOption === "comandaMea") {
             setCustomShowPopup(true);
         } else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
