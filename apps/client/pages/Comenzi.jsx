@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
+import CustomPlataMasa from "./CustomPlataMasa";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
@@ -91,6 +92,8 @@ const Comenzi = () => {
     const [mesaComenzi, setMesaComenzi] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [showCustomPopup, setCustomShowPopup] = useState(false);
+    const [showCustomMasaPopup, setCustomShowMasaPopup] = useState(false);
+    
     const navigate = useNavigate();
     useEffect(() => {
         const tableFromStorage = localStorage.getItem('selectedTable');
@@ -174,6 +177,9 @@ const Comenzi = () => {
     const handleCloseCustomPopup = () => {
         setCustomShowPopup(false);
     };
+    const handleCloseCustomMasaPopup = () => {
+        setCustomShowMasaPopup(false);
+    };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod, updatedComenzi) => {
         if (selectedOption === "comandaMea") {
@@ -191,7 +197,11 @@ const Comenzi = () => {
         }
         if (paymentMethod === "custom" && selectedOption === "comandaMea") {
             setCustomShowPopup(true);
-        } else {
+        } 
+        else if (paymentMethod === "custom" && selectedOption === "comandaMesei") {
+            setCustomShowMasaPopup(true);
+        }
+        else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
         }
         setShowPopup(false);
@@ -257,6 +267,7 @@ const Comenzi = () => {
             <Button className="plateste" onClick={handlePlata} disabled={selectedPrep.length === 0}>Plateste</Button>
             {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
             {showCustomPopup && <CustomPlata onClose={handleCloseCustomPopup} onSubmit={handlePaymentSubmit} />}
+            {showCustomMasaPopup && <CustomPlataMasa onClose={handleCloseCustomMasaPopup} onSubmit={handlePaymentSubmit} />}
         </Layout>
     );
 };
