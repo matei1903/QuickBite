@@ -206,9 +206,8 @@ const handleButtonClick = async () => {
 
             // Iterează prin comenzile din masa selectată
             for (const mesaComanda of mesaComenzi.comenzi) {
-                // Căutăm documentele utilizatorilor care au această comandă
                 const usersRef = collection(db, "users");
-                const userQuery = query(usersRef, where("comenzi", "array-contains", mesaComanda));
+                const userQuery = query(usersRef, where("comenzi", "array-contains", mesaComanda.id_comanda));
                 const userSnapshot = await getDocs(userQuery);
 
                 userSnapshot.forEach(async (userDoc) => {
@@ -234,6 +233,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
 
