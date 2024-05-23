@@ -203,30 +203,19 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                 for (const userDoc of userQuerySnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
-                    const updatedUserComenzi = userComenzi.map((comanda) => {
-                        allCategories.forEach(category => {
-                            if (Array.isArray(comanda[category])) {
-                                comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                    !movedItemIds.includes(`${comanda.id}-${category}-${id}`)
-                                );
+    
+                    for (const userComanda of userComenzi) {
+                        // Find the matching order in the comenzi collection
+                        const comenziCollectionRef = collection(db, "comenzi");
+                        const comenziQuerySnapshot = await getDocs(comenziCollectionRef);
+    
+                        for (const comandaDoc of comenziQuerySnapshot.docs) {
+                            const comandaData = comandaDoc.data();
+                            if (comandaData.id === userComanda.id) {
+                                // Update the user's comanda with the one from comenzi
+                                await updateDoc(userDoc.ref, { comenzi: comandaData });
+                                break; // Stop searching after finding the matching order
                             }
-                        });
-                        return comanda;
-                    }).filter(comanda =>
-                        allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
-                    );
-    
-                    // Verifică dacă comanda există în lista actualizată de comenzi din masa selectată
-                    const comenziExist = updatedComenzi.map(c => c.id);
-                    const finalUpdatedUserComenzi = updatedUserComenzi.filter(comanda =>
-                        comenziExist.includes(comanda.id)
-                    );
-    
-                    if (JSON.stringify(finalUpdatedUserComenzi) !== JSON.stringify(userComenzi)) {
-                        if (finalUpdatedUserComenzi.length > 0) {
-                            await updateDoc(userDoc.ref, { comenzi: finalUpdatedUserComenzi });
-                        } else {
-                            await updateDoc(userDoc.ref, { comenzi: null });
                         }
                     }
                 }
@@ -240,6 +229,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
 
