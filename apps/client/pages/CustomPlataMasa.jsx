@@ -213,7 +213,7 @@ const handleButtonClick = async () => {
             });
 
             await updateDoc(mesaRef, {
-                comenzi: updatedComenzi
+                comenzi: deleteField(),
             });
 
             localStorage.removeItem("plata");
