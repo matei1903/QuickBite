@@ -204,14 +204,24 @@ const handleButtonClick = async () => {
                 }
             });
 
-            // Șterge comenzile din documentul "comenzi" al mesei
-            const updatedComenzi = mesaComenzi.filter(comanda => {
-                return !userQuerySnapshot.docs.some(userDoc => {
-                    const userComenzi = userDoc.data().comenzi || [];
-                    return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
+            // Filtrarea comenzilor din documentul "comenzi" al mesei
+            const updatedComenzi = mesaComenzi.map(comanda => {
+                allCategories.forEach(category => {
+                    if (Array.isArray(comanda[category])) {
+                        comanda[category] = comanda[category].filter(id => {
+                            return !userQuerySnapshot.docs.some(userDoc => {
+                                const userComenzi = userDoc.data().comenzi || [];
+                                return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
+                            });
+                        });
+                    }
                 });
+                return comanda;
+            }).filter(comanda => {
+                return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
+            // Actualizarea documentului "comenzi" al mesei
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
@@ -225,6 +235,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
 
 
