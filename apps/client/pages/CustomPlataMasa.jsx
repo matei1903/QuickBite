@@ -203,27 +203,20 @@ const handleButtonClick = async () => {
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
-
-            // Obține documentele tuturor utilizatorilor
-            const usersCollectionRef = collection(db, "users");
-            const usersSnapshot = await getDocs(usersCollectionRef);
-
-            const batch = writeBatch(db);
-
-            usersSnapshot.forEach(async userDocRef => {
-                const userComenzi = userDocRef.data().comenzi || [];
+            // Obține documentul utilizatorului
+            const userSnapshot = await getDoc(userDocRef);
+            if (userSnapshot.exists()) {
+                const userComenzi = userSnapshot.data().comenzi || [];
+                // Filtrează comenzile utilizatorului pentru a elimina comanda plătită
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-                batch.update(userDocRef, {
+                // Actualizează documentul utilizatorului
+                await updateDoc(userDocRef, {
                     comenzi: updatedUserComenzi,
-                    plata: 0
+                    plata: 0,
                 });
-            });
-
-            // Execute batch write
-            await batch.commit();
-
+            }
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
