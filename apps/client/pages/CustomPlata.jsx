@@ -197,7 +197,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 localStorage.removeItem("plata");
 
                 // Ștergerea comenzilor plătite din documentul mesei
-                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                const mesaRef = doc(db, "comenzi");
                 const mesaSnapshot = await getDoc(mesaRef);
                 if (mesaSnapshot.exists()) {
                     const mesaData = mesaSnapshot.data();
