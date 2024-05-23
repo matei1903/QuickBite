@@ -203,20 +203,24 @@ const handleButtonClick = async () => {
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
-            // Obține documentul utilizatorilor
+
+            // Obține documentele tuturor utilizatorilor
             const usersCollectionRef = collection(db, "users");
             const usersSnapshot = await getDocs(usersCollectionRef);
 
             const batch = writeBatch(db);
-            usersSnapshot.forEach(userDoc => {
-                const userComenzi = userDoc.data().comenzi || [];
+
+            usersSnapshot.forEach(async userDocRef => {
+                const userComenzi = userDocRef.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-                batch.update(userDoc.ref, {
-                    comenzi: updatedUserComenzi
+                batch.update(userDocRef, {
+                    comenzi: updatedUserComenzi,
+                    plata: 0
                 });
             });
+
             // Execute batch write
             await batch.commit();
 
