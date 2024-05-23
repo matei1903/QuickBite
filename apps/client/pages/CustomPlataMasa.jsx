@@ -189,8 +189,10 @@ const handleButtonClick = async () => {
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
             // Obține documentele utilizatorilor și actualizează-le
-            const userQuerySnapshot = await getDocs(collection(db, "users"));
-            userQuerySnapshot.forEach(async (userDoc) => {
+            const userCollectionRef = collection(db, "users");
+            const userQuerySnapshot = await getDocs(userCollectionRef);
+
+            for (const userDoc of userQuerySnapshot.docs) {
                 const userComenzi = userDoc.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
@@ -202,7 +204,7 @@ const handleButtonClick = async () => {
                         plata: 0,
                     });
                 }
-            });
+            }
 
             // Filtrarea comenzilor din documentul "comenzi" al mesei
             const updatedComenzi = mesaComenzi.map(comanda => {
@@ -221,9 +223,9 @@ const handleButtonClick = async () => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
-            // Actualizarea documentului "comenzi" al mesei
+            // Actualizarea documentului "comenzi" al mesei cu comenzile filtrate
             await updateDoc(mesaRef, {
-                comenzi: deleteField(),
+                comenzi: updatedComenzi,
             });
 
             localStorage.removeItem("plata");
