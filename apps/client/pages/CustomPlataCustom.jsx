@@ -185,13 +185,13 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
-                            comanda[category] = comanda[category].filter((id, itemIndex) => 
+                            comanda[category] = comanda[category].filter((id, itemIndex) =>
                                 !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
                             );
                         }
                     });
                     return comanda;
-                }).filter(comanda => 
+                }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
     
@@ -206,23 +206,23 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     const updatedUserComenzi = userComenzi.map((comanda) => {
                         allCategories.forEach(category => {
                             if (Array.isArray(comanda[category])) {
-                                comanda[category] = comanda[category].filter((id, itemIndex) => 
+                                comanda[category] = comanda[category].filter((id, itemIndex) =>
                                     !movedItemIds.includes(`${comanda.id}-${category}-${id}`)
                                 );
                             }
                         });
                         return comanda;
-                    }).filter(comanda => 
+                    }).filter(comanda =>
                         allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                     );
     
                     // Verifică dacă comanda există în lista actualizată de comenzi din masa selectată
-                    const comenziExist = mesaComenzi.map(c => c.id);
-                    const finalUpdatedUserComenzi = updatedUserComenzi.filter(comanda => 
+                    const comenziExist = updatedComenzi.map(c => c.id);
+                    const finalUpdatedUserComenzi = updatedUserComenzi.filter(comanda =>
                         comenziExist.includes(comanda.id)
                     );
     
-                    if (finalUpdatedUserComenzi.length !== userComenzi.length) {
+                    if (JSON.stringify(finalUpdatedUserComenzi) !== JSON.stringify(userComenzi)) {
                         if (finalUpdatedUserComenzi.length > 0) {
                             await updateDoc(userDoc.ref, { comenzi: finalUpdatedUserComenzi });
                         } else {
@@ -240,9 +240,6 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
-    
-    
-    
     
     
 
