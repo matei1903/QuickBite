@@ -189,27 +189,32 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 });
     
                 const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
-
+    
                 await updateDoc(userDocRef, {
                     comenzi: [],
                     plata: 0
                 });
                 localStorage.removeItem("plata");
-
-                // Ștergerea comenzilor plătite din documentul mesei
-                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-                const mesaSnapshot = await getDoc(mesaRef);
-                if (mesaSnapshot.exists()) {
-                    const mesaData = mesaSnapshot.data();
+    
+                // Ștergerea comenzilor plătite din toate documentele meselor
+                const comenziSnapshot = await getDocs(collection(db, "comenzi"));
+                const batch = writeBatch(db);
+                
+                comenziSnapshot.forEach((docSnapshot) => {
+                    const mesaData = docSnapshot.data();
                     const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
                         return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
                     });
-
-                    await updateDoc(mesaRef, {
-                        comenzi: updatedMesaComenzi
-                    });
-                }
-
+    
+                    if (updatedMesaComenzi.length !== mesaData.comenzi.length) {
+                        batch.update(doc(db, "comenzi", docSnapshot.id), {
+                            comenzi: updatedMesaComenzi
+                        });
+                    }
+                });
+    
+                await batch.commit();
+    
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
@@ -218,6 +223,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
     const renderComenzi = (comenzi) => {
