@@ -213,14 +213,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                             const comandaData = comandaDoc.data();
                             if (comandaData.id === userComanda.id) {
                                 // Update the user's comanda with the one from comenzi
-                                const updatedUserComenzi = userComenzi.map(userComanda => {
-                                    if (userComanda.id === comandaData.id) {
-                                        return comandaData;
-                                    } else {
-                                        return userComanda;
-                                    }
-                                });
-                                await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
+                                await updateDoc(userDoc.ref, { comenzi: comandaData });
                                 break; // Stop searching after finding the matching order
                             }
                         }
@@ -236,6 +229,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
     
