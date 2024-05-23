@@ -182,6 +182,7 @@ useEffect(() => {
 const handleButtonClick = async () => {
     try {
         const userDocRef = doc(db, "users", userID);
+        console.log("id-ul util: ",userID);
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
 
