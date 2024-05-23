@@ -213,7 +213,14 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                             const comandaData = comandaDoc.data();
                             if (comandaData.id === userComanda.id) {
                                 // Update the user's comanda with the one from comenzi
-                                await updateDoc(userDoc.ref, { comenzi: comandaData });
+                                const updatedUserComenzi = userComenzi.map(userComanda => {
+                                    if (userComanda.id === comandaData.id) {
+                                        return comandaData;
+                                    } else {
+                                        return userComanda;
+                                    }
+                                });
+                                await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                                 break; // Stop searching after finding the matching order
                             }
                         }
