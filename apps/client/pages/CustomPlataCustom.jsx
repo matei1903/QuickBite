@@ -175,44 +175,52 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
         try {
             const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
             const mesaSnapshot = await getDoc(mesaRef);
-
+    
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
-
+    
                 // Remove selected items from the "comenzi" collection
-                const updatedComenzi = mesaComenzi.map(comanda => {
+                const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
-                            comanda[category] = comanda[category].filter((id, itemIndex) => !movedItemIds.includes(`${mesaComenzi.indexOf(comanda)}-${category}-${id}-${itemIndex}`));
+                            comanda[category] = comanda[category].filter((id, itemIndex) => 
+                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                            );
                         }
                     });
                     return comanda;
-                }).filter(comanda => allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0));
-
+                }).filter(comanda => 
+                    allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
+                );
+    
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
-
+    
                 // Remove selected items from the "users" collection
                 const userCollectionRef = collection(db, "users");
                 const userQuerySnapshot = await getDocs(userCollectionRef);
-
+    
                 for (const userDoc of userQuerySnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
-                    const updatedUserComenzi = userComenzi.map(comanda => {
+                    const updatedUserComenzi = userComenzi.map((comanda, comandaIndex) => {
                         allCategories.forEach(category => {
                             if (Array.isArray(comanda[category])) {
-                                comanda[category] = comanda[category].filter((id, itemIndex) => !movedItemIds.includes(`${userComenzi.indexOf(comanda)}-${category}-${id}-${itemIndex}`));
+                                comanda[category] = comanda[category].filter((id, itemIndex) => 
+                                    !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                                );
                             }
                         });
                         return comanda;
-                    }).filter(comanda => allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0));
-
-                    if (updatedUserComenzi.length !== userComenzi.length) {
+                    }).filter(comanda => 
+                        allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
+                    );
+    
+                    if (JSON.stringify(updatedUserComenzi) !== JSON.stringify(userComenzi)) {
                         await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                     }
                 }
-
+    
                 localStorage.removeItem("plata");
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
@@ -222,6 +230,8 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
+    
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -262,14 +272,14 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
                     <h3>Plată cu Card</h3>
                     {cardWidgets.map((item, index) => (
-                        <div key={index}>{item.denumire} - {item.pret} RON</div>
+                        <div key={index}>{item.nume} - {item.pret} RON</div>
                     ))}
                     <TotalAmount>Total: {totalCard} RON</TotalAmount>
                 </DropArea>
                 <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
                     <h3>Plată cu Cash</h3>
                     {cashWidgets.map((item, index) => (
-                        <div key={index}>{item.denumire} - {item.pret} RON</div>
+                        <div key={index}>{item.nume} - {item.pret} RON</div>
                     ))}
                     <TotalAmount>Total: {totalCash} RON</TotalAmount>
                 </DropArea>
