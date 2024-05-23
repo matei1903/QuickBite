@@ -203,11 +203,11 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                 for (const userDoc of userQuerySnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
-                    const updatedUserComenzi = userComenzi.map((comanda, comandaIndex) => {
+                    const updatedUserComenzi = userComenzi.map((comanda) => {
                         allCategories.forEach(category => {
                             if (Array.isArray(comanda[category])) {
                                 comanda[category] = comanda[category].filter((id, itemIndex) => 
-                                    !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                                    !movedItemIds.includes(`${comanda.id}-${category}-${id}`)
                                 );
                             }
                         });
@@ -232,6 +232,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     };
     
     
+    
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -250,9 +251,9 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                                     style={{ marginBottom: "10px", cursor: "grab" }}
                                 >
                                     {movedItems.has(preparatId) ? (
-                                        <StrikethroughItem>{preparat.denumire} - {preparat.pret} RON</StrikethroughItem>
+                                        <StrikethroughItem>{preparat.nume} - {preparat.pret} RON</StrikethroughItem>
                                     ) : (
-                                        <div>{preparat.denumire} - {preparat.pret} RON</div>
+                                        <div>{preparat.nume} - {preparat.pret} RON</div>
                                     )}
                                 </div>
                             )
