@@ -191,24 +191,25 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
     
                 await updateDoc(userDocRef, {
-                    comenzi: [],
-                    plata: 0
+                    comenzi: updatedComenzi,
+                    plata: newTotalPlata // Actualizare plata
                 });
                 localStorage.removeItem("plata");
     
-                // Ștergerea comenzilor plătite din documentul mesei
-                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-                const mesaSnapshot = await getDoc(mesaRef);
-                if (mesaSnapshot.exists()) {
-                    const mesaData = mesaSnapshot.data();
+                // Ștergerea comenzilor plătite din toate mesele
+                const comenziCollectionRef = collection(db, "comenzi");
+                const querySnapshot = await getDocs(comenziCollectionRef);
+                
+                querySnapshot.forEach(async doc => {
+                    const mesaData = doc.data();
                     const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
-                        return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
+                        return !updatedComenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
                     });
     
-                    await updateDoc(mesaRef, {
+                    await updateDoc(doc.ref, {
                         comenzi: updatedMesaComenzi
                     });
-                }
+                });
     
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
@@ -218,6 +219,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
