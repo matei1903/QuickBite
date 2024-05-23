@@ -195,12 +195,16 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 });
                 localStorage.removeItem("plata");
     
+                console.log('Updated user orders:', updatedComenzi);
+    
                 // Obține numărul de mese din colecția "tables"
                 const tablesDocRef = doc(db, "tables", "number");
                 const tablesDocSnapshot = await getDoc(tablesDocRef);
                 if (tablesDocSnapshot.exists()) {
                     const tableData = tablesDocSnapshot.data();
                     const numberOfTables = tableData.number;
+    
+                    console.log('Number of tables:', numberOfTables);
     
                     // Ștergerea comenzilor plătite din toate documentele de mese
                     const batch = writeBatch(db);
@@ -209,9 +213,13 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                         const mesaSnapshot = await getDoc(mesaRef);
                         if (mesaSnapshot.exists()) {
                             const mesaData = mesaSnapshot.data();
+                            console.log(`Masa ${tableNumber} data before update:`, mesaData);
+    
                             const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
                                 return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
                             });
+    
+                            console.log(`Masa ${tableNumber} data after update:`, updatedMesaComenzi);
     
                             if (updatedMesaComenzi.length !== mesaData.comenzi.length) {
                                 // Adăugăm actualizarea la batch doar dacă sunt modificări
@@ -219,16 +227,23 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                                     comenzi: updatedMesaComenzi
                                 });
                             }
+                        } else {
+                            console.log(`Masa ${tableNumber} document does not exist.`);
                         }
                     }
     
                     // Commit toate schimbările
                     await batch.commit();
+                    console.log('Batch commit successful');
+                } else {
+                    console.log('Tables document does not exist.');
                 }
     
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
+            } else {
+                console.log('User document does not exist.');
             }
         } catch (error) {
             console.error("Eroare la actualizarea datelor:", error);
