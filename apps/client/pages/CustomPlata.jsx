@@ -189,28 +189,27 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 });
     
                 const newTotalPlata = (userData.plata || 0) - (totalCard + totalCash);
-    
+
                 await updateDoc(userDocRef, {
-                    comenzi: updatedComenzi,
-                    plata: newTotalPlata // Actualizare plata
+                    comenzi: [],
+                    plata: 0
                 });
                 localStorage.removeItem("plata");
-    
-                // Ștergerea comenzilor plătite din toate mesele
-                const comenziCollectionRef = collection(db, "comenzi");
-                const querySnapshot = await getDocs(comenziCollectionRef);
-                
-                querySnapshot.forEach(async doc => {
-                    const mesaData = doc.data();
+
+                // Ștergerea comenzilor plătite din documentul mesei
+                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                const mesaSnapshot = await getDoc(mesaRef);
+                if (mesaSnapshot.exists()) {
+                    const mesaData = mesaSnapshot.data();
                     const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
-                        return !updatedComenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
+                        return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
                     });
-    
-                    await updateDoc(doc.ref, {
+
+                    await updateDoc(mesaRef, {
                         comenzi: updatedMesaComenzi
                     });
-                });
-    
+                }
+
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
