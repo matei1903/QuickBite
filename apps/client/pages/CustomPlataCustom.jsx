@@ -197,7 +197,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
     
-                // Remove selected items from the "users" collection
+                // Update or remove items from the "users" collection
                 const userCollectionRef = collection(db, "users");
                 const userQuerySnapshot = await getDocs(userCollectionRef);
     
@@ -216,8 +216,18 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                         allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                     );
     
-                    if (JSON.stringify(updatedUserComenzi) !== JSON.stringify(userComenzi)) {
-                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
+                    // Verifică dacă comanda există în lista actualizată de comenzi din masa selectată
+                    const comenziExist = mesaComenzi.map(c => c.id);
+                    const finalUpdatedUserComenzi = updatedUserComenzi.filter(comanda => 
+                        comenziExist.includes(comanda.id)
+                    );
+    
+                    if (finalUpdatedUserComenzi.length !== userComenzi.length) {
+                        if (finalUpdatedUserComenzi.length > 0) {
+                            await updateDoc(userDoc.ref, { comenzi: finalUpdatedUserComenzi });
+                        } else {
+                            await updateDoc(userDoc.ref, { comenzi: null });
+                        }
                     }
                 }
     
@@ -230,6 +240,8 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
+    
     
     
     
