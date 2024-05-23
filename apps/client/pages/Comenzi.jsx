@@ -5,6 +5,7 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
 import CustomPlataMasa from "./CustomPlataMasa";
+import CustomPlataCustom from "./CustomPlataCustom";
 import { useNavigate } from 'react-router-dom';
 
 const Layout = React.lazy(() => import("../Layout.jsx"));
@@ -93,6 +94,7 @@ const Comenzi = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [showCustomPopup, setCustomShowPopup] = useState(false);
     const [showCustomMasaPopup, setCustomShowMasaPopup] = useState(false);
+    const [showCustomPlataPopup, setCustomPlataPopup] = useState(false);
     
     const navigate = useNavigate();
     useEffect(() => {
@@ -180,6 +182,9 @@ const Comenzi = () => {
     const handleCloseCustomMasaPopup = () => {
         setCustomShowMasaPopup(false);
     };
+    const handleCloseCustomPlataPopup = () => {
+        setCustomPlataPopup(false);
+    };
 
     const handlePaymentSubmit = (selectedOption, paymentMethod, updatedComenzi) => {
         if (selectedOption === "comandaMea") {
@@ -200,6 +205,9 @@ const Comenzi = () => {
         } 
         else if (paymentMethod === "custom" && selectedOption === "comandaMesei") {
             setCustomShowMasaPopup(true);
+        }
+        else if (selectedOption === "custom") {
+            setCustomPlataPopup(true);
         }
         else {
             alert(`Opțiunea de plată selectată: ${selectedOption}, Metodă de plată: ${paymentMethod}`);
@@ -268,6 +276,7 @@ const Comenzi = () => {
             {showPopup && <PaymentPopup onClose={handleClosePopup} onSubmit={handlePaymentSubmit} />}
             {showCustomPopup && <CustomPlata onClose={handleCloseCustomPopup} onSubmit={handlePaymentSubmit} />}
             {showCustomMasaPopup && <CustomPlataMasa onClose={handleCloseCustomMasaPopup} onSubmit={handlePaymentSubmit} />}
+            {showCustomPlataPopup && <CustomPlataCustom onClose={handleCloseCustomPlataPopup} onSubmit={handlePaymentSubmit} />}
         </Layout>
     );
 };
