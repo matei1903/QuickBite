@@ -203,20 +203,23 @@ const handleButtonClick = async () => {
             await updateDoc(mesaRef, {
                 comenzi: deleteField(),
             });
-            // Obține documentul utilizatorului
-            const userSnapshot = await getDoc(userDocRef);
-            if (userSnapshot.exists()) {
-                const userComenzi = userSnapshot.data().comenzi || [];
-                // Filtrează comenzile utilizatorului pentru a elimina comanda plătită
+            // Obține documentul utilizatorilor
+            const usersCollectionRef = collection(db, "users");
+            const usersSnapshot = await getDocs(usersCollectionRef);
+
+            const batch = writeBatch(db);
+            usersSnapshot.forEach(userDoc => {
+                const userComenzi = userDoc.data().comenzi || [];
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.comenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-                // Actualizează documentul utilizatorului
-                await updateDoc(userDocRef, {
-                    comenzi: updatedUserComenzi,
-                    plata: 0,
+                batch.update(userDoc.ref, {
+                    comenzi: updatedUserComenzi
                 });
-            }
+            });
+            // Execute batch write
+            await batch.commit();
+
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
@@ -226,6 +229,7 @@ const handleButtonClick = async () => {
         console.error("Eroare la actualizarea datelor:", error);
     }
 };
+
 
     const renderComenzi = (comenzi, orderIndex) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
