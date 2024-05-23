@@ -202,11 +202,17 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 
                 comenziSnapshot.forEach((docSnapshot) => {
                     const mesaData = docSnapshot.data();
+                    if (!mesaData.comenzi) {
+                        console.warn(`Documentul mesei ${docSnapshot.id} nu conține câmpul "comenzi".`);
+                        return;
+                    }
+    
                     const updatedMesaComenzi = mesaData.comenzi.filter(mesaComanda => {
                         return !userData.comenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda);
                     });
     
                     if (updatedMesaComenzi.length !== mesaData.comenzi.length) {
+                        console.log(`Actualizare comenzi pentru masa ${docSnapshot.id}`);
                         batch.update(doc(db, "comenzi", docSnapshot.id), {
                             comenzi: updatedMesaComenzi
                         });
@@ -223,6 +229,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
     
