@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField, getDocs, collection } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 const PopupContainer = styled.div`
@@ -188,7 +188,6 @@ const handleButtonClick = async () => {
             const mesaComenzi = mesaSnapshot.data().comenzi || [];
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
-            // Obține documentele utilizatorilor și actualizează-le
             const userCollectionRef = collection(db, "users");
             const userQuerySnapshot = await getDocs(userCollectionRef);
 
@@ -206,7 +205,6 @@ const handleButtonClick = async () => {
                 }
             }
 
-            // Filtrarea comenzilor din documentul "comenzi" al mesei
             const updatedComenzi = mesaComenzi.map(comanda => {
                 allCategories.forEach(category => {
                     if (Array.isArray(comanda[category])) {
@@ -223,7 +221,6 @@ const handleButtonClick = async () => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
-            // Actualizarea documentului "comenzi" al mesei cu comenzile filtrate
             await updateDoc(mesaRef, {
                 comenzi: updatedComenzi,
             });
