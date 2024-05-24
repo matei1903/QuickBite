@@ -11,6 +11,13 @@ const StyledLayout = styled.div`
     box-shadow: 0 10px 10px 10px rgba(0,0,0,0.5);
     opacity: 100%;
     background-color: #192440;
+  }
+  
+  .img {
+    width: 150px;
+    height: auto;
+    top: 10px;
+    margin: 0 auto;
     
   }
   `;
