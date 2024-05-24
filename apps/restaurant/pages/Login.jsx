@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
+const Layout = React.lazy(() => import("../Layout.jsx"));
 
 
 const Login = () => {
@@ -18,14 +19,16 @@ const Login = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Table Numbers</h1>
-      <ul>
-        {tableNumbers.map((number, index) => (
-          <li key={index}>{number}</li>
-        ))}
-      </ul>
-    </div>
+    <Layout>
+      <div>
+        <h1>Table Numbers</h1>
+        <ul>
+          {tableNumbers.map((number, index) => (
+            <li key={index}>{number}</li>
+          ))}
+        </ul>
+      </div>
+    </Layout>
   );
 };
 
