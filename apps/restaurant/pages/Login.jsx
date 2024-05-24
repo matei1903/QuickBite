@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+
 
 const Login = () => {
   const [tableNumbers, setTableNumbers] = useState([]);
+  const firestore = getFirestore();
 
   useEffect(() => {
     const fetchTables = async () => {
-      const tablesCollection = collection(db, 'tables');
+      const tablesCollection = collection(firestore, 'tables');
       const tablesSnapshot = await getDocs(tablesCollection);
       const tablesList = tablesSnapshot.docs.map(doc => doc.data().number);
       setTableNumbers(tablesList);
