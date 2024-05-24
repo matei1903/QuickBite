@@ -11,7 +11,7 @@ const router = createBrowserRouter([
 ]);
 const GlobalStypes = createGlobalStyle`
   body {
-    background: #202E51;
+    background: #192440;
     color: ${variables.primaryColor};
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, fantasy;
 `;
