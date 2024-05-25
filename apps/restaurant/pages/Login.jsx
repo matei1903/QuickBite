@@ -10,7 +10,7 @@ const Layout = React.lazy(() => import("../Layout.jsx"));
 const Login = () => {
 
   return (
-    <Layout style="height=150px">
+    <Layout>
       <div id="nav-bar">
         <input type="checkbox" id="nav-toggle" />
         <div id="nav-header">

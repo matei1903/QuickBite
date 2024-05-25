@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 
 const StyledLayout = styled.div`
+
+  background-color: #9F9A8C;
+
   .header {
     text-align: center;
     position: sticky;
