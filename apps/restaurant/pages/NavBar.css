@@ -346,8 +346,8 @@ label[for="nav-footer-toggle"] {
   height: 65vh;
   width: 120vh;
   left: 400px;
-  top: -310px;
-  position: relative;
+  top: 195px;
+  position: absolute;
 }
 #masa1 {
   border: 3px solid #18283b;
