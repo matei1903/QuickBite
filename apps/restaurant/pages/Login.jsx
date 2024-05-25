@@ -3,11 +3,76 @@ import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import styled from 'styled-components';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './NavBar.css';
+import Draggable from 'react-draggable';
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
 
 
 const Login = () => {
+
+// Verificăm dacă există o poziție stocată în localStorage la încărcarea inițială a componentei
+const storedPosition_masa1 = JSON.parse(localStorage.getItem('draggedPosition_masa1'));
+const storedPosition_masa2 = JSON.parse(localStorage.getItem('draggedPosition_masa2'));
+const storedPosition_masa3 = JSON.parse(localStorage.getItem('draggedPosition_masa3'));
+// Folosim poziția stocată sau poziția implicită (0, 0) dacă nu există o poziție stocată
+const [position_masa1, setPosition_masa1] = useState(storedPosition_masa1 || { x: 0, y: 0 });
+const [position_masa2, setPosition_masa2] = useState(storedPosition_masa2 || { x: 0, y: 0 });
+const [position_masa3, setPosition_masa3] = useState(storedPosition_masa3 || { x: 0, y: 0 });
+
+
+  // Definim funcțiile handleStart, handleDrag și handleStop
+  const handleStartmasa1 = (e, data) => {
+    console.log('Start dragging');
+  };
+
+  const handleDragmasa1 = (e, data) => {
+    const { x, y } = data;
+    console.log('Dragging: ', x, y);
+    setPosition_masa1({ x, y });
+  };
+
+  const handleStopmasa1 = (e, data) => {
+    console.log('Stop dragging');
+    const { x, y } = data;
+    setPosition_masa1({ x, y });
+    localStorage.setItem('draggedPosition_masa1', JSON.stringify({ x, y }));
+  };
+
+
+  const handleStartmasa2 = (e, data) => {
+    console.log('Start dragging');
+  };
+
+  const handleDragmasa2 = (e, data) => {
+    const { x, y } = data;
+    console.log('Dragging: ', x, y);
+    setPosition_masa2({ x, y });
+  };
+
+  const handleStopmasa2 = (e, data) => {
+    console.log('Stop dragging');
+    const { x, y } = data;
+    setPosition_masa2({ x, y });
+    localStorage.setItem('draggedPosition_masa2', JSON.stringify({ x, y }));
+  };
+
+
+  const handleStartmasa3 = (e, data) => {
+    console.log('Start dragging');
+  };
+
+  const handleDragmasa3 = (e, data) => {
+    const { x, y } = data;
+    console.log('Dragging: ', x, y);
+    setPosition_masa3({ x, y });
+  };
+
+  const handleStopmasa3 = (e, data) => {
+    console.log('Stop dragging');
+    const { x, y } = data;
+    setPosition_masa3({ x, y });
+    localStorage.setItem('draggedPosition_masa3', JSON.stringify({ x, y }));
+  };
 
   return (
     <Layout>
@@ -50,6 +115,59 @@ const Login = () => {
             <i className="fas fa-solid fa-power-off"></i><span>Inchidere sistem</span>
           </div>
         </div>
+      </div>
+      <div class='container'>
+        <Draggable
+          axis="both"
+          handle=".handle"
+          defaultPosition={{ x: 0, y: 0 }}
+          position={position_masa1}
+          grid={[25, 25]}
+          scale={1}
+          onStart={handleStartmasa1}
+          onDrag={handleDragmasa1}
+          onStop={handleStopmasa1}
+          bounds="parent"
+          allowAnyClick={Boolean}
+        >
+          <div id="masa1" className="handle">
+            <div >Masa1</div>
+          </div>
+        </Draggable>
+        <Draggable
+          axis="both"
+          handle=".handle"
+          defaultPosition={{ x: 0, y: 0 }}
+          position={position_masa2}
+          grid={[25, 25]}
+          scale={1}
+          onStart={handleStartmasa2}
+          onDrag={handleDragmasa2}
+          onStop={handleStopmasa2}
+          bounds="parent"
+          allowAnyClick={Boolean}
+        >
+          <div id="masa2" className="handle">
+            <div >Masa2</div>
+          </div>
+        </Draggable>
+        <Draggable
+          axis="both"
+          handle=".handle"
+          defaultPosition={{ x: 0, y: 0 }}
+          position={position_masa3}
+          grid={[25, 25]}
+          scale={1}
+          onStart={handleStartmasa3}
+          onDrag={handleDragmasa3}
+          onStop={handleStopmasa3}
+          bounds="parent"
+          allowAnyClick={Boolean}
+        >
+          <div id="masa3" className="handle">
+            <div >Masa3</div>
+          </div>
+        </Draggable>
       </div>
     </Layout>
   );
