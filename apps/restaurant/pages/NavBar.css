@@ -367,3 +367,6 @@ label[for="nav-footer-toggle"] {
   padding: 20px;
   text-align: center;
 }
+.handle {
+  color: black;
+}

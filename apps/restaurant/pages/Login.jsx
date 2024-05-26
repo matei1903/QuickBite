@@ -4,11 +4,18 @@ import styled from 'styled-components';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './NavBar.css';
 import Draggable from 'react-draggable';
+import { useNavigate } from 'react-router-dom';
 const Layout = React.lazy(() => import("../Layout.jsx"));
 
 
 
 const Login = () => {
+const navigate = useNavigate();
+
+
+const handleAdaugaComanda = () => {
+  navigate('/menu');
+}
 
 // Verificăm dacă există o poziție stocată în localStorage la încărcarea inițială a componentei
 const storedPosition_masa1 = JSON.parse(localStorage.getItem('draggedPosition_masa1'));
@@ -85,7 +92,7 @@ const [position_masa3, setPosition_masa3] = useState(storedPosition_masa3 || { x
           <hr />
         </div>
         <div id="nav-content">
-          <div className="nav-button">
+          <div className="nav-button" onClick={handleAdaugaComanda}>
             <i className="fas fa-solid fa-plus"></i><span>Adaugare comenzi</span>
           </div>
           <div className="nav-button">
