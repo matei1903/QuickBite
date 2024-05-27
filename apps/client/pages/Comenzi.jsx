@@ -216,9 +216,15 @@ const Comenzi = () => {
                     if (comandaSelectata) {
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
     
+                        // Filtrăm preparatele comandate
+                        const preparateComandate = selectedPrep.filter(prepId => {
+                            const [comandaId] = prepId.split('-');
+                            return comandaId === comandaSelectata.id_comanda;
+                        });
+    
                         // Creează promisiuni pentru a obține detaliile preparatelor
-                        const preparatePromises = selectedPrep.map(async (prepId) => {
-                            const [comandaId, categorie, id] = prepId.split('-');
+                        const preparatePromises = preparateComandate.map(async (prepId) => {
+                            const [, categorie, id] = prepId.split('-');
                             const preparatDocRef = doc(db, categorie, id);
                             const preparatDocSnapshot = await getDoc(preparatDocRef);
                             return preparatDocSnapshot.exists() ? preparatDocSnapshot.data().pret : 0;
@@ -230,15 +236,14 @@ const Comenzi = () => {
     
                         // Creează obiectul pentru comanda de adăugat/actualizat
                         const comandaDeAdaugat = {
-                            ...comandaSelectata,
-                            preparate_comandate: selectedPrep,
-                            uuid: comandaSelectata.id_comanda,
+                            id_comanda: comandaSelectata.id_comanda,
+                            preparate_comandate: preparateComandate,
                             total_cash: totalCash,
                             total_card: 0,
                             ora_plata: new Date().toISOString()
                         };
     
-                        const comenziInterRef = doc(db, "comenzi_inter", userID);
+                        const comenziInterRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
                         const comenziInterSnapshot = await getDoc(comenziInterRef);
     
                         if (comenziInterSnapshot.exists()) {
