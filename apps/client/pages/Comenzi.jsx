@@ -254,13 +254,6 @@ const Comenzi = () => {
                             });
                         }
             
-                        // Șterge comanda din colecția "users"
-                        const newUserComenziData = userComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
-                        await updateDoc(userDocRef, {
-                            comenzi: newUserComenziData,
-                            plata: 0
-                        });
-            
                         // Șterge comanda din colecția "comenzi"
                         const comandaRef = doc(db, "comenzi", comandaSelectata.id_comanda);
                         const comandaSnapshot = await getDoc(comandaRef);
@@ -268,16 +261,23 @@ const Comenzi = () => {
                             await deleteDoc(comandaRef);
                         }
             
-                        // Șterge comanda din colecția "comenzi_inter" dacă există
-                        const comenziInterData = comenziInterSnapshot.data();
-                        const newComenziInterData = comenziInterData.comenzi.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
-                        if (newComenziInterData.length === 0) {
-                            await deleteDoc(comenziInterRef);
-                        } else {
-                            await updateDoc(comenziInterRef, {
-                                comenzi: newComenziInterData
-                            });
-                        }
+                        // Verifică comenzile rămase în colecția "comenzi" și actualizează "users"
+                        const allComenziSnapshot = await getDocs(collection(db, "comenzi"));
+                        const existingComenziIds = new Set();
+                        allComenziSnapshot.forEach(doc => {
+                            const data = doc.data();
+                            if (data && data.id_comanda) {
+                                existingComenziIds.add(data.id_comanda);
+                            }
+                        });
+            
+                        // Șterge comenzile din colecția "users" care nu mai există în colecția "comenzi"
+                        const newUserComenziData = userComenziData.filter(comanda => existingComenziIds.has(comanda.id_comanda));
+                        await updateDoc(userDocRef, {
+                            comenzi: newUserComenziData,
+                            plata: 0
+                        });
+            
                     } else {
                         console.error("Comanda selectată nu a fost găsită.");
                     }
@@ -287,6 +287,7 @@ const Comenzi = () => {
             } catch (error) {
                 console.error("Eroare la actualizarea comenzilor intermediare:", error);
             }
+            
         }
         if (paymentMethod === "custom" && selectedOption === "comandaMea") {
             setCustomShowPopup(true);
