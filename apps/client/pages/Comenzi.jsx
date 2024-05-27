@@ -204,18 +204,18 @@ const Comenzi = () => {
             try {
                 const userDocRef = doc(db, "users", userID);
                 const userDocSnapshot = await getDoc(userDocRef);
-    
+            
                 if (userDocSnapshot.exists()) {
                     const userComenziData = userDocSnapshot.data().comenzi || [];
-    
+            
                     // Găsește comanda selectată
                     const comandaSelectata = userComenziData.find(comanda =>
                         selectedPrep.some(prepId => prepId.startsWith(comanda.id_comanda))
                     );
-    
+            
                     if (comandaSelectata) {
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-    
+            
                         // Extrage preparatele comandate și calculează totalul
                         let totalCash = 0;
                         for (const categorie of allCategories) {
@@ -230,7 +230,7 @@ const Comenzi = () => {
                                 }
                             }
                         }
-    
+            
                         // Creează obiectul pentru comanda de adăugat/actualizat
                         const comandaDeAdaugat = {
                             ...comandaSelectata,
@@ -238,10 +238,10 @@ const Comenzi = () => {
                             total_card: 0,
                             ora_plata: new Date().toISOString()
                         };
-    
+            
                         const comenziInterRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
                         const comenziInterSnapshot = await getDoc(comenziInterRef);
-    
+            
                         if (comenziInterSnapshot.exists()) {
                             // Dacă documentul există, actualizează câmpul `comenzi`
                             await updateDoc(comenziInterRef, {
@@ -253,24 +253,29 @@ const Comenzi = () => {
                                 comenzi: [comandaDeAdaugat]
                             });
                         }
-    
+            
                         // Șterge comanda din colecția "users"
                         const newUserComenziData = userComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
                         await updateDoc(userDocRef, {
                             comenzi: newUserComenziData,
                             plata: 0
                         });
-    
+            
                         // Șterge comanda din colecția "comenzi"
-                        const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-                        const mesaSnapshot = await getDoc(mesaRef);
-                        if (mesaSnapshot.exists()) {
-                            const mesaData = mesaSnapshot.data();
-                            const updatedMesaComenzi = mesaData.comenzi.filter(comandaSelectata => {
-                                return !userComenziData.comenzi.some(comanda => comanda.id_comanda === comandaSelectata.id_comanda);
-                            });
-                            await updateDoc(mesaRef, {
-                                comenzi: updatedMesaComenzi
+                        const comandaRef = doc(db, "comenzi", comandaSelectata.id_comanda);
+                        const comandaSnapshot = await getDoc(comandaRef);
+                        if (comandaSnapshot.exists()) {
+                            await deleteDoc(comandaRef);
+                        }
+            
+                        // Șterge comanda din colecția "comenzi_inter" dacă există
+                        const comenziInterData = comenziInterSnapshot.data();
+                        const newComenziInterData = comenziInterData.comenzi.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
+                        if (newComenziInterData.length === 0) {
+                            await deleteDoc(comenziInterRef);
+                        } else {
+                            await updateDoc(comenziInterRef, {
+                                comenzi: newComenziInterData
                             });
                         }
                     } else {
