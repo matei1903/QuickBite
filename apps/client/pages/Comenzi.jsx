@@ -257,22 +257,21 @@ const Comenzi = () => {
                         // Șterge comanda din colecția "users"
                         const newUserComenziData = userComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
                         await updateDoc(userDocRef, {
-                            comenzi: newUserComenziData
+                            comenzi: newUserComenziData,
+                            plata: 0
                         });
     
                         // Șterge comanda din colecția "comenzi"
-                        const comandaRef = doc(db, "comenzi", `masa${selectedTable}`);
-                        const comandaSnapshot = await getDoc(comandaRef);
-                        if (comandaSnapshot.exists()) {
-                            const masaComenziData = comandaSnapshot.data();
-                            const newMasaComenziData = masaComenziData.comenzi.filter(comanda => comanda.id_comanda === comandaSelectata.id_comanda);
-                            if (newMasaComenziData.length === 0) {
-                                await deleteDoc(comandaRef);
-                            } else {
-                                await updateDoc(comandaRef, {
-                                    comenzi: newMasaComenziData
-                                });
-                            }
+                        const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                        const mesaSnapshot = await getDoc(mesaRef);
+                        if (mesaSnapshot.exists()) {
+                            const mesaData = mesaSnapshot.data();
+                            const updatedMesaComenzi = mesaData.comenzi.filter(comandaSelectata => {
+                                return !userComenziData.comenzi.some(comanda => comanda.id_comanda === comandaSelectata.id_comanda);
+                            });
+                            await updateDoc(mesaRef, {
+                                comenzi: updatedMesaComenzi
+                            });
                         }
                     } else {
                         console.error("Comanda selectată nu a fost găsită.");
