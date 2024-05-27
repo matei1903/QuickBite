@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
@@ -199,6 +199,68 @@ const Comenzi = () => {
                     (Array.isArray(comanda[category]) ? comanda[category] : []).map(id => `${comanda.id_comanda}-${category}-${id}`)
                 )
             ));
+        }
+        if (selectedOption === "comandaMea" && paymentMethod === "cash") {
+            try {
+                const userDocRef = doc(db, "users", userID);
+                const userDocSnapshot = await getDoc(userDocRef);
+    
+                if (userDocSnapshot.exists()) {
+                    const userComenziData = userDocSnapshot.data().comenzi || [];
+    
+                    // Găsește comanda selectată
+                    const comandaSelectata = userComenziData.find(comanda =>
+                        selectedPrep.some(prepId => prepId.startsWith(comanda.id_comanda))
+                    );
+    
+                    if (comandaSelectata) {
+                        const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+    
+                        // Creează promisiuni pentru a obține detaliile preparatelor
+                        const preparatePromises = selectedPrep.map(async (prepId) => {
+                            const [comandaId, categorie, id] = prepId.split('-');
+                            const preparatDocRef = doc(db, categorie, id);
+                            const preparatDocSnapshot = await getDoc(preparatDocRef);
+                            return preparatDocSnapshot.exists() ? preparatDocSnapshot.data().pret : 0;
+                        });
+    
+                        // Așteaptă toate promisiunile și calculează totalul
+                        const preturi = await Promise.all(preparatePromises);
+                        const totalCash = preturi.reduce((sum, pret) => sum + pret, 0);
+    
+                        // Creează obiectul pentru comanda de adăugat/actualizat
+                        const comandaDeAdaugat = {
+                            ...comandaSelectata,
+                            preparate_comandate: selectedPrep,
+                            uuid: comandaSelectata.id_comanda,
+                            total_cash: totalCash,
+                            total_card: 0,
+                            ora_plata: new Date().toISOString()
+                        };
+    
+                        const comenziInterRef = doc(db, "comenzi_inter", userID);
+                        const comenziInterSnapshot = await getDoc(comenziInterRef);
+    
+                        if (comenziInterSnapshot.exists()) {
+                            // Dacă documentul există, actualizează câmpul `comenzi`
+                            await updateDoc(comenziInterRef, {
+                                comenzi: arrayUnion(comandaDeAdaugat)
+                            });
+                        } else {
+                            // Dacă documentul nu există, creează-l și adaugă comanda
+                            await setDoc(comenziInterRef, {
+                                comenzi: [comandaDeAdaugat]
+                            });
+                        }
+                    } else {
+                        console.error("Comanda selectată nu a fost găsită.");
+                    }
+                } else {
+                    console.error("Documentul utilizatorului nu există.");
+                }
+            } catch (error) {
+                console.error("Eroare la actualizarea comenzilor intermediare:", error);
+            }
         }
         if (paymentMethod === "custom" && selectedOption === "comandaMea") {
             setCustomShowPopup(true);
