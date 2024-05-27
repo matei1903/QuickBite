@@ -215,29 +215,34 @@ const Comenzi = () => {
     
                     if (comandaSelectata) {
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-    
-                        // Filtrăm preparatele comandate
-                        const preparateComandate = selectedPrep.filter(prepId => {
-                            const [comandaId] = prepId.split('-');
-                            return comandaId === comandaSelectata.id_comanda;
-                        });
-    
-                        // Creează promisiuni pentru a obține detaliile preparatelor
-                        const preparatePromises = preparateComandate.map(async (prepId) => {
-                            const [, categorie, id] = prepId.split('-');
-                            const preparatDocRef = doc(db, categorie, id);
-                            const preparatDocSnapshot = await getDoc(preparatDocRef);
-                            return preparatDocSnapshot.exists() ? preparatDocSnapshot.data().pret : 0;
-                        });
-    
-                        // Așteaptă toate promisiunile și calculează totalul
-                        const preturi = await Promise.all(preparatePromises);
-                        const totalCash = preturi.reduce((sum, pret) => sum + pret, 0);
+                        
+                        // Extrage preparatele comandate și calculează totalul
+                        let preparateComandate = [];
+                        let totalCash = 0;
+                        for (const categorie of allCategories) {
+                            if (Array.isArray(comandaSelectata[categorie])) {
+                                for (const id of comandaSelectata[categorie]) {
+                                    const preparatDocRef = doc(db, categorie, id);
+                                    const preparatDocSnapshot = await getDoc(preparatDocRef);
+                                    if (preparatDocSnapshot.exists()) {
+                                        const preparat = preparatDocSnapshot.data();
+                                        totalCash += preparat.pret;
+                                        preparateComandate.push({
+                                            categorie,
+                                            id,
+                                            nume: preparat.nume,
+                                            pret: preparat.pret
+                                        });
+                                    }
+                                }
+                            }
+                        }
     
                         // Creează obiectul pentru comanda de adăugat/actualizat
                         const comandaDeAdaugat = {
                             id_comanda: comandaSelectata.id_comanda,
                             preparate_comandate: preparateComandate,
+                            uuid: comandaSelectata.id_comanda,
                             total_cash: totalCash,
                             total_card: 0,
                             ora_plata: new Date().toISOString()
