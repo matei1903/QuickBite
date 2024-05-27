@@ -264,8 +264,8 @@ const Comenzi = () => {
                         const comandaRef = doc(db, "comenzi", `masa${selectedTable}`);
                         const comandaSnapshot = await getDoc(comandaRef);
                         if (comandaSnapshot.exists()) {
-                            const masaComenziData = comandaSnapshot.data().comenzi || [];
-                            const newMasaComenziData = masaComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
+                            const masaComenziData = comandaSnapshot.data();
+                            const newMasaComenziData = masaComenziData.comenzi.filter(comanda => comanda.id_comanda === comandaSelectata.id_comanda);
                             if (newMasaComenziData.length === 0) {
                                 await deleteDoc(comandaRef);
                             } else {
