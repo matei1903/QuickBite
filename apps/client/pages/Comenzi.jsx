@@ -215,9 +215,8 @@ const Comenzi = () => {
     
                     if (comandaSelectata) {
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                        
+    
                         // Extrage preparatele comandate și calculează totalul
-                        let preparateComandate = [];
                         let totalCash = 0;
                         for (const categorie of allCategories) {
                             if (Array.isArray(comandaSelectata[categorie])) {
@@ -227,12 +226,6 @@ const Comenzi = () => {
                                     if (preparatDocSnapshot.exists()) {
                                         const preparat = preparatDocSnapshot.data();
                                         totalCash += preparat.pret;
-                                        preparateComandate.push({
-                                            categorie,
-                                            id,
-                                            nume: preparat.nume,
-                                            pret: preparat.pret
-                                        });
                                     }
                                 }
                             }
@@ -240,9 +233,7 @@ const Comenzi = () => {
     
                         // Creează obiectul pentru comanda de adăugat/actualizat
                         const comandaDeAdaugat = {
-                            id_comanda: comandaSelectata.id_comanda,
-                            preparate_comandate: preparateComandate,
-                            uuid: comandaSelectata.id_comanda,
+                            ...comandaSelectata,
                             total_cash: totalCash,
                             total_card: 0,
                             ora_plata: new Date().toISOString()
