@@ -370,3 +370,18 @@ label[for="nav-footer-toggle"] {
 .handle {
   color: black;
 }
+/* Pentru a schimba cursorul când mesele sunt selectabile */
+.selectable {
+cursor: pointer;
+}
+
+/* Pentru a evidenția mesele */
+.selectable:hover {
+box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Pentru a blura meniul și alte elemente */
+.blur-background *:not(.container,.handle,.nume) {
+filter: blur(5px);
+}
+

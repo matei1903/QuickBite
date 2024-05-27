@@ -6,9 +6,11 @@ import { FirebaseProvider } from "@quick-bite/components/context/Firebase";
 const Login = React.lazy(() => import("./pages/Login.jsx"));
 const NotFound = React.lazy(() => import("./pages/NotFound.jsx"));
 const Menu = React.lazy(() => import("./pages/Menu.jsx"));
+const Comenzi = React.lazy(() => import("./pages/Comenzi.jsx"));
 const router = createBrowserRouter([
   { path: "/", element: <Login />},
   { path: "/Menu", element: <Menu /> },
+  { path: "/Comenzi/:masa", element: <Comenzi /> },
   { path: "/*", element: <NotFound /> },
   
 ]);
