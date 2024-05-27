@@ -186,7 +186,7 @@ const Comenzi = () => {
         setCustomPlataPopup(false);
     };
 
-    const handlePaymentSubmit = (selectedOption, paymentMethod, updatedComenzi) => {
+    const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi) => {
         if (selectedOption === "comandaMea") {
             setSelectedPrep(userComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
