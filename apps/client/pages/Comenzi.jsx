@@ -253,6 +253,27 @@ const Comenzi = () => {
                                 comenzi: [comandaDeAdaugat]
                             });
                         }
+    
+                        // Șterge comanda din colecția "users"
+                        const newUserComenziData = userComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
+                        await updateDoc(userDocRef, {
+                            comenzi: newUserComenziData
+                        });
+    
+                        // Șterge comanda din colecția "comenzi"
+                        const comandaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                        const comandaSnapshot = await getDoc(comandaRef);
+                        if (comandaSnapshot.exists()) {
+                            const masaComenziData = comandaSnapshot.data().comenzi || [];
+                            const newMasaComenziData = masaComenziData.filter(comanda => comanda.id_comanda !== comandaSelectata.id_comanda);
+                            if (newMasaComenziData.length === 0) {
+                                await deleteDoc(comandaRef);
+                            } else {
+                                await updateDoc(comandaRef, {
+                                    comenzi: newMasaComenziData
+                                });
+                            }
+                        }
                     } else {
                         console.error("Comanda selectată nu a fost găsită.");
                     }
