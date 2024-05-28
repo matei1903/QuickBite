@@ -215,8 +215,8 @@ const CustomPlata = ({ onClose, onSubmit }) => {
 
                 const newComanda = {
                     comenzi: userComenzi,
-                    totalCard,
-                    totalCash,
+                    totalPretCard: totalCard,
+                    totalPretCash: totalCash,
                     dataPlata: timestamp
                 };
                 const tableDocSnapshot = await getDoc(tableDocRef);
