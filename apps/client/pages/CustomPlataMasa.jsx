@@ -180,6 +180,9 @@ useEffect(() => {
 
 
 const handleButtonClick = async () => {
+    
+    const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
+    const timestamp = new Date();
     try {
         const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
         const mesaSnapshot = await getDoc(mesaRef);
@@ -225,8 +228,26 @@ const handleButtonClick = async () => {
                 comenzi: updatedComenzi,
             });
 
+
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
+
+            const newComanda = {
+                comenzi: mesaComenzi,
+                totalPretCard: totalCard,
+                totalPretCash: totalCash,
+                dataPlata: timestamp
+            };
+            const tableDocSnapshot = await getDoc(tableDocRef);
+            if (tableDocSnapshot.exists()) {
+                await updateDoc(tableDocRef, {
+                    comenzi: arrayUnion(newComanda)
+                });
+            } else {
+                await setDoc(tableDocRef, {
+                    comenzi: [newComanda]
+                });
+            }
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
         }
