@@ -197,19 +197,21 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
     
-                // Update the user's "comenzi" field
-                const userRef = doc(db, "users", userID);
-                const userSnapshot = await getDoc(userRef);
-                if (userSnapshot.exists()) {
-                    const userComenzi = userSnapshot.data().comenzi || [];
+                // Update each user's "comenzi" field
+                const usersSnapshot = await getDocs(collection(db, "users"));
+                for (const userDoc of usersSnapshot.docs) {
+                    const userComenzi = userDoc.data().comenzi || [];
+                    let userComenziUpdated = false;
     
                     const updatedUserComenzi = userComenzi.map((userComanda) => {
-                        if (updatedComenzi.some((comanda, comandaIndex) => comanda.id === userComanda.id)) {
+                        const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
+                        if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
                                     userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                        !movedItemIds.includes(`${userComanda.id}-${category}-${id}-${itemIndex}`)
+                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
                                     );
+                                    userComenziUpdated = true;
                                 }
                             });
                         }
@@ -218,7 +220,9 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                         allCategories.some(category => Array.isArray(userComanda[category]) && userComanda[category].length > 0)
                     );
     
-                    await updateDoc(userRef, { comenzi: updatedUserComenzi });
+                    if (userComenziUpdated) {
+                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
+                    }
                 }
     
                 localStorage.removeItem("plata");
@@ -230,6 +234,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
 
