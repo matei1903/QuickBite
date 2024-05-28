@@ -190,6 +190,26 @@ const handleButtonClick = async () => {
             const mesaComenzi = mesaSnapshot.data().comenzi || [];
             console.log("Initial mesaComenzi:", mesaComenzi);
 
+            // Stocare initiala a comenzilor mesei în `comenzi_inter`
+            const initialComanda = {
+                comenzi: mesaComenzi,
+                totalPretCard: totalCard, // Actualizează cu valoarea corectă dacă este disponibilă
+                totalPretCash: totalCash, // Actualizează cu valoarea corectă dacă este disponibilă
+                dataPlata: timestamp
+            };
+
+            const tableDocSnapshot = await getDoc(tableDocRef);
+            if (tableDocSnapshot.exists()) {
+                await updateDoc(tableDocRef, {
+                    comenzi: arrayUnion(initialComanda)
+                });
+            } else {
+                await setDoc(tableDocRef, {
+                    comenzi: [initialComanda]
+                });
+            }
+
+            // Continuă cu logica de filtrare și actualizare a comenzilor
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
             const userCollectionRef = collection(db, "users");
@@ -235,23 +255,7 @@ const handleButtonClick = async () => {
             onSubmit(updatedComenzi);
             console.log("Comenzile sunt:", updatedComenzi);
 
-            const newComanda = {
-                comenzi: updatedComenzi,
-                totalPretCard: totalCard,
-                totalPretCash: totalCash,
-                dataPlata: timestamp
-            };
-
-            const tableDocSnapshot = await getDoc(tableDocRef);
-            if (tableDocSnapshot.exists()) {
-                await updateDoc(tableDocRef, {
-                    comenzi: arrayUnion(newComanda)
-                });
-            } else {
-                await setDoc(tableDocRef, {
-                    comenzi: [newComanda]
-                });
-            }
+            
 
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
