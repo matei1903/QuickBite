@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { doc, getDoc, setDoc, updateDoc, arrayUnion, getDocs } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, getDocs, collection } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
@@ -320,10 +320,10 @@ const Comenzi = () => {
                 if (mesaSnapshot.exists()) {
                     const mesaComenzi = mesaSnapshot.data().comenzi || [];
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-        
+                    
                     const userCollectionRef = collection(db, "users");
                     const userQuerySnapshot = await getDocs(userCollectionRef);
-        
+                    
                     for (const userDoc of userQuerySnapshot.docs) {
                         const userComenzi = userDoc.data().comenzi || [];
                         const updatedUserComenzi = userComenzi.filter(userComanda => {
@@ -337,7 +337,7 @@ const Comenzi = () => {
                             });
                         }
                     }
-        
+                    
                     const updatedMesaComenzi = mesaComenzi.map(comanda => {
                         allCategories.forEach(category => {
                             if (Array.isArray(comanda[category])) {
@@ -359,7 +359,7 @@ const Comenzi = () => {
                     });
         
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
-                    onClose();
+                    
                 }
             } catch (error) {
                 console.error("Eroare la actualizarea datelor:", error);
