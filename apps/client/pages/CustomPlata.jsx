@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField, arrayUnion } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 const PopupContainer = styled.div`
@@ -178,7 +178,7 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                 const userData = userDocSnapshot.data();
                 const userComenzi = userDocSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-                
+
                 // Actualizare comenzi - ștergerea comenzilor plătite
                 const updatedComenzi = userData.comenzi.map(comanda => {
                     allCategories.forEach(category => {
@@ -219,9 +219,16 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     totalCash,
                     dataPlata: timestamp
                 };
-                await updateDoc(tableDocRef, {
-                    comenzi: arrayUnion(newComanda)
-                });
+                const tableDocSnapshot = await getDoc(tableDocRef);
+                if (tableDocSnapshot.exists()) {
+                    await updateDoc(tableDocRef, {
+                        comenzi: arrayUnion(newComanda)
+                    });
+                } else {
+                    await setDoc(tableDocRef, {
+                        comenzi: [newComanda]
+                    });
+                }
 
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
@@ -230,9 +237,9 @@ const CustomPlata = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
-    
-    
-    
+
+
+
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, comandaIndex) => (
