@@ -233,7 +233,7 @@ const handleButtonClick = async () => {
 
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
-
+            console.log("comenzile sunt:",mesaComenzi);
             const newComanda = {
                 comenzi: mesaComenzi,
                 totalPretCard: totalCard,
