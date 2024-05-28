@@ -311,6 +311,61 @@ const Comenzi = () => {
                 console.error("Eroare la actualizarea comenzii mesei:", error);
             }
         }
+
+        if (selectedOption === "comandaMesei" && paymentMethod === "cash") {
+            try {
+                const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+                const mesaSnapshot = await getDoc(mesaRef);
+        
+                if (mesaSnapshot.exists()) {
+                    const mesaComenzi = mesaSnapshot.data().comenzi || [];
+                    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+        
+                    const userCollectionRef = collection(db, "users");
+                    const userQuerySnapshot = await getDocs(userCollectionRef);
+        
+                    for (const userDoc of userQuerySnapshot.docs) {
+                        const userComenzi = userDoc.data().comenzi || [];
+                        const updatedUserComenzi = userComenzi.filter(userComanda => {
+                            return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                        });
+        
+                        if (updatedUserComenzi.length !== userComenzi.length) {
+                            await updateDoc(userDoc.ref, {
+                                comenzi: updatedUserComenzi,
+                                plata: 0,
+                            });
+                        }
+                    }
+        
+                    const updatedComenzi = mesaComenzi.map(comanda => {
+                        allCategories.forEach(category => {
+                            if (Array.isArray(comanda[category])) {
+                                comanda[category] = comanda[category].filter(id => {
+                                    return !userQuerySnapshot.docs.some(userDoc => {
+                                        const userComenzi = userDoc.data().comenzi || [];
+                                        return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
+                                    });
+                                });
+                            }
+                        });
+                        return comanda;
+                    }).filter(comanda => {
+                        return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
+                    });
+        
+                    await updateDoc(mesaRef, {
+                        comenzi: updatedComenzi,
+                    });
+        
+                    
+                    alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+                    onClose();
+                }
+            } catch (error) {
+                console.error("Eroare la actualizarea datelor:", error);
+            }
+        }
     
         if (selectedOption === "comandaMea") {
             setSelectedPrep(userComenzi.flatMap(comanda =>
