@@ -180,9 +180,12 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
-        
+    
+                console.log("Initial Mesa Comenzi:", mesaComenzi);
+                console.log("Moved Item IDs:", movedItemIds);
+    
                 // Remove selected items from the "comenzi" collection
-                const updatedComenzi = mesaComenzi.map((comanda) => {
+                const updatedComenzi = mesaComenzi.map(comanda => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
@@ -195,8 +198,10 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
     
+                console.log("Updated Mesa Comenzi:", updatedComenzi);
+    
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
-        
+    
                 // Update each user's "comenzi" field
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
@@ -221,6 +226,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     );
     
                     if (userComenziUpdated) {
+                        console.log(`Updating user ${userDoc.id} with new comenzi:`, updatedUserComenzi);
                         await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                     }
                 }
