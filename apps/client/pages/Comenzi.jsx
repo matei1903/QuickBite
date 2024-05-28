@@ -220,7 +220,7 @@ const Comenzi = () => {
                     const newComanda = {
                         comenzi: userComenzi,
                         totalPretCash,
-                        totalPretCard,
+                        totalPretCard: 0,
                         dataPlata: timestamp
                     };
     
@@ -242,7 +242,8 @@ const Comenzi = () => {
     
                     // Șterge comenzile din documentul utilizatorului
                     await updateDoc(userDocRef, {
-                        comenzi: []
+                        comenzi: [],
+                        plata: 0
                     });
                 }
             } catch (error) {
