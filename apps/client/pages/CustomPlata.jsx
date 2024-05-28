@@ -168,11 +168,15 @@ const CustomPlata = ({ onClose, onSubmit }) => {
         e.preventDefault();
     };
     const handleButtonClick = async () => {
+
+        const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
+        const timestamp = new Date();
         try {
             const userDocRef = doc(db, "users", userID);
             const userDocSnapshot = await getDoc(userDocRef);
             if (userDocSnapshot.exists()) {
                 const userData = userDocSnapshot.data();
+                const userComenzi = userDocSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 
                 // Actualizare comenzi - ștergerea comenzilor plătite
@@ -208,6 +212,17 @@ const CustomPlata = ({ onClose, onSubmit }) => {
                     });
                 }
                 onSubmit(updatedComenzi);
+
+                const newComanda = {
+                    comenzi: userComenzi,
+                    totalCard,
+                    totalCash,
+                    dataPlata: timestamp
+                };
+                await updateDoc(tableDocRef, {
+                    comenzi: arrayUnion(newComanda)
+                });
+
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                 onClose();
             }
