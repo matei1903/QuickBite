@@ -180,7 +180,6 @@ useEffect(() => {
 
 
 const handleButtonClick = async () => {
-    
     const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
     const timestamp = new Date();
     try {
@@ -189,6 +188,8 @@ const handleButtonClick = async () => {
 
         if (mesaSnapshot.exists()) {
             const mesaComenzi = mesaSnapshot.data().comenzi || [];
+            console.log("Initial mesaComenzi:", mesaComenzi);
+
             const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
             const userCollectionRef = collection(db, "users");
@@ -199,8 +200,6 @@ const handleButtonClick = async () => {
                 const updatedUserComenzi = userComenzi.filter(userComanda => {
                     return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
                 });
-
-                
 
                 if (updatedUserComenzi.length !== userComenzi.length) {
                     await updateDoc(userDoc.ref, {
@@ -226,20 +225,23 @@ const handleButtonClick = async () => {
                 return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
             });
 
+            console.log("Updated comenzi:", updatedComenzi);
+
             await updateDoc(mesaRef, {
                 comenzi: updatedComenzi,
             });
 
-
             localStorage.removeItem("plata");
             onSubmit(updatedComenzi);
-            console.log("comenzile sunt:",mesaComenzi);
+            console.log("Comenzile sunt:", updatedComenzi);
+
             const newComanda = {
-                comenzi: mesaComenzi,
+                comenzi: updatedComenzi,
                 totalPretCard: totalCard,
                 totalPretCash: totalCash,
                 dataPlata: timestamp
             };
+
             const tableDocSnapshot = await getDoc(tableDocRef);
             if (tableDocSnapshot.exists()) {
                 await updateDoc(tableDocRef, {
@@ -250,8 +252,11 @@ const handleButtonClick = async () => {
                     comenzi: [newComanda]
                 });
             }
+
             alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             onClose();
+        } else {
+            console.log("No mesaSnapshot exists for masa:", selectedTable);
         }
     } catch (error) {
         console.error("Eroare la actualizarea datelor:", error);
