@@ -186,7 +186,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                                !movedItemIds.includes(`${comanda.id}-${category}-${id}-${itemIndex}`)
                             );
                         }
                     });
@@ -203,13 +203,12 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
     
-                    const updatedUserComenzi = userComenzi.map((userComanda, userComandaIndex) => {
-                        const correspondingMasaComanda = mesaComenzi.find(comanda => comanda.id === userComanda.id);
-                        if (correspondingMasaComanda) {
+                    const updatedUserComenzi = userComenzi.map(userComanda => {
+                        if (mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda)) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
                                     userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
+                                        !movedItemIds.includes(`${userComanda.id_comanda}-${category}-${id}-${itemIndex}`)
                                     );
                                     userComenziUpdated = true;
                                 }
@@ -234,6 +233,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
     
