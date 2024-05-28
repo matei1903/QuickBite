@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, getDocs } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import PaymentPopup from "./Plata";
 import CustomPlata from "./CustomPlata";
@@ -338,7 +338,7 @@ const Comenzi = () => {
                         }
                     }
         
-                    const updatedComenzi = mesaComenzi.map(comanda => {
+                    const updatedMesaComenzi = mesaComenzi.map(comanda => {
                         allCategories.forEach(category => {
                             if (Array.isArray(comanda[category])) {
                                 comanda[category] = comanda[category].filter(id => {
@@ -355,10 +355,9 @@ const Comenzi = () => {
                     });
         
                     await updateDoc(mesaRef, {
-                        comenzi: updatedComenzi,
+                        comenzi: updatedMesaComenzi,
                     });
         
-                    
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                     onClose();
                 }
