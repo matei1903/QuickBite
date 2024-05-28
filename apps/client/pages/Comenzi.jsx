@@ -228,12 +228,28 @@ const Comenzi = () => {
                     await updateDoc(tableDocRef, {
                         comenzi: arrayUnion(newComanda)
                     });
+    
+                    // Șterge comenzile din documentul mesei
+                    const mesaDocRef = doc(db, "comenzi", `masa${selectedTable}`);
+                    const mesaSnapshot = await getDoc(mesaDocRef);
+                    if (mesaSnapshot.exists()) {
+                        const mesaComenzi = mesaSnapshot.data().comenzi || [];
+                        const filteredMesaComenzi = mesaComenzi.filter(mesaComanda => 
+                            !userComenzi.some(userComanda => userComanda.id_comanda === mesaComanda.id_comanda)
+                        );
+                        await setDoc(mesaDocRef, { comenzi: filteredMesaComenzi });
+                    }
+    
+                    // Șterge comenzile din documentul utilizatorului
+                    await updateDoc(userDocRef, {
+                        comenzi: []
+                    });
                 }
             } catch (error) {
                 console.error("Eroare la actualizarea comenzii mesei:", error);
             }
         }
-        
+    
         if (selectedOption === "comandaMea") {
             setSelectedPrep(userComenzi.flatMap(comanda =>
                 Object.keys(comanda).flatMap(category =>
@@ -263,6 +279,7 @@ const Comenzi = () => {
             setUserComenzi(updatedComenzi);
         }
     };
+    
     
     const renderComenzi = (comenzi, orderIndex, isUserOrder) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
