@@ -203,14 +203,16 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 if (userSnapshot.exists()) {
                     const userComenzi = userSnapshot.data().comenzi || [];
     
-                    const updatedUserComenzi = userComenzi.map((userComanda, userComandaIndex) => {
-                        allCategories.forEach(category => {
-                            if (Array.isArray(userComanda[category])) {
-                                userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                    !movedItemIds.includes(`${userComandaIndex}-${category}-${id}-${itemIndex}`)
-                                );
-                            }
-                        });
+                    const updatedUserComenzi = userComenzi.map((userComanda) => {
+                        if (updatedComenzi.some((comanda, comandaIndex) => comanda.id === userComanda.id)) {
+                            allCategories.forEach(category => {
+                                if (Array.isArray(userComanda[category])) {
+                                    userComanda[category] = userComanda[category].filter((id, itemIndex) =>
+                                        !movedItemIds.includes(`${userComanda.id}-${category}-${id}-${itemIndex}`)
+                                    );
+                                }
+                            });
+                        }
                         return userComanda;
                     }).filter(userComanda =>
                         allCategories.some(category => Array.isArray(userComanda[category]) && userComanda[category].length > 0)
@@ -228,6 +230,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
 
     const renderComenzi = (comenzi) => {
