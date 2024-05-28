@@ -314,74 +314,47 @@ const Comenzi = () => {
 
         if (selectedOption === "comandaMesei" && paymentMethod === "cash") {
             try {
-                // Referința la documentul mesei selectate din colecția "comenzi"
                 const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
                 const mesaSnapshot = await getDoc(mesaRef);
         
                 if (mesaSnapshot.exists()) {
                     const mesaComenzi = mesaSnapshot.data().comenzi || [];
+                    let totalPretCash = 0;
+                    let totalPretCard = 0;
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+        
+                    // Adaugarea comenzilor mesei în colecția comenzi_inter
+                    const comenziInterRef = collection(db, "comenzi_inter");
                     
-                    // Adăugarea comenzilor în colecția "comenzi_inter"
-                    const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
-                    const timestamp = new Date();
-                    const newComanda = {
-                        comenzi: mesaComenzi,
-                        totalPretCash: totalCash,
-                        totalPretCard: 0,
-                        dataPlata: timestamp
-                    };
-                    await setDoc(tableDocRef, newComanda);
+                    // Obținerea documentului comenzi_inter (dacă există)
+                    const comenziInterDoc = await getDoc(comenziInterRef);
         
-                    // Preluarea tuturor documentelor din colecția "users"
-                    const userCollectionRef = collection(db, "users");
-                    const userQuerySnapshot = await getDocs(userCollectionRef);
+                    let updatedComenzi = [];
         
-                    // Filtrarea și actualizarea comenzilor utilizatorilor
-                    for (const userDoc of userQuerySnapshot.docs) {
-                        const userComenzi = userDoc.data().comenzi || [];
-                        const updatedUserComenzi = userComenzi.filter(userComanda => {
-                            return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
-                        });
-        
-                        // Actualizarea documentului utilizatorului dacă a avut comenzi șterse
-                        if (updatedUserComenzi.length !== userComenzi.length) {
-                            await updateDoc(userDoc.ref, {
-                                comenzi: updatedUserComenzi,
-                                plata: 0,
-                            });
-                        }
+                    if (comenziInterDoc.exists()) {
+                        updatedComenzi = comenziInterDoc.data().comenzi || []; // Obținerea comenzilor existente (dacă există)
                     }
         
-                    // Filtrarea și actualizarea comenzilor mesei
-                    const updatedMesaComenzi = mesaComenzi.map(comanda => {
-                        allCategories.forEach(category => {
-                            if (Array.isArray(comanda[category])) {
-                                comanda[category] = comanda[category].filter(id => {
-                                    return !userQuerySnapshot.docs.some(userDoc => {
-                                        const userComenzi = userDoc.data().comenzi || [];
-                                        return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
-                                    });
-                                });
-                            }
-                        });
-                        return comanda;
-                    }).filter(comanda => {
-                        return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
+                    updatedComenzi.push({ // Adăugarea comenzilor mesei în colecția comenzi_inter
+                        comenzi: mesaComenzi,
+                        totalPretCash,
+                        totalPretCard: 0,
+                        dataPlata: timestamp
                     });
         
-                    // Actualizarea documentului mesei cu comenzile rămase
-                    await updateDoc(mesaRef, {
-                        comenzi: updatedMesaComenzi,
-                    });
+                    // Actualizarea colecției comenzi_inter cu comenzile actualizate
+                    await setDoc(comenziInterRef, {
+                        comenzi: updatedComenzi
+                    }, { merge: true }); // Se folosește merge: true pentru a combina comenzile noi cu cele existente (dacă există)
         
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
-                    
+        
                 }
             } catch (error) {
                 console.error("Eroare la actualizarea datelor:", error);
             }
         }
+        
         
     
         if (selectedOption === "comandaMea") {
