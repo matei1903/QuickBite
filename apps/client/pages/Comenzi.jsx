@@ -206,15 +206,18 @@ const Comenzi = () => {
                 const userDocSnapshot = await getDoc(userDocRef);
             
                 if (userDocSnapshot.exists()) {
-                    const userComenziData = userDocSnapshot.data().comenzi || [];
-                    const userEmail = userDocSnapshot.data().email;
+                    const userData = userDocSnapshot.data();
+                    const userComenziData = userData.comenzi || [];
+                    const userEmail = userData.email;
             
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                     const comenziDeAdaugat = [];
+                    let totalCash = 0;
+                    let totalCard = 0;
             
                     for (const comanda of userComenziData) {
-                        let totalCash = 0;
-                        let totalCard = 0;
+                        let comandaTotalCash = 0;
+                        let comandaTotalCard = 0;
             
                         for (const categorie of allCategories) {
                             if (Array.isArray(comanda[categorie])) {
@@ -224,19 +227,22 @@ const Comenzi = () => {
                                     if (preparatDocSnapshot.exists()) {
                                         const preparat = preparatDocSnapshot.data();
                                         if (preparat.modalitate_plata === "cash") {
-                                            totalCash += preparat.pret;
+                                            comandaTotalCash += preparat.pret;
                                         } else if (preparat.modalitate_plata === "card") {
-                                            totalCard += preparat.pret;
+                                            comandaTotalCard += preparat.pret;
                                         }
                                     }
                                 }
                             }
                         }
             
+                        totalCash += comandaTotalCash;
+                        totalCard += comandaTotalCard;
+            
                         const comandaDeAdaugat = {
                             ...comanda,
-                            total_cash: totalCash,
-                            total_card: totalCard,
+                            total_cash: comandaTotalCash,
+                            total_card: comandaTotalCard,
                             ora_plata: new Date().toISOString()
                         };
             
@@ -267,11 +273,13 @@ const Comenzi = () => {
             
                     // Șterge comenzile din colecția comenzi care aparțin utilizatorului curent
                     const comenziCollectionRef = collection(db, "comenzi");
-                    const comenziQuery = query(comenziCollectionRef, where("user.email", "==", userEmail));
+                    const comenziQuery = query(comenziCollectionRef, where("user", "==", userEmail));
                     const comenziSnapshot = await getDocs(comenziQuery);
                     for (const docSnapshot of comenziSnapshot.docs) {
                         await deleteDoc(docSnapshot.ref);
                     }
+            
+                    alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
             
                 } else {
                     console.error("Documentul utilizatorului nu există.");
