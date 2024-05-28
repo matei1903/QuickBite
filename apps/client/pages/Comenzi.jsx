@@ -207,20 +207,17 @@ const Comenzi = () => {
             
                 if (userDocSnapshot.exists()) {
                     const userComenziData = userDocSnapshot.data().comenzi || [];
+                    const userEmail = userDocSnapshot.data().email;
             
-                    // Găsește comanda selectată
-                    const comandaSelectata = userComenziData.find(comanda =>
-                        selectedPrep.some(prepId => prepId.startsWith(comanda.id_comanda))
-                    );
+                    const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                    const comenziDeAdaugat = [];
             
-                    if (comandaSelectata) {
-                        const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-            
-                        // Extrage preparatele comandate și calculează totalul
+                    for (const comanda of userComenziData) {
                         let totalCash = 0;
+            
                         for (const categorie of allCategories) {
-                            if (Array.isArray(comandaSelectata[categorie])) {
-                                for (const id of comandaSelectata[categorie]) {
+                            if (Array.isArray(comanda[categorie])) {
+                                for (const id of comanda[categorie]) {
                                     const preparatDocRef = doc(db, categorie, id);
                                     const preparatDocSnapshot = await getDoc(preparatDocRef);
                                     if (preparatDocSnapshot.exists()) {
@@ -231,56 +228,49 @@ const Comenzi = () => {
                             }
                         }
             
-                        // Creează obiectul pentru comanda de adăugat/actualizat
                         const comandaDeAdaugat = {
-                            ...comandaSelectata,
+                            ...comanda,
                             total_cash: totalCash,
                             total_card: 0,
                             ora_plata: new Date().toISOString()
                         };
             
-                        const comenziInterRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
-                        const comenziInterSnapshot = await getDoc(comenziInterRef);
+                        comenziDeAdaugat.push(comandaDeAdaugat);
+                    }
             
-                        if (comenziInterSnapshot.exists()) {
-                            // Dacă documentul există, actualizează câmpul `comenzi`
+                    const comenziInterRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
+                    const comenziInterSnapshot = await getDoc(comenziInterRef);
+            
+                    if (comenziInterSnapshot.exists()) {
+                        const comenziInterData = comenziInterSnapshot.data().comenzi || [];
+                        const comenziInterDataFiltered = comenziInterData.filter(comanda => comanda.user.email !== userEmail);
+            
+                        if (comenziInterDataFiltered.length > 0) {
                             await updateDoc(comenziInterRef, {
-                                comenzi: arrayUnion(comandaDeAdaugat)
+                                comenzi: [...comenziInterDataFiltered, ...comenziDeAdaugat]
                             });
                         } else {
-                            // Dacă documentul nu există, creează-l și adaugă comanda
-                            await setDoc(comenziInterRef, {
-                                comenzi: [comandaDeAdaugat]
-                            });
+                            await deleteDoc(comenziInterRef);
                         }
+                    } else {
+                        await setDoc(comenziInterRef, {
+                            comenzi: comenziDeAdaugat
+                        });
+                    }
             
-                        // Șterge comanda din colecția "comenzi"
-                        const comandaRef = doc(db, "comenzi", comandaSelectata.id_comanda);
+                    for (const comanda of userComenziData) {
+                        const comandaRef = doc(db, "comenzi", comanda.id_comanda);
                         const comandaSnapshot = await getDoc(comandaRef);
                         if (comandaSnapshot.exists()) {
                             await deleteDoc(comandaRef);
                         }
-            
-                        // Verifică comenzile rămase în colecția "comenzi" și actualizează "users"
-                        const allComenziSnapshot = await getDocs(collection(db, "comenzi"));
-                        const existingComenziIds = new Set();
-                        allComenziSnapshot.forEach(doc => {
-                            const data = doc.data();
-                            if (data && data.id_comanda) {
-                                existingComenziIds.add(data.id_comanda);
-                            }
-                        });
-            
-                        // Șterge comenzile din colecția "users" care nu mai există în colecția "comenzi"
-                        const newUserComenziData = userComenziData.filter(comanda => existingComenziIds.has(comanda.id_comanda));
-                        await updateDoc(userDocRef, {
-                            comenzi: newUserComenziData,
-                            plata: 0
-                        });
-            
-                    } else {
-                        console.error("Comanda selectată nu a fost găsită.");
                     }
+            
+                    await updateDoc(userDocRef, {
+                        comenzi: [],
+                        plata: 0
+                    });
+            
                 } else {
                     console.error("Documentul utilizatorului nu există.");
                 }
