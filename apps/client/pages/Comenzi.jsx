@@ -355,7 +355,7 @@ const Comenzi = () => {
                     });
 
                     const newComanda = {
-                        comenzi: userComenzi,
+                        comenzi: mesaComenzi,
                         totalPretCash,
                         totalPretCard: 0,
                         dataPlata: timestamp
