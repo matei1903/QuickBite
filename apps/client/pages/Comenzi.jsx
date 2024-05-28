@@ -319,6 +319,8 @@ const Comenzi = () => {
         
                 if (mesaSnapshot.exists()) {
                     const mesaComenzi = mesaSnapshot.data().comenzi || [];
+                    let totalPretCash = 0;
+                    let totalPretCard = 0;
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                     
                     const userCollectionRef = collection(db, "users");
@@ -337,6 +339,30 @@ const Comenzi = () => {
                             });
                         }
                     }
+
+                    mesaComenzi.forEach(comanda => {
+                        Object.keys(comanda).forEach(category => {
+                            if (Array.isArray(comanda[category])) {
+                                comanda[category].forEach(id => {
+                                    const preparat = preparateDetails[id];
+                                    if (preparat) {
+                                        totalPretCash += preparat.pret;
+                                        totalPretCard += preparat.pret;
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    const newComanda = {
+                        comenzi: userComenzi,
+                        totalPretCash,
+                        totalPretCard: 0,
+                        dataPlata: timestamp
+                    };
+                    await updateDoc(tableDocRef, {
+                        comenzi: arrayUnion(newComanda)
+                    });
                     
                     const updatedMesaComenzi = mesaComenzi.map(comanda => {
                         allCategories.forEach(category => {
