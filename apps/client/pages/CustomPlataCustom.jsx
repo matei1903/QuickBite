@@ -203,8 +203,8 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
     
-                    const updatedUserComenzi = userComenzi.map((userComanda) => {
-                        const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
+                    const updatedUserComenzi = userComenzi.map((userComanda, userComandaIndex) => {
+                        const correspondingMasaComanda = mesaComenzi.find(comanda => comanda.id === userComanda.id);
                         if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
@@ -234,6 +234,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
+    
     
     
     
