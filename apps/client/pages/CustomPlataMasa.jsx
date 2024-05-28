@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc, updateDoc, deleteField, getDocs, collection, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField, getDocs, collection, setDoc, arrayUnion } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 const PopupContainer = styled.div`
