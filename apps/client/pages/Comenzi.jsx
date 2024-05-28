@@ -316,45 +316,76 @@ const Comenzi = () => {
             try {
                 const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
                 const mesaSnapshot = await getDoc(mesaRef);
-        
+
                 if (mesaSnapshot.exists()) {
                     const mesaComenzi = mesaSnapshot.data().comenzi || [];
                     let totalPretCash = 0;
                     let totalPretCard = 0;
                     const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-        
-                    // Adăugare comenzile tale în colecția comenzi_inter
-                    const userCollectionRef = collection(db, "comenzi_inter");
+
+                    const userCollectionRef = collection(db, "users");
                     const userQuerySnapshot = await getDocs(userCollectionRef);
+                    
+                    for (const userDoc of userQuerySnapshot.docs) {
+                        const userComenzi = userDoc.data().comenzi || [];
+                        const updatedUserComenzi = userComenzi.filter(userComanda => {
+                            return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                        });
         
-                    const userComenzi = mesaComenzi; // Toate comenzile mesei vor fi considerate comenzile tale
-        
-                    // Adăugare comenzile tale și alte comenzi existente (dacă există)
-                    const updatedComenzi = userQuerySnapshot.docs.reduce((accumulator, userDoc) => {
-                        const existingComenzi = userDoc.data().comenzi || [];
-                        accumulator.push(...existingComenzi); // Adăugare comenzi existente
-                        return accumulator;
-                    }, []);
-        
-                    updatedComenzi.push({ // Adăugare comenzile tale
+                        if (updatedUserComenzi.length !== userComenzi.length) {
+                            await updateDoc(userDoc.ref, {
+                                comenzi: updatedUserComenzi,
+                                plata: 0,
+                            });
+                        }
+                    }
+
+                    mesaComenzi.forEach(comanda => {
+                        Object.keys(comanda).forEach(category => {
+                            if (Array.isArray(comanda[category])) {
+                                comanda[category].forEach(id => {
+                                    const preparat = preparateDetails[id];
+                                    if (preparat) {
+                                        totalPretCash += preparat.pret;
+                                        totalPretCard += preparat.pret;
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    const newComanda = {
                         comenzi: userComenzi,
                         totalPretCash,
                         totalPretCard: 0,
                         dataPlata: timestamp
+                    };
+                    await updateDoc(tableDocRef, {
+                        comenzi: arrayUnion(newComanda)
+                    });
+
+                    const updatedMesaComenzi = mesaComenzi.map(comanda => {
+                        allCategories.forEach(category => {
+                            if (Array.isArray(comanda[category])) {
+                                comanda[category] = comanda[category].filter(id => {
+                                    return !userQuerySnapshot.docs.some(userDoc => {
+                                        const userComenzi = userDoc.data().comenzi || [];
+                                        return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
+                                    });
+                                });
+                            }
+                        });
+                        return comanda;
+                    }).filter(comanda => {
+                        return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
                     });
         
-                    // Actualizare colecție comenzi_inter cu comenzile actualizate
-                    await updateDoc(userCollectionRef, {
-                        comenzi: updatedComenzi
-                    });
-        
-                    // Actualizare comenzi în colecția mesei cu comenzile tale
                     await updateDoc(mesaRef, {
-                        comenzi: userComenzi,
+                        comenzi: updatedMesaComenzi,
                     });
         
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
-        
+                    
                 }
             } catch (error) {
                 console.error("Eroare la actualizarea datelor:", error);
