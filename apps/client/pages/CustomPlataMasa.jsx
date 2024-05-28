@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc, updateDoc, deleteField, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField, getDocs, collection, setDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 const PopupContainer = styled.div`
@@ -171,92 +171,92 @@ const CustomPlataMasa = ({ onClose, onSubmit }) => {
         e.preventDefault();
     };
 
-    useEffect(() => {
-        const tableFromStorage = localStorage.getItem('selectedTable');
-        if (tableFromStorage) {
-            setSelectedTable(parseInt(tableFromStorage));
-        }
-    }, []);
+useEffect(() => {
+    const tableFromStorage = localStorage.getItem('selectedTable');
+    if (tableFromStorage) {
+        setSelectedTable(parseInt(tableFromStorage));
+    }
+}, []);
 
 
-    const handleButtonClick = async () => {
+const handleButtonClick = async () => {
+    
+    const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
+    const timestamp = new Date();
+    try {
+        const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
+        const mesaSnapshot = await getDoc(mesaRef);
 
-        const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
-        const timestamp = new Date();
-        try {
-            const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
-            const mesaSnapshot = await getDoc(mesaRef);
+        if (mesaSnapshot.exists()) {
+            const mesaComenzi = mesaSnapshot.data().comenzi || [];
+            const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
 
-            if (mesaSnapshot.exists()) {
-                const mesaComenzi = mesaSnapshot.data().comenzi || [];
-                const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+            const userCollectionRef = collection(db, "users");
+            const userQuerySnapshot = await getDocs(userCollectionRef);
 
-                const userCollectionRef = collection(db, "users");
-                const userQuerySnapshot = await getDocs(userCollectionRef);
+            for (const userDoc of userQuerySnapshot.docs) {
+                const userComenzi = userDoc.data().comenzi || [];
+                const updatedUserComenzi = userComenzi.filter(userComanda => {
+                    return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                });
 
-                for (const userDoc of userQuerySnapshot.docs) {
-                    const userComenzi = userDoc.data().comenzi || [];
-                    const updatedUserComenzi = userComenzi.filter(userComanda => {
-                        return !mesaComenzi.some(mesaComanda => mesaComanda.id_comanda === userComanda.id_comanda);
+                
+
+                if (updatedUserComenzi.length !== userComenzi.length) {
+                    await updateDoc(userDoc.ref, {
+                        comenzi: updatedUserComenzi,
+                        plata: 0,
                     });
-
-                    const newComanda = {
-                        comenzi: mesaComenzi,
-                        totalPretCard: totalCard,
-                        totalPretCash: totalCash,
-                        dataPlata: timestamp
-                    };
-                    const tableDocSnapshot = await getDoc(tableDocRef);
-                    if (tableDocSnapshot.exists()) {
-                        await updateDoc(tableDocRef, {
-                            comenzi: arrayUnion(newComanda)
-                        });
-                    } else {
-                        await setDoc(tableDocRef, {
-                            comenzi: [newComanda]
-                        });
-                    }
-
-                    if (updatedUserComenzi.length !== userComenzi.length) {
-                        await updateDoc(userDoc.ref, {
-                            comenzi: updatedUserComenzi,
-                            plata: 0,
-                        });
-                    }
                 }
-
-                const updatedComenzi = mesaComenzi.map(comanda => {
-                    allCategories.forEach(category => {
-                        if (Array.isArray(comanda[category])) {
-                            comanda[category] = comanda[category].filter(id => {
-                                return !userQuerySnapshot.docs.some(userDoc => {
-                                    const userComenzi = userDoc.data().comenzi || [];
-                                    return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
-                                });
-                            });
-                        }
-                    });
-                    return comanda;
-                }).filter(comanda => {
-                    return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
-                });
-
-                await updateDoc(mesaRef, {
-                    comenzi: updatedComenzi,
-                });
-
-
-                localStorage.removeItem("plata");
-                onSubmit(updatedComenzi);
-
-
-                alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
-                onClose();
             }
-        } catch (error) {
-            console.error("Eroare la actualizarea datelor:", error);
+
+            const updatedComenzi = mesaComenzi.map(comanda => {
+                allCategories.forEach(category => {
+                    if (Array.isArray(comanda[category])) {
+                        comanda[category] = comanda[category].filter(id => {
+                            return !userQuerySnapshot.docs.some(userDoc => {
+                                const userComenzi = userDoc.data().comenzi || [];
+                                return userComenzi.some(userComanda => userComanda.id_comanda === comanda.id_comanda);
+                            });
+                        });
+                    }
+                });
+                return comanda;
+            }).filter(comanda => {
+                return allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0);
+            });
+
+            await updateDoc(mesaRef, {
+                comenzi: updatedComenzi,
+            });
+
+
+            localStorage.removeItem("plata");
+            onSubmit(updatedComenzi);
+
+            const newComanda = {
+                comenzi: mesaComenzi,
+                totalPretCard: totalCard,
+                totalPretCash: totalCash,
+                dataPlata: timestamp
+            };
+            const tableDocSnapshot = await getDoc(tableDocRef);
+            if (tableDocSnapshot.exists()) {
+                await updateDoc(tableDocRef, {
+                    comenzi: arrayUnion(newComanda)
+                });
+            } else {
+                await setDoc(tableDocRef, {
+                    comenzi: [newComanda]
+                });
+            }
+            alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+            onClose();
         }
-    };
+    } catch (error) {
+        console.error("Eroare la actualizarea datelor:", error);
+    }
+};
 
 
 
