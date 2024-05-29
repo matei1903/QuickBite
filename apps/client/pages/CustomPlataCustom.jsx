@@ -180,28 +180,13 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
-    
-                // Calculate the total price of removed items
-                let totalPriceRemoved = 0;
-                mesaComenzi.forEach(comanda => {
-                    allCategories.forEach(category => {
-                        if (Array.isArray(comanda[category])) {
-                            comanda[category].forEach(item => {
-                                const [id, price] = item.split('-');
-                                if (movedItemIds.includes(`${comanda.id}-${category}-${id}`)) {
-                                    totalPriceRemoved += parseFloat(price);
-                                }
-                            });
-                        }
-                    });
-                });
-    
+
                 // Remove selected items from the "comenzi" collection
                 const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comanda.id}-${category}-${id}`)
+                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
                             );
                         }
                     });
@@ -209,35 +194,31 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
-    
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
-    
-                // Update each user's "comenzi" field and adjust payment
+                // Update each user's "comenzi" field
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
-    
+
                     const updatedUserComenzi = userComenzi.map((userComanda) => {
                         const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
-                        if (correspondingMasaComanda && correspondingMasaComanda.id_comanda === userComanda.id_comanda) {
-                            // Copy the corresponding order from "comenzi" to "users"
-                            Object.assign(userComanda, correspondingMasaComanda);
-                            userComenziUpdated = true;
+                        if (correspondingMasaComanda) {
+                            allCategories.forEach(category => {
+                                if (Array.isArray(userComanda[category])) {
+                                    userComanda[category] = userComanda[category].filter((id, itemIndex) =>
+                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
+                                    );
+                                    userComenziUpdated = true;
+                                }
+                            });
                         }
                         return userComanda;
-                    });
-    
-                    // If no corresponding order is found, remove the order from "users"
-                    if (!userComenziUpdated) {
-                        await updateDoc(userDoc.ref, { comenzi: [], plata: 0 });
-                    }
-    
+                    }).filter(userComanda =>
+                        allCategories.some(category => Array.isArray(userComanda[category]) && userComanda[category].length > 0)
+                    );
                     if (userComenziUpdated) {
-                        // Adjust payment in user's document
-                        const userPlata = parseFloat(userDoc.data().plata) || 0;
-                        const newPlata = userPlata - totalPriceRemoved;
-                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi, plata: newPlata });
+                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                     }
                 }
     
