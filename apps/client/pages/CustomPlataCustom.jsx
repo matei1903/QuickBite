@@ -182,11 +182,11 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const movedItemIds = Array.from(movedItems);
 
                 // Remove selected items from the "comenzi" collection
-                const updatedComenzi = mesaComenzi.map(comanda => {
+                const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comanda.id_comanda}-${category}-${id}-${itemIndex}`)
+                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
                             );
                         }
                     });
@@ -203,13 +203,13 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
 
-                    const updatedUserComenzi = userComenzi.map(userComanda => {
-                        const correspondingMasaComanda = mesaComenzi.find(comanda => comanda.id_comanda === userComanda.id_comanda);
+                    const updatedUserComenzi = userComenzi.map((userComanda) => {
+                        const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
                         if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
                                     userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                        !movedItemIds.includes(`${userComanda.id_comanda}-${category}-${id}-${itemIndex}`)
+                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
                                     );
                                     userComenziUpdated = true;
                                 }
