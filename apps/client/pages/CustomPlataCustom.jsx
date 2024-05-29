@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
-import { doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, updateDoc, getDocs, collection, arrayUnion } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
@@ -172,10 +172,12 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     };
 
     const handleButtonClick = async () => {
+        const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
+        const timestamp = new Date();
         try {
             const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
             const mesaSnapshot = await getDoc(mesaRef);
-    
+
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
@@ -194,6 +196,23 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
+                const initialComanda = {
+                    comenzi: updatedComenzi,
+                    totalPretCard: totalCard, // Actualizează cu valoarea corectă dacă este disponibilă
+                    totalPretCash: totalCash, // Actualizează cu valoarea corectă dacă este disponibilă
+                    dataPlata: timestamp
+                };
+                const tableDocSnapshot = await getDoc(tableDocRef);
+                if (tableDocSnapshot.exists()) {
+                    await updateDoc(tableDocRef, {
+                        comenzi: arrayUnion(initialComanda)
+                    });
+                } else {
+                    await setDoc(tableDocRef, {
+                        comenzi: [initialComanda]
+                    });
+                }
+
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
                 // Update each user's "comenzi" field
                 const usersSnapshot = await getDocs(collection(db, "users"));
