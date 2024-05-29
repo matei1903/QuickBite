@@ -208,9 +208,10 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                         if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
-                                    userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
-                                    );
+                                    userComanda[category] = userComanda[category].filter((id, itemIndex) => {
+                                        const mesaComandaIndex = mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id);
+                                        return !movedItemIds.includes(`${mesaComandaIndex}-${category}-${id}-${itemIndex}`);
+                                    });
                                     userComenziUpdated = true;
                                 }
                             });
@@ -234,7 +235,6 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
-    
     
     
 
