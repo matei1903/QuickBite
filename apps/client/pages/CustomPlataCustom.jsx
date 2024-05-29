@@ -186,7 +186,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                                !movedItemIds.includes(`${comanda.id}-${category}-${id}-${itemIndex}`)
                             );
                         }
                     });
@@ -209,8 +209,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
                                     userComanda[category] = userComanda[category].filter((id, itemIndex) => {
-                                        const mesaComandaIndex = mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id);
-                                        return !movedItemIds.includes(`${mesaComandaIndex}-${category}-${id}-${itemIndex}`);
+                                        return !movedItemIds.includes(`${userComanda.id}-${category}-${id}-${itemIndex}`);
                                     });
                                     userComenziUpdated = true;
                                 }
