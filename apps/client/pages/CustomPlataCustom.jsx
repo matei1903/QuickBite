@@ -174,46 +174,15 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     const handleButtonClick = async () => {
         const tableDocRef = doc(db, "comenzi_inter", `masa${selectedTable}`);
         const timestamp = new Date();
-    
         try {
-            // Funcție pentru a crea structura preparatelor mutate
-            const createPreparateStructure = (widgets) => {
-                const structure = {
-                    aperitive: [],
-                    fel_principal: [],
-                    supe_ciorbe: [],
-                    paste: [],
-                    pizza: [],
-                    garnituri: [],
-                    salate: [],
-                    desert: [],
-                    bauturi: []
-                };
-    
-                widgets.forEach((item) => {
-                    if (structure[item.category]) {
-                        structure[item.category].push(item.nume);
-                    }
-                });
-    
-                return structure;
-            };
-    
-            // Crearea structurii pentru preparatele mutate
-            const preparateCard = createPreparateStructure(cardWidgets);
-            const preparateCash = createPreparateStructure(cashWidgets);
-    
-            // Structura comenzii actualizate
-            const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-            const movedItemIds = Array.from(movedItems);
-    
             const mesaRef = doc(db, "comenzi", `masa${selectedTable}`);
             const mesaSnapshot = await getDoc(mesaRef);
-    
+
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
-                
-                // Eliminarea preparatelor mutate din comenzi
+                const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
+                const movedItemIds = Array.from(movedItems);
+                // Remove selected items from the "comenzi" collection
                 const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
@@ -226,25 +195,12 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
-    
-                // Noua comandă cu structura cerută
                 const initialComanda = {
-                    comenzi: [
-                        {
-                            ...preparateCard,
-                            id_comanda: `comanda-${Date.now()}`
-                        },
-                        {
-                            ...preparateCash,
-                            id_comanda: `comanda-${Date.now() + 1}`
-                        }
-                    ],
-                    totalPretCard,
-                    totalPretCash,
+                    comenzi: updatedComenzi,
+                    totalPretCard: totalCard, // Actualizează cu valoarea corectă dacă este disponibilă
+                    totalPretCash: totalCash, // Actualizează cu valoarea corectă dacă este disponibilă
                     dataPlata: timestamp
                 };
-    
-                // Actualizarea documentului mesei în "comenzi_inter"
                 const tableDocSnapshot = await getDoc(tableDocRef);
                 if (tableDocSnapshot.exists()) {
                     await updateDoc(tableDocRef, {
@@ -255,16 +211,13 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                         comenzi: [initialComanda]
                     });
                 }
-    
-                // Actualizarea documentului mesei în "comenzi"
+
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
-    
-                // Actualizarea comenzilor utilizatorilor
+                // Update each user's "comenzi" field
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
-    
                     const updatedUserComenzi = userComenzi.map((userComanda) => {
                         const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
                         if (correspondingMasaComanda) {
@@ -285,7 +238,6 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                         await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                     }
                 }
-
                 localStorage.removeItem("plata");
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
