@@ -205,13 +205,18 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                     const updatedUserComenzi = userComenzi.map((userComanda) => {
                         const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
-                        if (correspondingMasaComanda) {
+                        if (correspondingMasaComanda && correspondingMasaComanda.id_comanda === userComanda.id_comanda) {
                             // Copy the corresponding order from "comenzi" to "users"
                             Object.assign(userComanda, correspondingMasaComanda);
                             userComenziUpdated = true;
                         }
                         return userComanda;
                     });
+    
+                    // If no corresponding order is found, remove the order from "users"
+                    if (!userComenziUpdated) {
+                        await updateDoc(userDoc.ref, { comenzi: [] });
+                    }
     
                     if (userComenziUpdated) {
                         await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
