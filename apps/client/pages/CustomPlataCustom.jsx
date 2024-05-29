@@ -180,36 +180,46 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
-
-                // Remove selected items from the "comenzi" collection
-                const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
+    
+                // Find the item to be removed and its price
+                let removedItemPrice = 0;
+                const updatedComenzi = mesaComenzi.map(comanda => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
-                            comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
-                            );
+                            comanda[category] = comanda[category].filter(item => {
+                                const itemId = `${comanda.id}-${category}-${item.id}`;
+                                if (movedItemIds.includes(itemId)) {
+                                    removedItemPrice += item.pret; // Add the price of the removed item
+                                    return false;
+                                }
+                                return true;
+                            });
                         }
                     });
                     return comanda;
                 }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
-                await updateDoc(mesaRef, { comenzi: updatedComenzi });
-                // Update each user's "comenzi" field
+    
+                // Update each user's "comenzi" field and subtract the price of the removed item from their payment
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
-
-                    const updatedUserComenzi = userComenzi.map((userComanda) => {
+    
+                    const updatedUserComenzi = userComenzi.map(userComanda => {
                         const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
                         if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
-                                    userComanda[category] = userComanda[category].filter((id, itemIndex) =>
-                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
-                                    );
-                                    userComenziUpdated = true;
+                                    userComanda[category] = userComanda[category].filter(item => {
+                                        const itemId = `${correspondingMasaComanda.id}-${category}-${item.id}`;
+                                        if (movedItemIds.includes(itemId)) {
+                                            userComenziUpdated = true;
+                                            return false;
+                                        }
+                                        return true;
+                                    });
                                 }
                             });
                         }
@@ -217,21 +227,23 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     }).filter(userComanda =>
                         allCategories.some(category => Array.isArray(userComanda[category]) && userComanda[category].length > 0)
                     );
+    
+                    // Subtract the price of the removed item from the user's payment
                     if (userComenziUpdated) {
-                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
+                        const updatedPlata = (userDoc.data().plata || 0) - removedItemPrice;
+                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi, plata: updatedPlata });
                     }
                 }
     
                 localStorage.removeItem("plata");
                 onSubmit(updatedComenzi);
-                alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
+                alert(`Pretul preparatului sters a fost scazut din suma de plata a utilizatorilor.`);
                 onClose();
             }
         } catch (error) {
             console.error("Eroare la actualizarea datelor:", error);
         }
     };
-    
 
     const renderComenzi = (comenzi) => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
