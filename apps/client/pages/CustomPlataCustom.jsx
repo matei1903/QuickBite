@@ -181,12 +181,27 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
     
+                // Calculate the total price of removed items
+                let totalPriceRemoved = 0;
+                mesaComenzi.forEach(comanda => {
+                    allCategories.forEach(category => {
+                        if (Array.isArray(comanda[category])) {
+                            comanda[category].forEach(item => {
+                                const [id, price] = item.split('-');
+                                if (movedItemIds.includes(`${comanda.id}-${category}-${id}`)) {
+                                    totalPriceRemoved += parseFloat(price);
+                                }
+                            });
+                        }
+                    });
+                });
+    
                 // Remove selected items from the "comenzi" collection
                 const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
                             comanda[category] = comanda[category].filter((id, itemIndex) =>
-                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                                !movedItemIds.includes(`${comanda.id}-${category}-${id}`)
                             );
                         }
                     });
@@ -197,7 +212,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
     
-                // Update each user's "comenzi" field
+                // Update each user's "comenzi" field and adjust payment
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
                     const userComenzi = userDoc.data().comenzi || [];
@@ -215,11 +230,14 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
     
                     // If no corresponding order is found, remove the order from "users"
                     if (!userComenziUpdated) {
-                        await updateDoc(userDoc.ref, { comenzi: [] });
+                        await updateDoc(userDoc.ref, { comenzi: [], plata: 0 });
                     }
     
                     if (userComenziUpdated) {
-                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
+                        // Adjust payment in user's document
+                        const userPlata = parseFloat(userDoc.data().plata) || 0;
+                        const newPlata = userPlata - totalPriceRemoved;
+                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi, plata: newPlata });
                     }
                 }
     
