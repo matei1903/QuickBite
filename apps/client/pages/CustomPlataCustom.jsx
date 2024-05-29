@@ -180,54 +180,36 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const movedItemIds = Array.from(movedItems);
-                const usersDeletedItemsCosts = {};
-    
-                // Remove selected items from the "comenzi" collection and calculate the cost of deleted items for each user
+
+                // Remove selected items from the "comenzi" collection
                 const updatedComenzi = mesaComenzi.map((comanda, comandaIndex) => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
-                            comanda[category] = comanda[category].filter((item, itemIndex) => {
-                                const itemId = `${comandaIndex}-${category}-${item.id}-${itemIndex}`;
-                                if (movedItemIds.includes(itemId)) {
-                                    const userId = item.userId;  // Presupunând că fiecare item are un câmp userId pentru a identifica utilizatorul
-                                    if (!usersDeletedItemsCosts[userId]) {
-                                        usersDeletedItemsCosts[userId] = 0;
-                                    }
-                                    usersDeletedItemsCosts[userId] += item.pret;
-                                    return false;
-                                }
-                                return true;
-                            });
+                            comanda[category] = comanda[category].filter((id, itemIndex) =>
+                                !movedItemIds.includes(`${comandaIndex}-${category}-${id}-${itemIndex}`)
+                            );
                         }
                     });
                     return comanda;
                 }).filter(comanda =>
                     allCategories.some(category => Array.isArray(comanda[category]) && comanda[category].length > 0)
                 );
-    
                 await updateDoc(mesaRef, { comenzi: updatedComenzi });
-    
-                // Update each user's "comenzi" field and "plata" field
+                // Update each user's "comenzi" field
                 const usersSnapshot = await getDocs(collection(db, "users"));
                 for (const userDoc of usersSnapshot.docs) {
-                    const userId = userDoc.id;
                     const userComenzi = userDoc.data().comenzi || [];
                     let userComenziUpdated = false;
-                    let userDeletedItemsCost = usersDeletedItemsCosts[userId] || 0;
-    
+
                     const updatedUserComenzi = userComenzi.map((userComanda) => {
                         const correspondingMasaComanda = updatedComenzi.find(comanda => comanda.id === userComanda.id);
                         if (correspondingMasaComanda) {
                             allCategories.forEach(category => {
                                 if (Array.isArray(userComanda[category])) {
-                                    userComanda[category] = userComanda[category].filter((item, itemIndex) => {
-                                        const itemId = `${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${item.id}-${itemIndex}`;
-                                        if (movedItemIds.includes(itemId)) {
-                                            userComenziUpdated = true;
-                                            return false;
-                                        }
-                                        return true;
-                                    });
+                                    userComanda[category] = userComanda[category].filter((id, itemIndex) =>
+                                        !movedItemIds.includes(`${mesaComenzi.findIndex(c => c.id === correspondingMasaComanda.id)}-${category}-${id}-${itemIndex}`)
+                                    );
+                                    userComenziUpdated = true;
                                 }
                             });
                         }
@@ -235,13 +217,11 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     }).filter(userComanda =>
                         allCategories.some(category => Array.isArray(userComanda[category]) && userComanda[category].length > 0)
                     );
-    
-                    if (userComenziUpdated || userDeletedItemsCost > 0) {
-                        const newPlata = (userDoc.data().plata || 0) - userDeletedItemsCost;
-                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi, plata: newPlata });
+                    if (userComenziUpdated) {
+                        await updateDoc(userDoc.ref, { comenzi: updatedUserComenzi });
                     }
                 }
-    
+
                 localStorage.removeItem("plata");
                 onSubmit(updatedComenzi);
                 alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
