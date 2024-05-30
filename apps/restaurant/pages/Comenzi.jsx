@@ -187,7 +187,7 @@ const Comenzi = () => {
     return (
         <Layout>
             <Container className="comenzi-container">
-                <h2>Comenzi pentru masa {masa}</h2>
+                <h2>Comenzi pentru {masa}</h2>
                 <ul>
                     {mesaComenzi.map((comanda, comandaIndex) => {
                         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];

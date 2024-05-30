@@ -15,15 +15,39 @@ const Login = () => {
   };
 
   const [eliminareComenziActive, setEliminareComenziActive] = useState(false);
-  const [selectedTable, setSelectedTable] = useState(null);
+  const [creareNotaPlataActive, setCreareNotaPlataActive] = useState(false);
+  const [IstoricComenziActive, setIstoricComenziActive] = useState(false);
 
   const handleEliminareComenzi = () => {
     setEliminareComenziActive(true);
+    setCreareNotaPlataActive(false);  // Ensure only one action is active at a time
+    setIstoricComenziActive(false);
+  };
+
+  const handleCreareNotaPlata = () => {
+    setCreareNotaPlataActive(true);
+    setEliminareComenziActive(false);  // Ensure only one action is active at a time
+    setIstoricComenziActive(false);
+  };
+
+  const handleIstoricComenzi = () => {
+    setEliminareComenziActive(false);
+    setCreareNotaPlataActive(false);  // Ensure only one action is active at a time
+    setIstoricComenziActive(true);
   };
 
   const handleTableClick = (masa) => {
     if (eliminareComenziActive) {
+      console.log(`Navigating to /comenzi/${masa}`);
       navigate(`/comenzi/${masa}`);
+    } else if (creareNotaPlataActive) {
+      console.log(`Navigating to /nota-plata/${masa}`);
+      navigate(`/nota-plata/${masa}`);
+    } else if (IstoricComenziActive) {
+      console.log(`Navigating to /istoric-comenzi/${masa}`);
+      navigate(`/istoric-comenzi/${masa}`);
+    } else {
+      console.log("No action is active");
     }
   };
 
@@ -70,7 +94,7 @@ const Login = () => {
 
   return (
     <Layout>
-      <div className={eliminareComenziActive ? 'blur-background' : ''}>
+      <div className={eliminareComenziActive || creareNotaPlataActive || IstoricComenziActive ? 'blur-background' : ''}>
         <div id="nav-bar">
           <input type="checkbox" id="nav-toggle" />
           <div id="nav-header">
@@ -86,10 +110,10 @@ const Login = () => {
             <div className="nav-button" onClick={handleEliminareComenzi}>
               <i className="fas fa-solid fa-minus"></i><span>Eliminare comenzi</span>
             </div>
-            <div className="nav-button">
+            <div className="nav-button" onClick={handleIstoricComenzi}>
               <i className="fas fa-solid fa-clock-rotate-left"></i><span>Istoric comenzi</span>
             </div>
-            <div className="nav-button">
+            <div className="nav-button" onClick={handleCreareNotaPlata}>
               <i className="fas fa-solid fa-money-bill"></i><span>Creare nota de plata</span>
             </div>
           </div>
@@ -123,7 +147,7 @@ const Login = () => {
             onStop={handleStopmasa1}
             bounds="parent"
           >
-            <div id="masa1" className={`handle ${eliminareComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa1')}>
+            <div id="masa1" className={`handle ${eliminareComenziActive || creareNotaPlataActive || IstoricComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa1')}>
               <div className="nume">Masa1</div>
             </div>
           </Draggable>
@@ -138,7 +162,7 @@ const Login = () => {
             onStop={handleStopmasa2}
             bounds="parent"
           >
-            <div id="masa2" className={`handle ${eliminareComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa2')}>
+            <div id="masa2" className={`handle ${eliminareComenziActive || creareNotaPlataActive || IstoricComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa2')}>
               <div className="nume">Masa2</div>
             </div>
           </Draggable>
@@ -153,7 +177,7 @@ const Login = () => {
             onStop={handleStopmasa3}
             bounds="parent"
           >
-            <div id="masa3" className={`handle ${eliminareComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa3')}>
+            <div id="masa3" className={`handle ${eliminareComenziActive || creareNotaPlataActive || IstoricComenziActive ? 'selectable' : ''}`} onClick={() => handleTableClick('masa3')}>
               <div className="nume">Masa3</div>
             </div>
           </Draggable>

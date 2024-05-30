@@ -7,10 +7,14 @@ const Login = React.lazy(() => import("./pages/Login.jsx"));
 const NotFound = React.lazy(() => import("./pages/NotFound.jsx"));
 const Menu = React.lazy(() => import("./pages/Menu.jsx"));
 const Comenzi = React.lazy(() => import("./pages/Comenzi.jsx"));
+const NotaPlata = React.lazy(() => import("./pages/NotaPlata.jsx"));
+const IstoricComenzi = React.lazy(() => import("./pages/IstoricComenzi.jsx"));
 const router = createBrowserRouter([
   { path: "/", element: <Login />},
   { path: "/Menu", element: <Menu /> },
   { path: "/Comenzi/:masa", element: <Comenzi /> },
+  { path: "/nota-plata/:masaId", element: <NotaPlata /> },
+  { path: "/istoric-comenzi/:masa", element: <IstoricComenzi /> },
   { path: "/*", element: <NotFound /> },
   
 ]);
