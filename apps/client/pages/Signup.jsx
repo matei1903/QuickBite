@@ -20,7 +20,7 @@ const RegisterWrapper = styled.div`
   text-align: center;
   padding: 80px;
   padding-top: 30px;
-  width: 60%;
+  width: 50%;
   margin: 0 auto;
   background-color: #202b1b;
 `;
@@ -149,7 +149,7 @@ const Signup = () => {
         <RegisterWrapper>
           <Img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="site_logo"></Img>
 
-          <h2>Sign Up</h2>
+          <h2>Înregistrează-te</h2>
 
           <form action="" method="post" className="form">
 
@@ -166,13 +166,13 @@ const Signup = () => {
             </FormField>
 
             <FormField>
-              <SubmitButton type="submit" onClick={handleSignup} value="Sign Up" />
-              <SubmitButton type="submit" onClick={handleGoogleSignup} value="Sign Up with Google" />
+              <SubmitButton type="submit" onClick={handleSignup} value="Înregistrează-te" />
+              <SubmitButton type="submit" onClick={handleGoogleSignup} value="Înregistrează-te cu Google" />
             </FormField>
 
           </form>
 
-          <p>Already have an account? <a href="#" onClick={navigateToLogin}>Log in</a></p>
+          <p>Deja ai un cont? <a href="#" onClick={navigateToLogin}>Autentifică-te</a></p>
 
         </RegisterWrapper>
       </div>

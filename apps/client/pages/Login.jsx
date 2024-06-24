@@ -104,7 +104,7 @@ const navigateToSignup = () => {
         <RegisterWrapper>
           <Img src="https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/logo_quickbite.png?alt=media&token=356b8ce3-e2e0-4584-a46a-656992a181f3" className="site_logo"></Img>
 
-          <h2>Sign In</h2>
+          <h2>Autentifică-te</h2>
 
           <form action="" method="post" className="form">
 
@@ -122,7 +122,7 @@ const navigateToSignup = () => {
 
           </form>
 
-          <p>You don't have an account? <a href="#" onClick={navigateToSignup}>Create an account</a></p>
+          <p>Nu ai un cont? <a href="#" onClick={navigateToSignup}>Înregistrează-te</a></p>
 
         </RegisterWrapper>
       </div>

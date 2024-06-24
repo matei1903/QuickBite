@@ -40,6 +40,10 @@ const StyledHome = styled.div`
     font-size:18px;
     
   }
+  .alimente:hover {
+    background-color: #9fac99;
+  }
+    
   .comanda {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
