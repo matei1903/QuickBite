@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import PaymentPopup from "./Plata";
 import CustomPlataMasa from "./CustomPlataMasa";
 import CustomPlataCustom from "./CustomPlataCustom";
+import jsPDF from 'jspdf';
 
 const NotaPlataContainer = styled.div`
   display: flex;
@@ -450,6 +451,12 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
         setUserComenzi(updatedComenzi);
     }
 };
+
+const generatePDF = (orderContent, fileName) => {
+  const doc = new jsPDF();
+  doc.text(orderContent, 10, 10);
+  doc.save(fileName);
+};
   return (
     <Layout>
       <NotaPlataContainer>
@@ -477,6 +484,9 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                 <p>Total Pret Card: {order.totalPretCard}</p>
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
+                <Button onClick={() => generatePDF(JSON.stringify(order), `Order_${index + 1}.pdf`)}>
+                  Descarcă PDF
+                </Button>
               </Order>
             ))}
           </OrdersContainer>
