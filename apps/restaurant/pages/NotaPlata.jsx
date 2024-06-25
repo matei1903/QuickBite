@@ -453,19 +453,28 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
     }
 };
 
-const generatePDF = (order) => {
-  const input = document.getElementById(`order-${order.id}`);
-  
-  html2canvas(input).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`NotaPlata_Masa${order.id}.pdf`);
+const generatePDF = (orderContent, fileName) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 10;
+  const maxWidth = pageWidth - 2 * margin;
+
+  // Fragmentăm textul pentru a se încadra în lățimea paginii
+  const lines = doc.splitTextToSize(orderContent, maxWidth);
+
+  // Adăugăm textul în PDF
+  let y = 10;
+  lines.forEach(line => {
+    doc.text(line, margin, y);
+    y += 10; // spațiere între linii
+    // Dacă se ajunge la sfârșitul paginii, adaugă o nouă pagină
+    if (y > doc.internal.pageSize.getHeight() - margin) {
+      doc.addPage();
+      y = margin;
+    }
   });
+
+  doc.save(fileName);
 };
   return (
     <Layout>
@@ -494,7 +503,7 @@ const generatePDF = (order) => {
                 <p>Total Pret Card: {order.totalPretCard}</p>
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
-                <Button onClick={() => generatePDF(order)}>
+                <Button onClick={() => generatePDF(JSON.stringify(order, null, 2), `Order_${index + 1}.pdf`)}>
                   Descarcă PDF
                 </Button>
               </Order>
