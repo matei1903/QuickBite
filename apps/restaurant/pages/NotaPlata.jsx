@@ -9,6 +9,7 @@ import PaymentPopup from "./Plata";
 import CustomPlataMasa from "./CustomPlataMasa";
 import CustomPlataCustom from "./CustomPlataCustom";
 import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const NotaPlataContainer = styled.div`
   display: flex;
@@ -453,46 +454,18 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
 };
 
 const generatePDF = (order) => {
-  const docPDF = new jsPDF();
-  const pageHeight = docPDF.internal.pageSize.height;
-  const pageWidth = docPDF.internal.pageSize.width;
-  const padding = 10;
-  const contentWidth = pageWidth - 2 * padding;
-  const fontSize = 12;
-  const lineHeight = fontSize * 1.5;
-  const now = new Date();
-  const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-  let currentY = padding + 20;
-  docPDF.setFontSize(16);
-  docPDF.text(`Nota de plata pentru masa ${masaId}`, padding, currentY);
-  currentY += lineHeight;
-  docPDF.setFontSize(fontSize);
+  const input = document.getElementById(`order-${order.id}`);
   
-    docPDF.text(`Comanda ${index + 1}`, padding, currentY);
-    currentY += lineHeight;
-    docPDF.text(`Data plasare: ${formatDate(order.dataPlasare)}`, padding, currentY);
-    currentY += lineHeight;
-    order.comenzi.forEach((comanda) => {
-      const formattedText = `${comanda.numePreparat} - ${comanda.cantitate} buc x ${comanda.pret} lei/buc = ${comanda.pret * comanda.cantitate} lei`;
-      const splitText = docPDF.splitTextToSize(formattedText, contentWidth);
-      splitText.forEach(line => {
-        if (currentY + lineHeight > pageHeight - padding) {
-          docPDF.addPage();
-          currentY = padding;
-        }
-        docPDF.text(line, padding, currentY);
-        currentY += lineHeight;
-      });
-    });
-    currentY += lineHeight;
-    docPDF.text(`Total: ${order.totalPret} lei`, padding, currentY);
-    currentY += lineHeight;
-    docPDF.text(`Metoda plata: ${order.metodaPlata}`, padding, currentY);
-    currentY += lineHeight;
-  
-  docPDF.text(`Data generarii: ${formattedDate}`, padding, currentY);
-  currentY += lineHeight;
-  docPDF.save(`NotaPlata_Masa${masaId}.pdf`);
+  html2canvas(input).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`NotaPlata_Masa${order.id}.pdf`);
+  });
 };
   return (
     <Layout>
