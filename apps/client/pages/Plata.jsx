@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 const PopupContainer = styled.div`
   position: fixed;
   top: 0;
@@ -16,11 +17,43 @@ const PopupContainer = styled.div`
   color: black;
 `;
 const PopupContent = styled.div`
-  background: white;
+  background: #897662;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   width: 400px;
   max-width: 100%;
+
+.btn-plata-container {
+    display: flex;
+    justify-content: center; /* Centrare orizontală */
+    margin-top: 20px; /* Spațiu între butoane și butonul de confirmare */
+}
+.btn-inchide-container {
+    display: flex;
+    justify-content: center; /* Centrare orizontală */
+    margin-top: 20px; /* Spațiu între butoane și butonul de confirmare */
+}
+
+.btn-plata {
+    border-radius: 20px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;    
+}
+.btn-plata:hover {
+    background-color: #669366; 
+}
+
+.btn-inchide {
+    border-radius: 20px;
+    padding: 5px;
+    width: 30px;
+    height: 30px; 
+}
+.btn-inchide:hover {
+    background-color: #b26666;
+}
 `;
 const RadioGroup = styled.div`
   margin-bottom: 15px;
@@ -140,8 +173,13 @@ const PaymentPopup = ({ onClose, onSubmit }) => {
                         Custom
                     </label>
                 </RadioGroup>
-                <button onClick={handleSubmit}>Plătește</button>
-                <button onClick={onClose}>Închide</button>
+                <div className="btn-plata-container">
+                    <button className="btn-plata" onClick={handleSubmit}><i class="fa fa-money"></i></button>
+                </div>
+                <div className="btn-inchide-container">
+                    <button className="btn-inchide" onClick={onClose}><i class="fa fa-times"></i></button>
+                </div>
+                
             </PopupContent>
         </PopupContainer>
     );
