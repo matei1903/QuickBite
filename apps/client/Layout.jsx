@@ -101,7 +101,6 @@ const ProfileButton = ({ children }) => {
   const handleButtonClick = () => {
     setIsMenuOpen(!isMenuOpen);
     console.log("userul in header este: ",user);
-    console.log("plata clientului este: ", user.plata);
     // Implementați aici acțiunea butonului
     // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
   };
@@ -126,14 +125,13 @@ const ProfileButton = ({ children }) => {
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
-          setPlata(userData.plata || 0);
-          console.log("plata clientului este: ", userData.plata);
+          setPlata(userData?.plata || 0);
+          console.log("plata clientului este: ", userData?.plata);
         }
       }, error => {
         console.error("Error getting document:", error);
       });
 
-      // Cleanup listener on unmount
       return () => unsubscribe();
     }
   }, [user, db]);
