@@ -123,9 +123,9 @@ const ProfileButton = ({ children }) => {
   useEffect(() => {
     if (user && db) {
       const userDocRef = doc(db, "users", user.uid);
-      const unsubscribe = userDocRef.onSnapshot(doc => {
-        if (doc.exists()) {
-          const userData = doc.data();
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
           setPlata(userData.plata || 0);
           console.log("plata clientului este: ", userData.plata);
         }
