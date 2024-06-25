@@ -31,7 +31,7 @@ const PopupContainer = styled.div`
     padding: 5px;
     text-align: center;
     position: fixed;
-    bottom: 5px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
     width: 40px;
@@ -302,7 +302,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     ))}
                     <TotalAmount>Total: {totalCard} RON</TotalAmount>
                 </DropArea>
-                <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
+                <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
                     <h3>Plată cu Cash</h3>
                     {cashWidgets.map((item, index) => (
                         <div key={index}>{item.nume} - {item.pret} RON</div>
