@@ -452,10 +452,47 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
     }
 };
 
-const generatePDF = (orderContent, fileName) => {
-  const doc = new jsPDF();
-  doc.text(orderContent, 10, 10);
-  doc.save(fileName);
+const generatePDF = () => {
+  const docPDF = new jsPDF();
+  const pageHeight = docPDF.internal.pageSize.height;
+  const pageWidth = docPDF.internal.pageSize.width;
+  const padding = 10;
+  const contentWidth = pageWidth - 2 * padding;
+  const fontSize = 12;
+  const lineHeight = fontSize * 1.5;
+  const now = new Date();
+  const formattedDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+  let currentY = padding + 20;
+  docPDF.setFontSize(16);
+  docPDF.text(`Nota de plata pentru masa ${masaId}`, padding, currentY);
+  currentY += lineHeight;
+  docPDF.setFontSize(fontSize);
+  orders.forEach((order, index) => {
+    docPDF.text(`Comanda ${index + 1}`, padding, currentY);
+    currentY += lineHeight;
+    docPDF.text(`Data plasare: ${formatDate(order.dataPlasare)}`, padding, currentY);
+    currentY += lineHeight;
+    order.comenzi.forEach((comanda) => {
+      const formattedText = `${comanda.numePreparat} - ${comanda.cantitate} buc x ${comanda.pret} lei/buc = ${comanda.pret * comanda.cantitate} lei`;
+      const splitText = docPDF.splitTextToSize(formattedText, contentWidth);
+      splitText.forEach(line => {
+        if (currentY + lineHeight > pageHeight - padding) {
+          docPDF.addPage();
+          currentY = padding;
+        }
+        docPDF.text(line, padding, currentY);
+        currentY += lineHeight;
+      });
+    });
+    currentY += lineHeight;
+    docPDF.text(`Total: ${order.totalPret} lei`, padding, currentY);
+    currentY += lineHeight;
+    docPDF.text(`Metoda plata: ${order.metodaPlata}`, padding, currentY);
+    currentY += lineHeight;
+  });
+  docPDF.text(`Data generarii: ${formattedDate}`, padding, currentY);
+  currentY += lineHeight;
+  docPDF.save(`NotaPlata_Masa${masaId}.pdf`);
 };
   return (
     <Layout>
@@ -484,7 +521,7 @@ const generatePDF = (orderContent, fileName) => {
                 <p>Total Pret Card: {order.totalPretCard}</p>
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
-                <Button onClick={() => generatePDF(JSON.stringify(order), `Order_${index + 1}.pdf`)}>
+                <Button onClick={() => generatePDF()}>
                   Descarcă PDF
                 </Button>
               </Order>
