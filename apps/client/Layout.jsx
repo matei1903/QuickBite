@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, collection, addDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, doc, onSnapshot } from 'firebase/firestore';
 const StyledLayout = styled.div`
   .header {
     text-align: center;
@@ -123,15 +123,18 @@ const ProfileButton = ({ children }) => {
   useEffect(() => {
     if (user && db) {
       const userDocRef = doc(db, "users", user.uid);
-      userDocRef.get().then(doc => {
-        if (doc.exists) {
+      const unsubscribe = userDocRef.onSnapshot(doc => {
+        if (doc.exists()) {
           const userData = doc.data();
           setPlata(userData.plata || 0);
           console.log("plata clientului este: ", userData.plata);
         }
-      }).catch(error => {
+      }, error => {
         console.error("Error getting document:", error);
       });
+
+      // Cleanup listener on unmount
+      return () => unsubscribe();
     }
   }, [user, db]);
   //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
