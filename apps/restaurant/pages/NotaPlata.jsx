@@ -452,7 +452,7 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
     }
 };
 
-const generatePDF = () => {
+const generatePDF = (order) => {
   const docPDF = new jsPDF();
   const pageHeight = docPDF.internal.pageSize.height;
   const pageWidth = docPDF.internal.pageSize.width;
@@ -467,7 +467,7 @@ const generatePDF = () => {
   docPDF.text(`Nota de plata pentru masa ${masaId}`, padding, currentY);
   currentY += lineHeight;
   docPDF.setFontSize(fontSize);
-  orders.forEach((order, index) => {
+  
     docPDF.text(`Comanda ${index + 1}`, padding, currentY);
     currentY += lineHeight;
     docPDF.text(`Data plasare: ${formatDate(order.dataPlasare)}`, padding, currentY);
@@ -489,7 +489,7 @@ const generatePDF = () => {
     currentY += lineHeight;
     docPDF.text(`Metoda plata: ${order.metodaPlata}`, padding, currentY);
     currentY += lineHeight;
-  });
+  
   docPDF.text(`Data generarii: ${formattedDate}`, padding, currentY);
   currentY += lineHeight;
   docPDF.save(`NotaPlata_Masa${masaId}.pdf`);
@@ -521,7 +521,7 @@ const generatePDF = () => {
                 <p>Total Pret Card: {order.totalPretCard}</p>
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
-                <Button onClick={() => generatePDF()}>
+                <Button onClick={() => generatePDF(order)}>
                   Descarcă PDF
                 </Button>
               </Order>
