@@ -38,8 +38,8 @@ const PopupContent = styled.div`
 .btn-plata {
     border-radius: 20px;
     padding: 5px;
-    width: 30px;
-    height: 30px;    
+    width: 40px;
+    height: 40px;    
 }
 .btn-plata:hover {
     background-color: #669366; 
@@ -48,8 +48,8 @@ const PopupContent = styled.div`
 .btn-inchide {
     border-radius: 20px;
     padding: 5px;
-    width: 30px;
-    height: 30px; 
+    width: 40px;
+    height: 40px; 
 }
 .btn-inchide:hover {
     background-color: #b26666;
