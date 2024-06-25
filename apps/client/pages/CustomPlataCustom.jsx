@@ -31,7 +31,7 @@ const PopupContainer = styled.div`
     padding: 5px;
     text-align: center;
     position: fixed;
-    bottom: 50px;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     width: 40px;

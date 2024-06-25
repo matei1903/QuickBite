@@ -13,7 +13,10 @@ const ColoanaS = styled.div`
     float: left;
     width: 45%;
     padding: 9px;
-    border-right: 1px solid black;
+    border: 1px solid black;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    background-color: #9f9a8c;
+    color: #191919;
     
     h2 {
         text-align: center;
@@ -40,7 +43,10 @@ const ColoanaD = styled.div`
     float: right;
     width: 45%;
     padding: 9px;
-    border-left: 1px solid black;
+    background-color: #9f9a8c;
+    border: 1px solid black;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    color: #191919;
     
     h2 {
         text-align: center;
