@@ -174,7 +174,7 @@ const PaymentPopup = ({ onClose, onSubmit }) => {
                     </label>
                 </RadioGroup>
                 <div className="btn-plata-container">
-                    <button className="btn-plata" onClick={handleSubmit}><i class="fa fa-money"></i></button>
+                    <button className="btn-plata" onClick={handleSubmit}><i class="fa-light fa-money-bill"></i></button>
                 </div>
                 <div className="btn-inchide-container">
                     <button className="btn-inchide" onClick={onClose}><i class="fa fa-times"></i></button>
