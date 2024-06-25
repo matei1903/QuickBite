@@ -3,6 +3,7 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, getDoc, updateDoc, getDocs, collection, arrayUnion } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const PopupContainer = styled.div`
   position: fixed;
@@ -19,6 +20,12 @@ const PopupContainer = styled.div`
   color: black;
   flex-direction: column;
 
+  .btn-container {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+  }
+
   button {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -27,7 +34,8 @@ const PopupContainer = styled.div`
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    width: 150px;
+    width: 40px;
+    height: 40px; 
     border-radius: 20px;
     background-color: #53624d;
     color: #ecebed;
@@ -52,13 +60,14 @@ const PopupContainer = styled.div`
 `;
 
 const PopupContent = styled.div`
-  background: white;
-  padding: 20px;
+  background: #897662;
+  padding: 10px;
   border-radius: 10px;
   width: 350px;
   max-width: 100%;
-  height: 100px;
+  height: 150px;
   overflow: auto;
+  margin: 10px;
 `;
 
 const DropAreaContainer = styled.div`
@@ -91,6 +100,7 @@ const TotalAmount = styled.div`
 
 const StrikethroughItem = styled.div`
   text-decoration: line-through;
+  color: #4c0000;
 `;
 
 const CustomPlataCustom = ({ onClose, onSubmit }) => {
@@ -299,7 +309,10 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                     <TotalAmount>Total: {totalCash} RON</TotalAmount>
                 </DropArea>
             </DropAreaContainer>
-            <button onClick={handleButtonClick}>Confirmă Plata</button>
+            <div className="btn-container">
+                <button onClick={handleButtonClick}><i className="fa fa-check"></i></button>
+            </div>
+            
         </PopupContainer>
     );
 };

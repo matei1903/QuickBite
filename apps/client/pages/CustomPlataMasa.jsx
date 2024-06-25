@@ -3,6 +3,7 @@ import { useFirebase } from "@quick-bite/components/context/Firebase";
 import { doc, getDoc, updateDoc, deleteField, getDocs, collection, setDoc, arrayUnion } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 const PopupContainer = styled.div`
   position: fixed;
   top: 0;
@@ -18,6 +19,12 @@ const PopupContainer = styled.div`
   color: black;
   flex-direction: column;
 
+  .btn-container {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+  }
+
   button {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -26,7 +33,8 @@ const PopupContainer = styled.div`
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    width: 150px;
+    width: 40px;
+    height: 40px; 
     border-radius: 20px;
     background-color: #53624d;
     color: #ecebed;
@@ -50,13 +58,14 @@ const PopupContainer = styled.div`
   }
 `;
 const PopupContent = styled.div`
-  background: white;
-  padding: 20px;
+  background: #897662;
+  padding: 10px;
   border-radius: 10px;
   width: 350px;
   max-width: 100%;
-  height: 100px;
+  height: 150px;
   overflow: auto;
+  margin: 10px;
 `;
 const DropAreaContainer = styled.div`
   display: flex;
@@ -85,6 +94,7 @@ const TotalAmount = styled.div`
 `;
 const StrikethroughItem = styled.div`
   text-decoration: line-through;
+  color: #4c0000;
 `;
 const CustomPlataMasa = ({ onClose, onSubmit }) => {
     const { db } = useFirebase();
@@ -274,7 +284,6 @@ const handleButtonClick = async () => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, comandaIndex) => (
             <PopupContent key={comandaIndex} className="order">
-                <h3>Comanda {comandaIndex + 1}</h3>
                 {allCategories.map((categorie) => {
                     const items = comanda[categorie];
                     if (Array.isArray(items) && items.length > 0) {
@@ -344,7 +353,10 @@ const handleButtonClick = async () => {
                         <TotalAmount>Cash: {totalCash} RON</TotalAmount>
                     </DropArea>
                 </DropAreaContainer>
-                <button onClick={handleButtonClick} disabled={!isButtonEnabled}>Confirmă Plată</button>
+                <div className="btn-container">
+                    <button onClick={handleButtonClick} disabled={!isButtonEnabled}><i className="fa fa-check"></i></button>
+                </div>
+                
             </div>
         </PopupContainer>
     );
