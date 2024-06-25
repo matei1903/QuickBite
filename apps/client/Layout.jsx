@@ -99,6 +99,8 @@ const ProfileButton = ({ children }) => {
   // Funcție pentru gestionarea clicului butonului
   const handleButtonClick = () => {
     setIsMenuOpen(!isMenuOpen);
+    console.log("userul in header este: ",user);
+    console.log("plata clientului este: ", user.plata);
     // Implementați aici acțiunea butonului
     // De exemplu, puteți deschide o fereastră modală pentru profilul utilizatorului sau pentru autentificare
   };
