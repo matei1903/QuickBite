@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '@quick-bite/components/context/Firebase';
 import Layout from "../Layout.jsx";
@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import PaymentPopup from "./Plata";
 import CustomPlataMasa from "./CustomPlataMasa";
 import CustomPlataCustom from "./CustomPlataCustom";
+import jsPDF from 'jspdf';
 
 const NotaPlataContainer = styled.div`
   display: flex;
@@ -176,6 +177,17 @@ const handleCloseCustomMasaPopup = () => {
 const handleCloseCustomPlataPopup = () => {
     setCustomPlataPopup(false);
 };
+
+
+
+const orderRef = useRef();
+const generatePDF = () => {
+  const divContent = orderRef.current;
+  const pdf = new jsPDF();
+  pdf.fromHTML(divContent, 10, 10, { 'width': 180 });
+  pdf.save(`order-${id_comanda}.pdf`);
+}
+
 localStorage.setItem('selectedTable', masaId.toString());
 
   useEffect(() => {
@@ -501,6 +513,7 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
           <Title>Cereri nota de plata {masaId}</Title>
           <OrdersContainer>
             {orders.map((order, index) => (
+              <div ref={orderRef}>
               <Order key={index}>
                 {order.comenzi.map((item, itemIndex) => (
                   <div key={itemIndex}>
@@ -522,7 +535,10 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
               </Order>
+              </div>
+              
             ))}
+            <button onClick={generatePDF}>Generare PDF</button>
           </OrdersContainer>
         </div>
       </NotaPlataContainer>
