@@ -252,6 +252,7 @@ const Comenzi = () => {
                         plata: 0
                     });
                 }
+                localStorage.removeItem("plata");
             } catch (error) {
                 console.error("Eroare la actualizarea comenzii mesei:", error);
             }
@@ -313,6 +314,7 @@ const Comenzi = () => {
                         plata: 0
                     });
                 }
+                localStorage.removeItem("plata");
             } catch (error) {
                 console.error("Eroare la actualizarea comenzii mesei:", error);
             }
@@ -393,6 +395,7 @@ const Comenzi = () => {
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                     
                 }
+                localStorage.removeItem("plata");
             } catch (error) {
                 console.error("Eroare la actualizarea datelor:", error);
             }
@@ -473,6 +476,7 @@ const Comenzi = () => {
                     alert(`Suma de plată pentru card: ${totalCard} RON\nSuma de plată pentru cash: ${totalCash} RON`);
                     
                 }
+                localStorage.removeItem("plata");
             } catch (error) {
                 console.error("Eroare la actualizarea datelor:", error);
             }
