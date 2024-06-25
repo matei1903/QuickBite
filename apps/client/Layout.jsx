@@ -77,12 +77,12 @@ const ProfileButton = ({ children }) => {
   // Starea pentru imaginea utilizatorului și conectare
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userImage, setUserImage] = useState(null);
-
+  const user = _firebase?.auth?.currentUser;
   // Funcție pentru încărcarea imaginii utilizatorului
   const loadUserImage = () => {
     // Verificați dacă utilizatorul este autentificat și încărcați imaginea corespunzătoare
     // Înlocuiți logica următoare cu încărcarea imaginii utilizatorului din baza de date sau de la serviciul de autentificare
-    const user = _firebase?.auth?.currentUser;
+    
     const guestIcon = 'https://firebasestorage.googleapis.com/v0/b/quickbite-844b3.appspot.com/o/user.png?alt=media&token=364d98fb-2720-4fa6-b1e9-2ea9b538280b';
     if (user && user.photoURL) {
       setUserImage(user.photoURL);
@@ -163,7 +163,7 @@ const ProfileButton = ({ children }) => {
           <button className="button" onClick={handleComenzileMele}>Comenzile mele</button>
         </MenuItem>
         <MenuItem>
-          <label htmlFor="search">Total de plata: {plata ? plata.toFixed(2) : "0.00"} RON</label>
+          <label htmlFor="search">Total de plata: {user.plata} RON</label>
         </MenuItem>
         <MenuItem>
           <button className="button" onClick={handleSignOut}>Delogare</button>
