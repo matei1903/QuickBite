@@ -120,33 +120,19 @@ const ProfileButton = ({ children }) => {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    // Recuperarea variabilei 'plata' din localStorage la încărcarea componentei
-    const storedPlata = localStorage.getItem('plata');
-    console.log("storedPlata:", storedPlata);
-    if (storedPlata) {
-      // Convertirea valorii recuperate într-un număr și actualizarea stării 'plata'
-      setPlata(parseFloat(storedPlata));
+    if (user && db) {
+      const userDocRef = db.collection('users').doc(user.uid);
+      userDocRef.get().then(doc => {
+        if (doc.exists) {
+          const userData = doc.data();
+          setPlata(userData.plata || 0);
+          console.log("plata clientului este: ", userData.plata);
+        }
+      }).catch(error => {
+        console.error("Error getting document:", error);
+      });
     }
-    const handlePlataUpdate = () => {
-      const updatedPlata = localStorage.getItem('plata');
-      if (updatedPlata) {
-        setPlata(parseFloat(updatedPlata));
-      }
-    };
-
-    window.addEventListener('plataUpdated', handlePlataUpdate);
-
-    // Curăță efectul secundar pentru a evita memory leaks
-    return () => {
-      window.removeEventListener('plataUpdated', handlePlataUpdate);
-    };
-  }, []);
-  useEffect(() => {
-    // Actualizează 'storedPlata' în localStorage când valoarea 'plata' este schimbată
-    if (plata !== null) {
-      localStorage.setItem('plata', plata.toString());
-    }
-  }, [plata]);
+  }, [user, db]);
   //const buttonClass = isLoggedIn ? "profile_button loggedIn" : "profile_button";
   //const buttonStyle = isLoggedIn ? { backgroundImage: `url(${userImage})` } : {};
   if (!db)
@@ -165,7 +151,7 @@ const ProfileButton = ({ children }) => {
           <button className="button" onClick={handleComenzileMele}>Comenzile mele</button>
         </MenuItem>
         <MenuItem>
-          <label htmlFor="search">Total de plata: {user.plata} RON</label>
+          <label htmlFor="search">Total de plata: {plata} RON</label>
         </MenuItem>
         <MenuItem>
           <button className="button" onClick={handleSignOut}>Delogare</button>
