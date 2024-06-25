@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { useFirebase } from "@quick-bite/components/context/Firebase";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const StyledPopup = styled.div`
     position: fixed;
@@ -18,13 +19,31 @@ const StyledPopup = styled.div`
     color: black;
 
 .popup {
-    background-color: white;
+    background-color: #757b8c;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
     }
 .label {
     color: black;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centrare orizontală */
+    margin-top: 20px; /* Spațiu între butoane și butonul de confirmare */
+}
+
+button {
+    border-radius: 20px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;    
+}
+button:hover {
+    background-color: #202b1b; 
 }
 
 `;
@@ -100,7 +119,9 @@ const Popup = ({ onClose, onSelect }) => {
             <div className="popup">
                 <h2>Selectează masa:</h2>
                 {renderTableButtons()}
-                <button onClick={handleConfirm}>Confirmă</button>
+                <div className="button-container">
+                    <button onClick={handleConfirm}><i className="fa fa-check"></i></button>
+                </div>
             </div>
         </StyledPopup>
     );
