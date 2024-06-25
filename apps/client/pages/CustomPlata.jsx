@@ -63,7 +63,7 @@ const PopupContent = styled.div`
   border-radius: 10px;
   width: 350px;
   max-width: 100%;
-  height: 200px;
+  height: 150px;
   overflow: auto;
   margin: 10px;
 `;
@@ -94,7 +94,7 @@ const TotalAmount = styled.div`
 `;
 const StrikethroughItem = styled.div`
   text-decoration: line-through;
-  color: #320000;
+  color: #4c0000;
 `;
 const CustomPlata = ({ onClose, onSubmit }) => {
     const { db } = useFirebase();
