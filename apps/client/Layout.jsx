@@ -121,7 +121,8 @@ const ProfileButton = ({ children }) => {
 
   useEffect(() => {
     if (user && db) {
-      const userDocRef = doc(db, "users", user.uid);
+      const userID = localStorage.getItem('userID');
+      const userDocRef = doc(db, "users", userID);
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
