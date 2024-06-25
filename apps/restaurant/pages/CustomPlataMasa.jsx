@@ -50,13 +50,14 @@ const PopupContainer = styled.div`
   }
 `;
 const PopupContent = styled.div`
-  background: white;
-  padding: 20px;
+  background: #897662;
+  padding: 10px;
   border-radius: 10px;
   width: 350px;
   max-width: 100%;
-  height: 100px;
+  height: 150px;
   overflow: auto;
+  margin: 10px;
 `;
 const DropAreaContainer = styled.div`
   display: flex;
@@ -85,6 +86,7 @@ const TotalAmount = styled.div`
 `;
 const StrikethroughItem = styled.div`
   text-decoration: line-through;
+  color: #4c0000;
 `;
 
 const CustomPlataMasa = ({ onClose, onSubmit }) => {
@@ -270,7 +272,6 @@ const handleButtonClick = async () => {
         const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
         return comenzi.map((comanda, comandaIndex) => (
             <PopupContent key={comandaIndex} className="order">
-                <h3>Comanda {comandaIndex + 1}</h3>
                 {allCategories.map((categorie) => {
                     const items = comanda[categorie];
                     if (Array.isArray(items) && items.length > 0) {

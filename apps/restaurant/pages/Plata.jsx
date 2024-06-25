@@ -17,9 +17,10 @@ const PopupContainer = styled.div`
 `;
 
 const PopupContent = styled.div`
-  background: white;
+  background: #897662;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   width: 400px;
   max-width: 100%;
   display: flex;

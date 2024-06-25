@@ -52,13 +52,14 @@ const PopupContainer = styled.div`
 `;
 
 const PopupContent = styled.div`
-  background: white;
-  padding: 20px;
+  background: #897662;
+  padding: 10px;
   border-radius: 10px;
   width: 350px;
   max-width: 100%;
-  height: 100px;
+  height: 150px;
   overflow: auto;
+  margin: 10px;
 `;
 
 const DropAreaContainer = styled.div`
@@ -91,6 +92,7 @@ const TotalAmount = styled.div`
 
 const StrikethroughItem = styled.div`
   text-decoration: line-through;
+  color: #4c0000;
 `;
 
 const CustomPlataCustom = ({ onClose, onSubmit }) => {
@@ -287,15 +289,16 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             <div className="comenzi">
                 {renderComenzi(mesaComenzi)}
             </div>
+            <div className="drop">
             <DropAreaContainer>
-                <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
+                <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
                     <h3>Plată cu Card</h3>
                     {cardWidgets.map((item, index) => (
                         <div key={index}>{item.nume} - {item.pret} RON</div>
                     ))}
                     <TotalAmount>Card: {totalCard} RON</TotalAmount>
                 </DropArea>
-                <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
+                <DropArea onDrop={(e) => handleOnDrop(e, "cash")} onDragOver={handleDragOver}>
                     <h3>Plată cu Cash</h3>
                     {cashWidgets.map((item, index) => (
                         <div key={index}>{item.nume} - {item.pret} RON</div>
@@ -304,6 +307,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
                 </DropArea>
             </DropAreaContainer>
             <button onClick={handleButtonClick}>Confirmă Plata</button>
+            </div>
         </PopupContainer>
     );
 };
