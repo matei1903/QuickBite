@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '@quick-bite/components/context/Firebase';
 import Layout from "../Layout.jsx";
@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import PaymentPopup from "./Plata";
 import CustomPlataMasa from "./CustomPlataMasa";
 import CustomPlataCustom from "./CustomPlataCustom";
-import jsPDF from 'jspdf';
 
 const NotaPlataContainer = styled.div`
   display: flex;
@@ -23,7 +22,6 @@ const NotaPlataContainer = styled.div`
   overflow: auto;
   position: absolute;
 `;
-
 const OrdersContainer = styled.div`
   width: 500px;
   padding: 20px;
@@ -32,7 +30,6 @@ const OrdersContainer = styled.div`
   gap: 10px;
   overflow: auto;
 `;
-
 const Order = styled.div`
   background-color: #f8f8f8;
   border: 1px solid #ccc;
@@ -41,18 +38,14 @@ const Order = styled.div`
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   color: black;
 `;
-
 const Title = styled.h2`
   width: 100%;
   text-align: center;
 `;
-
 const Button = styled.button`
   margin-top: 10px;
 `;
-
 const Container = styled.div`
-
 width: 30%;
 margin-left: 60%;
 text-align: justify;
@@ -65,23 +58,18 @@ background-color: #6f6b62;
 font-family: "Google Sans",Roboto,Arial,sans-serif;
 color: #191919;
 position: absolute;
-
-
 h2 {
     text-align: center;
 }
-
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-
 li {
     text-align: left;
     margin-left:22%;
 }
-
 .preparat {
     display: flex;
     align-items: center;
@@ -89,7 +77,6 @@ li {
 .preparat-row p {
     margin: 0 10px;
   }
-
 button {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     padding: 5px;
@@ -112,7 +99,6 @@ button {
     color: #323232;
   }
 }
-
 input{
     appearance: none;
   -webkit-appearance: none;
@@ -124,7 +110,6 @@ input{
   outline: none;
   cursor: pointer;
   margin-right: 8px;
-
   &:checked {
     background-color: #192440; /* Culoarea de fundal verde inchis când este selectat */
     border-color: #3b2b18; /* Culoarea bordurii când este selectat */
@@ -134,37 +119,29 @@ input{
 ::-webkit-scrollbar {
   width: 8px; /* Lățimea scrollbar-ului */
 }
-
 ::-webkit-scrollbar-thumb {
   background-color: #192440; /* Culoarea scrollbar-ului */
   border-radius: 10px; /* Colțuri rotunjite */
 }
-
 ::-webkit-scrollbar-track {
   background: transparent; /* Fundalul track-ului scrollbar-ului */
 }
-
 /* Pentru Firefox */
 * {
   scrollbar-width: thin; /* Subțire */
   scrollbar-color: #192440 transparent; /* Culoarea scrollbar-ului și fundalul track-ului */
 }
-
 `;
-
 const NotaPlata = () => {
   const { db } = useFirebase();
   const { masaId } = useParams();
   const [orders, setOrders] = useState([]);
-
   const [showPopup, setShowPopup] = useState(false);
   const [showCustomMasaPopup, setCustomShowMasaPopup] = useState(false);
-
   const [mesaComenzi, setMesaComenzi] = useState([]);
   const [preparateDetails, setPreparateDetails] = useState({});
   const [selectedPreparates, setSelectedPreparates] = useState([]);
   const [showCustomPlataPopup, setCustomPlataPopup] = useState(false);
-
   const handlePlata = () => {
     setShowPopup(true);
 };
@@ -177,17 +154,6 @@ const handleCloseCustomMasaPopup = () => {
 const handleCloseCustomPlataPopup = () => {
     setCustomPlataPopup(false);
 };
-
-
-
-const orderRef = useRef();
-const generatePDF = () => {
-  const divContent = orderRef.current;
-  const pdf = new jsPDF();
-  pdf.fromHTML(divContent, 10, 10, { 'width': 180 });
-  pdf.save(`order-${id_comanda}.pdf`);
-}
-
 localStorage.setItem('selectedTable', masaId.toString());
 
   useEffect(() => {
@@ -204,16 +170,13 @@ localStorage.setItem('selectedTable', masaId.toString());
         console.error('Error fetching orders: ', error);
       }
     };
-
     fetchOrders();
   }, [db, masaId]);
-
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
     const date = timestamp.toDate();
     return format(date, 'dd/MM/yyyy HH:mm');
   };
-
   const sendToHistory = async (order) => {
     console.log('sendToHistory function is called with order:', order);
     console.log('masaId:', masaId);
@@ -286,7 +249,6 @@ localStorage.setItem('selectedTable', masaId.toString());
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 setMesaComenzi(mesaComenzi);
-
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
                 const preparatePromises = mesaComenzi.flatMap(comanda =>
                     allCategories.flatMap(category =>
@@ -297,7 +259,6 @@ localStorage.setItem('selectedTable', masaId.toString());
                         })
                     )
                 );
-
                 const preparate = await Promise.all(preparatePromises);
                 const preparateMap = preparate.reduce((acc, preparat) => {
                     acc[preparat.id] = preparat;
@@ -311,10 +272,8 @@ localStorage.setItem('selectedTable', masaId.toString());
             console.error("Eroare la încărcarea comenzilor:", error);
         }
     };
-
     fetchComenzi();
 }, [db, masaId]);
-
 const handleSelectPreparat = (id_comanda, preparatId) => {
     const uniqueId = `${id_comanda}-${preparatId}`;
     setSelectedPreparates((prevSelected) =>
@@ -323,23 +282,19 @@ const handleSelectPreparat = (id_comanda, preparatId) => {
             : [...prevSelected, uniqueId]
     );
 };
-
 const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi) => {
     console.log(masaId);
     const tableDocRef = doc(db, "comenzi_inter", `${masaId}`);
     const timestamp = new Date();
-
     if (selectedOption === "comandaMesei" && paymentMethod === "cash") {
         try {
             const mesaRef = doc(db, "comenzi", `${masaId}`);
             const mesaSnapshot = await getDoc(mesaRef);
-
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 let totalPretCash = 0;
                 let totalPretCard = 0;
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-
                 const userCollectionRef = collection(db, "users");
                 const userQuerySnapshot = await getDocs(userCollectionRef);
                 
@@ -356,7 +311,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                         });
                     }
                 }
-
                 mesaComenzi.forEach(comanda => {
                     Object.keys(comanda).forEach(category => {
                         if (Array.isArray(comanda[category])) {
@@ -370,7 +324,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                         }
                     });
                 });
-
                 const newComanda = {
                     comenzi: mesaComenzi,
                     totalPretCash,
@@ -380,7 +333,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                 await updateDoc(tableDocRef, {
                     comenzi: arrayUnion(newComanda)
                 });
-
                 const updatedMesaComenzi = mesaComenzi.map(comanda => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
@@ -408,18 +360,15 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
             console.error("Eroare la actualizarea datelor:", error);
         }
     }
-
     if (selectedOption === "comandaMesei" && paymentMethod === "card") {
         try {
             const mesaRef = doc(db, "comenzi", `${masaId}`);
             const mesaSnapshot = await getDoc(mesaRef);
-
             if (mesaSnapshot.exists()) {
                 const mesaComenzi = mesaSnapshot.data().comenzi || [];
                 let totalPretCash = 0;
                 let totalPretCard = 0;
                 const allCategories = ["aperitive", "fel_principal", "supe_ciorbe", "paste", "pizza", "garnituri", "salate", "desert", "bauturi"];
-
                 const userCollectionRef = collection(db, "users");
                 const userQuerySnapshot = await getDocs(userCollectionRef);
                 
@@ -436,7 +385,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                         });
                     }
                 }
-
                 mesaComenzi.forEach(comanda => {
                     Object.keys(comanda).forEach(category => {
                         if (Array.isArray(comanda[category])) {
@@ -450,7 +398,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                         }
                     });
                 });
-
                 const newComanda = {
                     comenzi: mesaComenzi,
                     totalPretCash: 0,
@@ -460,7 +407,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                 await updateDoc(tableDocRef, {
                     comenzi: arrayUnion(newComanda)
                 });
-
                 const updatedMesaComenzi = mesaComenzi.map(comanda => {
                     allCategories.forEach(category => {
                         if (Array.isArray(comanda[category])) {
@@ -504,8 +450,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
         setUserComenzi(updatedComenzi);
     }
 };
-
-
   return (
     <Layout>
       <NotaPlataContainer>
@@ -513,7 +457,6 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
           <Title>Cereri nota de plata {masaId}</Title>
           <OrdersContainer>
             {orders.map((order, index) => (
-              <div ref={orderRef}>
               <Order key={index}>
                 {order.comenzi.map((item, itemIndex) => (
                   <div key={itemIndex}>
@@ -535,10 +478,7 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
               </Order>
-              </div>
-              
             ))}
-            <button onClick={generatePDF}>Generare PDF</button>
           </OrdersContainer>
         </div>
       </NotaPlataContainer>
@@ -582,5 +522,4 @@ const handlePaymentSubmit = async (selectedOption, paymentMethod, updatedComenzi
     </Layout>
   );
 };
-
 export default NotaPlata;
