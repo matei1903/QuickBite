@@ -503,7 +503,7 @@ const generatePDF = (orderContent, fileName) => {
                 <p>Total Pret Card: {order.totalPretCard}</p>
                 <p>Total Pret Cash: {order.totalPretCash}</p>
                 <Button onClick={() => sendToHistory(order)}>Trimite în istoric</Button>
-                <Button onClick={() => generatePDF(order, `Order_${index + 1}.pdf`)}>
+                <Button onClick={() => generatePDF(JSON.stringify(order, null, 2), `Order_${index + 1}.pdf`)}>
                   Descarcă PDF
                 </Button>
               </Order>
