@@ -293,8 +293,9 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             <div className="comenzi">
                 {renderComenzi(mesaComenzi)}
             </div>
+            <div className="drop">
             <DropAreaContainer>
-                <DropArea className="drop" onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
+                <DropArea onDrop={(e) => handleOnDrop(e, "card")} onDragOver={handleDragOver}>
                     <h3>Plată cu Card</h3>
                     {cardWidgets.map((item, index) => (
                         <div key={index}>{item.nume} - {item.pret} RON</div>
@@ -312,7 +313,7 @@ const CustomPlataCustom = ({ onClose, onSubmit }) => {
             <div className="btn-container">
                 <button onClick={handleButtonClick}><i className="fa fa-check"></i></button>
             </div>
-            
+           </div> 
         </PopupContainer>
     );
 };
